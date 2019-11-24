@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Puntokus</string>
+    <string name="easy">EASY</string>
+    <string name="normal">NORMAL</string>
+    <string name="hard">HARD</string>
+    <string name="sick">SICK</string>
+    <string name="evaluate">Check</string>
+    <string name="refresh">Clean</string>
+    <string name="newGame">New game</string>
+    <string name="isCorrect">Correct!</string>
+    <string name="isWrong">That\'s WRONG bro</string>
+    <string name="dialog_newGame">Do you want to start a new game? All progress will be deleted</string>
+    <string name="dialog_newGame_start">New game</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_clean">The board will be cleaned</string>
+    <string name="ok">Ok</string>
+
+</resources>
