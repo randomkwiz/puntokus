@@ -103,6 +103,7 @@ public class TableroActivity extends AppCompatActivity implements View.OnClickLi
         }else if(v instanceof Button){
             Utilidad utilidad = new Utilidad();
             AlertDialog.Builder builder;
+            AlertDialog dialog;
             switch (v.getId()){
                 case R.id.evaluateBtn:
                     if(utilidad.comprobarSiLaSolucionEsCorrecta(viewModel.getTablero())){
@@ -115,9 +116,11 @@ public class TableroActivity extends AppCompatActivity implements View.OnClickLi
                 case R.id.refreshBtn:
 
                     builder = new AlertDialog.Builder(this);
-
+                    //pongo el titulo y los botones
+                    builder.setTitle(R.string.refresh);
                     builder.setMessage(R.string.dialog_clean)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
                                 public void onClick(DialogInterface dialog, int id) {
                                     // Clean !
                                     Utilidad util = new Utilidad();
@@ -125,22 +128,21 @@ public class TableroActivity extends AppCompatActivity implements View.OnClickLi
                                     util.mostrarToast(getString(R.string.refresh), getApplicationContext());
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // User cancelled the dialog
-                                }
-                            });
+                            .setNegativeButton(R.string.cancel, null);
 
+                    //lo muestro
+                    dialog = builder.create();
+                    dialog.show();
 
 
 
                     break;
                 case R.id.newGameBtn:
-
-
                     builder = new AlertDialog.Builder(this);
+                    builder.setTitle(R.string.newGame);
                     builder.setMessage(R.string.dialog_newGame)
                             .setPositiveButton(R.string.dialog_newGame_start, new DialogInterface.OnClickListener() {
+                                @Override
                                 public void onClick(DialogInterface dialog, int id) {
                                     // Start new game!
                                     Utilidad util = new Utilidad();
@@ -149,11 +151,10 @@ public class TableroActivity extends AppCompatActivity implements View.OnClickLi
 
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // User cancelled the dialog
-                                }
-                            });
+                            .setNegativeButton(R.string.cancel, null);
+                    //lo muestro
+                    dialog = builder.create();
+                    dialog.show();
                     break;
 
             }
