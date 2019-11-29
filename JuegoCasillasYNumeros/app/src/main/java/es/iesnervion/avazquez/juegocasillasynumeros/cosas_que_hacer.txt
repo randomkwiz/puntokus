@@ -1,8 +1,0 @@
-Cosas que tienes que hacer aun:
--Mejorar la estructura de clases
-        -Haz la clase abstracta Casilla y que de ahi hereden CasillaJugable y CasillaNoJugable
-                aunque quizas no es buena idea dado que seria mas lioso crear el tablero pero bueno
-                dale una vueltecita
-        -Haz del tablero un livedata
-        -Mejor aun: mete LiveData con algun tipo de contador o algo asi que cuente la puntuacion
-            o algo de eso
