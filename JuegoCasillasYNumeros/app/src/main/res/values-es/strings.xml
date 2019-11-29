@@ -9,4 +9,9 @@
     <string name="newGame">Nuevo</string>
     <string name="isCorrect">¡Correcto!</string>
     <string name="isWrong">DALE UNA VUELTESITA BRO</string>
+    <string name="cancel">Cancelar</string>
+    <string name="dialog_clean">Se quitarán las marcas del tablero</string>
+    <string name="dialog_newGame">¿Quieres empezar un juego nuevo? Se perderá el progreso actual</string>
+    <string name="dialog_newGame_start">Partida nueva</string>
+    <string name="ok">Ok</string>
 </resources>
