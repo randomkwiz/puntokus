@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "490546603270",
+    "firebase_url": "https://puntokus.firebaseio.com",
+    "project_id": "puntokus",
+    "storage_bucket": "puntokus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490546603270:android:811f7106e8268cde8f2a87",
+        "android_client_info": {
+          "package_name": "es.iesnervion.avazquez.puntokus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490546603270-gonqpe4dkka3ivkp77gidnflvga9k5td.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.iesnervion.avazquez.puntokus",
+            "certificate_hash": "b72201a2a10d1e4976f263a1490774c1413b6f93"
+          }
+        },
+        {
+          "client_id": "490546603270-p1969ee2h2d2rhm8c0mpo5brerkbslf6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "es.iesnervion.avazquez.puntokus",
+            "certificate_hash": "f10faae83eae6907b30d3a04cb2df5dd9d7f1bf0"
+          }
+        },
+        {
+          "client_id": "490546603270-afsce1nqbdl9r353gh8ucnahv7839hht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT2UBPUcFV81xrWSnZKAK7ohXaGeigKkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490546603270-afsce1nqbdl9r353gh8ucnahv7839hht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
