@@ -9,4 +9,22 @@
     <string name="menu_account">Cuenta</string>
     <string name="menu_play">Jugar</string>
     <string name="menu_ranking">Clasificación</string>
+    <string name="lblEmail_account">Correo</string>
+    <string name="lblNickname_account">Nick</string>
+    <string name="loadingData">Cargando...</string>
+    <string name="invalidPassword">La contraseña debe tener al menos seis caracteres.</string>
+    <string name="easy">FÁCIL</string>
+    <string name="normal">NORMAL</string>
+    <string name="hard">DIFÍCIL</string>
+    <string name="sick">ENFERMIZO</string>
+    <string name="evaluate">Comprobar</string>
+    <string name="refresh">Limpiar</string>
+    <string name="newGame">Nuevo</string>
+    <string name="isCorrect">¡Correcto!</string>
+    <string name="isWrong">DALE UNA VUELTESITA BRO</string>
+    <string name="cancel">Cancelar</string>
+    <string name="dialog_clean">Se quitarán las marcas del tablero</string>
+    <string name="dialog_newGame">¿Quieres empezar un juego nuevo? Se perderá el progreso actual</string>
+    <string name="dialog_newGame_start">Partida nueva</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -42,9 +42,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-
-
-
     //Hago los binding con butter knife
     @BindView(R.id.input_email)
     EditText email;
@@ -64,6 +61,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         super.onPause();
         email.setText("");
         password.setText("");
+        viewModel.getUser().getValue().setEmail("");
+        viewModel.getUser().getValue().setPassword("");
+        viewModel.getUser().getValue().setNickname("");
     }
 
     @Override
@@ -90,12 +90,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        viewModel.setEmail(email.getText().toString().trim());
-        viewModel.setPassword(password.getText().toString().trim());
+        viewModel.getUser().getValue().setEmail(email.getText().toString().trim());
+        viewModel.getUser().getValue().setPassword(password.getText().toString().trim());
         switch (v.getId()){
             case R.id.btn_login:
-                if(!viewModel.getEmail().equals("") && !viewModel.getPassword().equals("") ){
-                    iniciarSesion(email.getText().toString().trim(), password.getText().toString().trim());
+                if(!viewModel.getUser().getValue().getEmail().equals("") && !viewModel.getUser().getValue().getPassword().equals("") ){
+                    iniciarSesion(viewModel.getUser().getValue().getEmail(), viewModel.getUser().getValue().getPassword());
                 }else{
                     Toast.makeText(getContext(), R.string.fillFields, Toast.LENGTH_SHORT).show();
                 }

@@ -21,10 +21,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
 
 /**
@@ -38,6 +44,8 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     }
     @BindView(R.id.input_email)
     EditText email;
+    @BindView(R.id.input_nickname)
+    EditText nickname;
     @BindView(R.id.input_password)
     EditText password;
     @BindView(R.id.btn_signup)
@@ -45,14 +53,19 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.link_login)
     TextView linkLogin;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
     ViewModelRegistro viewModel;
     ProgressDialog progressDialog;
 
     @Override
     public void onPause() { //para que se borren las credenciales
         super.onPause();
-        email.setText("");
+        nickname.setText("");
         password.setText("");
+        email.setText("");
+        viewModel.getUser().getValue().setEmail("");
+        viewModel.getUser().getValue().setPassword("");
+        viewModel.getUser().getValue().setNickname("");
     }
 
     @Override
@@ -69,6 +82,10 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
 
         // Inicializa el Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
+        //Database
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        //Así hacemos referencia al nodo principal de la DB
+
         btnSignup.setOnClickListener(this);
         linkLogin.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext());
@@ -79,13 +96,23 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        viewModel.setEmail(email.getText().toString().trim());
-        viewModel.setPassword(password.getText().toString().trim());
+        viewModel.getUser().getValue().setEmail(email.getText().toString().trim());
+        viewModel.getUser().getValue().setPassword(password.getText().toString().trim());
+        viewModel.getUser().getValue().setNickname(nickname.getText().toString().trim());
 
         switch (v.getId()){
             case R.id.btn_signup:
-                if(!viewModel.getEmail().equals("") && !viewModel.getPassword().equals("") ){
-                    registrarse(email.getText().toString().trim(), password.getText().toString().trim());
+                if(!viewModel.getUser().getValue().getEmail().isEmpty() || !viewModel.getUser().getValue().getPassword().isEmpty()
+                || !viewModel.getUser().getValue().getNickname().isEmpty()
+                ){
+                    if(viewModel.getUser().getValue().getPassword().length() < 6){   //lo pide firebase
+                        Toast.makeText(getContext(), R.string.invalidPassword, Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        //TODO por aqué aquí envío los datos tal cual si los tengo en el view model!!
+                        registrarse(viewModel.getUser().getValue().getEmail(), viewModel.getUser().getValue().getPassword());
+                    }
+
                 }else{
                     Toast.makeText(getContext(), R.string.fillFields, Toast.LENGTH_SHORT).show();
                 }
@@ -102,10 +129,14 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
 
     }
 
+    /*
+     * Metodo que pone el atributo de go to login a true
+     *  */
     private void iniciarSesion() {
         viewModel.setGoToLogIn(true);
     }
 
+    /*Metodo para registrarse*/
     private void registrarse(String email, String password) {
 
         progressDialog.setMessage("Registrando usuario");
@@ -119,7 +150,49 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                         //checking if success
                         if(task.isSuccessful()){
 
-                            Toast.makeText(getContext(),"Se ha registrado el usuario con el email: "+ viewModel.getEmail(),Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getContext(),
+//                                    "Se ha registrado el usuario con el email: "
+//                                            + viewModel.getUser().getValue().getEmail(),
+//                                    Toast.LENGTH_LONG).show();
+
+                            //Aqui vamos a guardar los datos del usuario en la BBDD Realtime DB
+                            //TODO esto
+
+                            //Debemos obtener el ID que nos proporciona Firebase
+                            User usuarioActual = new User(firebaseAuth.getCurrentUser().getUid(),
+                                    viewModel.getUser().getValue().getNickname(),
+                                    viewModel.getUser().getValue().getEmail(),
+                                    viewModel.getUser().getValue().getPassword());
+
+                            viewModel.setUser(usuarioActual);
+
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("id", viewModel.getUser().getValue().getId());
+                            map.put("nickname", viewModel.getUser().getValue().getNickname());
+                            map.put("email", viewModel.getUser().getValue().getEmail());
+                            //map.put("password", viewModel.getUser().getValue().getPassword()); //no debe guardarse la password
+
+
+                            databaseReference.child("Users").
+                                    child(usuarioActual.getId()).
+                                    setValue(map).
+                                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task2) {
+                                    if(task2.isSuccessful()){
+                                        Toast.makeText(getContext(),
+                                                "Se han registrado los datos",
+                                                Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+
+
+                            //https://www.youtube.com/watch?v=xwhEHb_AZ6k&t=171s
+                            //mas info aqui: https://firebase.google.com/docs/database/admin/save-data
+
+
                         }else{
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si ya existe
