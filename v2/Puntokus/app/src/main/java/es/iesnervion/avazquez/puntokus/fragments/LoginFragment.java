@@ -24,6 +24,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import butterknife.BindView;
@@ -31,6 +36,7 @@ import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.activities.MainActivity;
 import es.iesnervion.avazquez.puntokus.activities.SecondMainActivity;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
 
 /**
@@ -123,7 +129,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     * Inicia sesión en firebase con un email y contraseña
     * */
     private void iniciarSesion(String email, String password) {
-        progressDialog.setMessage("Iniciando sesión");
+        progressDialog.setMessage("Iniciando sesión. Ten paciencia, esta operación puede tardar varios segundos.");
         progressDialog.show();
 
         //loguear usuario
@@ -133,16 +139,36 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+
                             //TODO aquí haces que se vaya a la siguiente pantalla.
                             //TODO por aquí y sólo por aquí puede avanzar a la siguiente pantalla!!
 
-                            viewModel.setIsCorrectLogin(true);
+                            //viewModel.getUser().getValue().setEmail(email);
+                            viewModel.getUser().getValue().setId(firebaseAuth.getCurrentUser().getUid());
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                            databaseReference.child("Users").child(viewModel.getUser().getValue().getId())
+                                    .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    User user = dataSnapshot.getValue(User.class);
+                                    viewModel.setUser(user);
+                                    Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
+                                    viewModel.setIsCorrectLogin(true);
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
                         } else {
                             Toast.makeText(getContext(), "Esa combinación no existe", Toast.LENGTH_LONG).show();
-
+                            progressDialog.dismiss();
                         }
-                        progressDialog.dismiss();
+
                     }
                 });
 

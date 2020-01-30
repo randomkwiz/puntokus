@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import es.iesnervion.avazquez.puntokus.entities.Tablero;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.util.Utilidad;
 
 
@@ -27,6 +28,7 @@ public class TableroViewModel extends ViewModel {
     private SparseIntArray mapeo = new SparseIntArray();
     MutableLiveData<Boolean> isGoingToPlay;
     MutableLiveData<Integer> lado;
+    MutableLiveData<User> usuarioActual;
 
 
     public TableroViewModel() {
@@ -34,6 +36,8 @@ public class TableroViewModel extends ViewModel {
         this.isGoingToPlay = new MutableLiveData<>();
 
         this.lado = new MutableLiveData<>();
+        this.usuarioActual = new MutableLiveData<>();
+        this.usuarioActual.setValue(new User());
     }
 
     public void inicializarPartida(){
@@ -50,6 +54,14 @@ public class TableroViewModel extends ViewModel {
 
     }
 
+
+    public LiveData<User> getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    public void setUsuarioActual(User usuarioActual) {
+        this.usuarioActual.setValue(usuarioActual);
+    }
 
     public LiveData<Integer> getLado() {
         return lado;

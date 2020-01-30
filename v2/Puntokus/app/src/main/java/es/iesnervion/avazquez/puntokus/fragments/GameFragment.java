@@ -83,7 +83,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
         newGameBtn.setOnClickListener(this);
-
+        evaluateBtn.setEnabled(true);
         // Inicializa el Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
         //Database
@@ -146,10 +146,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         long milisegundosQueHanPasado = SystemClock.elapsedRealtime() - crono.getBase();
                         Map<String, Object> map = new HashMap<>();
                         map.put("idUser", usuarioActual.getId());
-                        map.put("email", usuarioActual.getEmail());
+                        map.put("nickname", viewModel.getUsuarioActual().getValue().getNickname());
+                        map.put("email", viewModel.getUsuarioActual().getValue().getEmail());
                         map.put("timeInMilis", milisegundosQueHanPasado);
                         map.put("level", utilidad.getLevelName(viewModel.getLado().getValue()));
-
+                        evaluateBtn.setEnabled(false);
 
 
                         databaseReference.child("Games").
@@ -211,6 +212,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                                     crono.stop();
                                     crono.setBase(SystemClock.elapsedRealtime());   //lo pone a 0
                                     crono.start();
+                                    evaluateBtn.setEnabled(true);
 
                                 }
                             })

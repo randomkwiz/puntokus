@@ -7,12 +7,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,13 +41,19 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         setContentView(R.layout.activity_second_main);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         accountFragment = new AccountFragment();
         playFragment = new PlayFragment();
         rankingFragment = new RankingFragment();
         gameFragment = new GameFragment();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         viewModel = ViewModelProviders.of(this).get(TableroViewModel.class);
+
+        viewModel.getUsuarioActual().getValue().setNickname(intent.getStringExtra("nickname"));
+        viewModel.getUsuarioActual().getValue().setEmail(firebaseAuth.getCurrentUser().getEmail());
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 

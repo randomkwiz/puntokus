@@ -19,11 +19,13 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <ImageView app:srcCompat="@drawable/ic_dots"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_marginBottom="24dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="50dp"
+                android:layout_gravity="center_horizontal"
+                ></TextView>
 
             <!-- Nickname Label -->
             <com.google.android.material.textfield.TextInputLayout

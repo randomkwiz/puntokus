@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.GameFragment">
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="300"
+        android:text="@string/app_name"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gridFrame"
+        app:layout_constraintEnd_toStartOf="@+id/gridFrame"
+        app:layout_constraintTop_toTopOf="@+id/gridFrame"></TextView>
+    <Chronometer
+        android:id="@+id/cronoTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/evaluateBtn"
+
+        />
+    <View
+        android:id="@+id/gridFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/evaluateBtn"
+        android:text="@string/evaluate"
+        android:background="#C8E6C9"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/refreshBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        ></Button>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/refreshBtn"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="#FBBBBB"
+        android:text="@string/refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/newGameBtn"
+        ></Button>
+
+    <Button
+        android:id="@+id/newGameBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#BBDEFB"
+        android:layout_marginEnd="15dp"
+
+        android:text="@string/newGame"
+        app:layout_constraintBottom_toBottomOf="@id/gridFrame"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        ></Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/lblImgPrize"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_first"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        />
+
+    <TextView
+        android:id="@+id/lblNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="randomkwiz"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/lblImgPrize"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        />
+    <TextView
+        android:id="@+id/lblDificultad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/lblNickname"
+        android:text="EASY"
+        app:layout_constraintStart_toStartOf="@id/lblNickname"
+        />
+    <TextView
+        android:id="@+id/lblTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:15"
+        app:layout_constraintTop_toTopOf="@id/lblNickname"
+        app:layout_constraintBottom_toBottomOf="@id/lblDificultad"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
