@@ -30,4 +30,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titleConfirmExit">Exit</string>
+    <string name="msgConfirmExit">Do you really want to exit? All progress will be deleted</string>
 </resources>

@@ -2,11 +2,14 @@ package es.iesnervion.avazquez.puntokus.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -23,6 +26,7 @@ import es.iesnervion.avazquez.puntokus.fragments.AccountFragment;
 import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RankingFragment;
+import es.iesnervion.avazquez.puntokus.util.Utilidad;
 import es.iesnervion.avazquez.puntokus.viewModels.TableroViewModel;
 
 public class SecondMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -107,4 +111,56 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
         return true;
     }
+
+
+
+    @Override
+    public void onBackPressed(){
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentSecondActivity);
+        if(currentFragment instanceof GameFragment){
+            //Si el usuario pulsa el boton de ir hacia atrás estando
+            //en el fragment del juego, se le mostrará dialog de confirmación
+            AlertDialog.Builder builder;
+            AlertDialog dialog;
+            builder = new AlertDialog.Builder(this);
+            //pongo el titulo y los botones
+            builder.setTitle(R.string.titleConfirmExit);
+            builder.setMessage(R.string.msgConfirmExit)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                           //Si el usuario le da a que sí desea salir
+                            viewModel.setUserWantToExit(true);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null);
+
+            //lo muestro
+            dialog = builder.create();
+            dialog.show();
+
+
+            Observer<Boolean> exitObserver = new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if(aBoolean){
+                        salir();
+                    }
+                }
+            };
+            viewModel.getUserWantToExit().observe(this,exitObserver);
+
+
+
+        }else{
+            salir();
+        }
+    }
+
+
+    public void salir(){
+        super.onBackPressed();
+    }
+
 }

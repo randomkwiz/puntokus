@@ -12,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_bk_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SecondMainActivity"></activity>
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.SecondMainActivity" android:screenOrientation="portrait" ></activity>
+        <activity android:name=".activities.MainActivity"  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

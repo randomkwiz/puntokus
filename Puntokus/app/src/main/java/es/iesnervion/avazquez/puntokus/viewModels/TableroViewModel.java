@@ -29,16 +29,21 @@ public class TableroViewModel extends ViewModel {
     MutableLiveData<Boolean> isGoingToPlay;
     MutableLiveData<Integer> lado;
     MutableLiveData<User> usuarioActual;
+    MutableLiveData<Boolean> userWantToExit;
+
 
 
     public TableroViewModel() {
 
         this.isGoingToPlay = new MutableLiveData<>();
-
+        this.userWantToExit = new MutableLiveData<>();
         this.lado = new MutableLiveData<>();
         this.usuarioActual = new MutableLiveData<>();
         this.usuarioActual.setValue(new User());
+        this.userWantToExit.setValue(false);
     }
+
+
 
     public void inicializarPartida(){
         if(lado.getValue()!=null ){
@@ -53,7 +58,17 @@ public class TableroViewModel extends ViewModel {
         }
 
     }
+    public LiveData<Boolean> getUserWantToExit() {
+        return userWantToExit;
+    }
 
+    public void setUserWantToExit(Boolean userWantToExit) {
+        if(userWantToExit){
+            this.userWantToExit.setValue(userWantToExit);
+            this.userWantToExit.setValue(false);
+        }
+
+    }
 
     public LiveData<User> getUsuarioActual() {
         return usuarioActual;
