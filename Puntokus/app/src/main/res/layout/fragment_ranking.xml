@@ -6,14 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".fragments.RankingFragment">
 
+
+    <RadioGroup
+        android:id="@+id/RGfiltrar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+
+        >
+
+
+        <RadioButton
+
+            android:id="@+id/RBAll"
+            android:text="@string/all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"/>
+
+        <RadioButton
+            android:id="@+id/RBeasy"
+            android:text="@string/easy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"/>
+
+        <RadioButton
+            android:id="@+id/RBnormal"
+            android:text="@string/normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"/>
+
+        <RadioButton
+            android:id="@+id/RBhard"
+            android:text="@string/hard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"/>
+        <RadioButton
+            android:id="@+id/RBsick"
+            android:text="@string/sick"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"/>
+    </RadioGroup>
+
+
+
     <ImageView
         android:id="@+id/logoRanking"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentTop="true"
+
         android:layout_centerHorizontal="true"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/RGfiltrar"
         app:srcCompat="@drawable/ic_podiumcoloured"
         />
     <ListView

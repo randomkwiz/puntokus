@@ -44,6 +44,9 @@ public class RankingFragment extends Fragment {
 
     @BindView(R.id.listView_ranking)
     ListView listViewRanking;
+
+    //TODO hacer el filtro del ranking
+
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
     ArrayList<Game> listaPartidas;
