@@ -1,6 +1,7 @@
 package es.iesnervion.avazquez.puntokus.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,17 +92,27 @@ public class GamesAdapter extends BaseAdapter {
             switch (position){
                 case 0:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_first);
+                    convertView.setBackgroundColor(Color.parseColor("#D4AF37"));
                     break;
                 case 1:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_second);
+                    convertView.setBackgroundColor(Color.parseColor("#C0C0C0"));
                     break;
                 case 2:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_third);
+                    convertView.setBackgroundColor(Color.parseColor("#cd7f32"));
                     break;
             }
         }else{
         viewHolder.getImgMedalla().setVisibility(View.GONE);
+            if(position%2 == 0){
+                convertView.setBackgroundColor(Color.parseColor("#fef6fb"));
+            }else{
+                convertView.setBackgroundColor(Color.parseColor("#d6e5fa"));
+            }
         }
+
+
 
         //viewHolder.getDificultad().setText(partida.getLevel());
         viewHolder.getNickname().setText(partida.getNickname());
