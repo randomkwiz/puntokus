@@ -23,7 +23,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="250dp"
-                android:src="@drawable/puntokus1"
+                app:srcCompat="@drawable/ic_puntokus1"
                 android:textSize="50dp"
                 android:layout_gravity="center_horizontal"
                 ></ImageView>
