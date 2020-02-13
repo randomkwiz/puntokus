@@ -2,6 +2,7 @@ package es.iesnervion.avazquez.puntokus.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +24,13 @@ import com.google.firebase.database.ValueEventListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.activities.MainActivity;
 import es.iesnervion.avazquez.puntokus.entities.User;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment {
+public class AccountFragment extends Fragment implements View.OnClickListener {
 
 
     public AccountFragment() {
@@ -39,6 +42,8 @@ public class AccountFragment extends Fragment {
     TextView nickname;
     @BindView(R.id.txtEmail_account)
     TextView email;
+    @BindView(R.id.btn_logout)
+    Button btnLogout;
     DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
     String idUsuarioActual;
@@ -69,7 +74,15 @@ public class AccountFragment extends Fragment {
             }
         });
 
+        btnLogout.setOnClickListener(this);
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        //Cierra la sesión y te devuelve a la main activity
+        firebaseAuth.signOut();
+        startActivity(new Intent(getContext(),MainActivity.class));
+
+    }
 }

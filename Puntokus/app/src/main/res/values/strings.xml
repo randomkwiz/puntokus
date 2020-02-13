@@ -31,4 +31,5 @@
     <string name="titleConfirmExit">Exit</string>
     <string name="msgConfirmExit">Do you really want to exit? All progress will be deleted</string>
     <string name="all">ALL</string>
+    <string name="logout">Log out</string>
 </resources>

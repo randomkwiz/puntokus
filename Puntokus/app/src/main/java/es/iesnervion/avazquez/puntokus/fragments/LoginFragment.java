@@ -173,4 +173,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 });
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(firebaseAuth.getCurrentUser() != null){
+            //significa que esta logeado
+            startActivity(new Intent(getContext(),SecondMainActivity.class));
+        }
+
+    }
 }
+
