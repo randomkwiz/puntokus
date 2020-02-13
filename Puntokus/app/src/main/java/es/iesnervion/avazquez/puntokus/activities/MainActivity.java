@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 if(aBoolean){
-                    ft.replace(R.id.fragment, registro).commit();   //no pongo el add to back stack porque no me interesa aqui
+                    ft.replace(R.id.fragment, registro)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .addToBackStack(null)
+                            .commit();   //aqui si interesa el add to back stack
                 }
 
             }
@@ -63,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 if(aBoolean){
-                    ft.replace(R.id.fragment, login).commit();//no pongo el add to back stack porque no me interesa aqui
+                    ft.replace(R.id.fragment, login)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //.addToBackStack(null)
+                            .commit();//no pongo el add to back stack porque no me interesa aqui
                 }
             }
         };
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 if(aBoolean){
                     intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
                     startActivity(intent);
+                    //finish();
                 }
 
             }

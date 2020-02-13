@@ -91,7 +91,9 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                 getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentSecondActivity, accountFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
+
+                        .commit()
+                        ;
 
                 break;
             case R.id.menu_play:
