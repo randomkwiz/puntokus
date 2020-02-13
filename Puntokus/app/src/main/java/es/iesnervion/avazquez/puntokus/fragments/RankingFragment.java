@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +46,8 @@ public class RankingFragment extends Fragment {
     }
 
 
+    @BindView(R.id.RGfiltrar)
+    RadioGroup radioGroup;
     @BindView(R.id.listView_ranking)
     ListView listViewRanking;
 
@@ -49,7 +55,8 @@ public class RankingFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
-    ArrayList<Game> listaPartidas;
+    MutableLiveData<ArrayList<Game>> listaPartidas;
+    MutableLiveData<ArrayList<Game>> listaPartidasAMostrar;
     Game partida;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +65,17 @@ public class RankingFragment extends Fragment {
         ButterKnife.bind(this,view);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        listaPartidas = new ArrayList<>();
+        listaPartidas = new MutableLiveData<ArrayList<Game>>();
+        listaPartidasAMostrar = new MutableLiveData<ArrayList<Game>>();
+        radioGroup.check(R.id.RBAll);
+        listaPartidas.setValue(new ArrayList<>());
+        listaPartidasAMostrar.setValue(new ArrayList<>());
        GamesAdapter adapter =
-                new GamesAdapter(listaPartidas,getActivity());
+                new GamesAdapter(listaPartidasAMostrar.getValue(),getActivity());
+
+
+
+
 
         databaseReference.child("Games").addValueEventListener(new ValueEventListener() {
             @Override
@@ -74,29 +89,34 @@ public class RankingFragment extends Fragment {
                             partida.setEmail(hijo.child("email").getValue().toString());
                             partida.setLevel(hijo.child("level").getValue().toString());
                             partida.setTimeInMilis(Long.parseLong(hijo.child("timeInMilis").getValue().toString()));
-//                            switch (hijo.getValue().toString().trim()){
-//                                case "email":
-//
-//                                    break;
-//                                case "level":
-//
-//                                    break;
-//                                case "timeInMilis":
-//
-//                                    break;
-//
-//                            }
-                            listaPartidas.add(partida);
+                            listaPartidas.getValue().add(partida);
                         }
 
                     }
 
-                    Collections.sort(listaPartidas);
-                    if(listaPartidas.size() >= 150){
-                        listaPartidas.subList(149, listaPartidas.size()).clear();   //elimina los elementos a partir de la posicion 149
+                    Collections.sort(listaPartidas.getValue());
+                    if(listaPartidas.getValue().size() >= 150){
+                        listaPartidas.getValue().subList(149, listaPartidas.getValue().size()).clear();   //elimina los elementos a partir de la posicion 149
                         //Es para que el ranking tenga max 150 partidas
                     }
-                listViewRanking.setAdapter(adapter);
+                //listViewRanking.setAdapter(adapter);
+                    switch (radioGroup.getCheckedRadioButtonId()) {
+                        case R.id.RBAll:
+                            listaPartidasAMostrar.setValue(listaPartidas.getValue());
+                            break;
+                        case R.id.RBeasy:
+                            filtrarListado("EASY"); //no puedo ponerlo con el R.string.easy porque en firebase siempre es EASY y nunca FACIL (en español)
+                            break;
+                        case R.id.RBnormal:
+                            filtrarListado("NORMAL");
+                            break;
+                        case R.id.RBhard:
+                            filtrarListado("HARD");
+                            break;
+                        case R.id.RBsick:
+                            filtrarListado("SICK");
+                            break;
+                    }
                 }
             }
 
@@ -107,7 +127,78 @@ public class RankingFragment extends Fragment {
         });
 
 
+        //El observer de la lista
+        final Observer<ArrayList<Game>> listObserver =
+                new Observer<ArrayList<Game>>() {
+                    @Override
+                    public void onChanged(ArrayList<Game> list) {
+                        //Actualizar la UI
+                        listViewRanking.invalidate(); //Se tiene que poner esto
+                        GamesAdapter gamesAdapter2 = new GamesAdapter(list, getActivity().getBaseContext());
+                        listViewRanking.setAdapter(gamesAdapter2);
+
+                    }
+                };
+
+        //lista.setAdapter(productosAdapter);
+        //Observo el LiveData con ese observer que acabo de crear
+        listaPartidasAMostrar.observe(this, listObserver);
+
+
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedId is the RadioButton selected
+                switch (radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.RBAll:
+                        listaPartidasAMostrar.setValue(listaPartidas.getValue());
+                        break;
+                    case R.id.RBeasy:
+                        filtrarListado("EASY"); //no puedo ponerlo con el R.string.easy porque en firebase siempre es EASY y nunca FACIL (en español)
+                        break;
+                    case R.id.RBnormal:
+                        filtrarListado("NORMAL");
+                        break;
+                    case R.id.RBhard:
+                        filtrarListado("HARD");
+                        break;
+                    case R.id.RBsick:
+                        filtrarListado("SICK");
+                        break;
+                }
+            }
+        });
+
+
         return view;
+    }
+
+    public void filtrarListado(String dificultadPorLaQueFiltro){
+        ArrayList<Game> nuevaListaFiltrada = new ArrayList<>();
+        if(dificultadPorLaQueFiltro.equals("EASY") ||
+                dificultadPorLaQueFiltro.equals("NORMAL") ||
+                dificultadPorLaQueFiltro.equals("HARD") ||
+                dificultadPorLaQueFiltro.equals("SICK")
+        ){
+            for(int i = 0; i < listaPartidas.getValue().size(); i ++){
+
+                if(listaPartidas.getValue().get(i).getLevel().trim().contains(dificultadPorLaQueFiltro)){
+                    nuevaListaFiltrada.add(listaPartidas.getValue().get(i));
+                }
+            }
+            this.listaPartidasAMostrar.setValue(nuevaListaFiltrada);
+            //copiarListaEnOtraLista(nuevaListaFiltrada, this.listaPartidas.getValue());
+        }
+
+    }
+
+    public List<Game> copiarListaEnOtraLista(List<Game> listaACopiar, ArrayList<Game> nuevaLista){
+       nuevaLista = new ArrayList<>();
+        for(int i = 0; i < listaACopiar.size(); i ++){
+            nuevaLista.add(listaACopiar.get(i));
+        }
+        return nuevaLista;
     }
 
 }

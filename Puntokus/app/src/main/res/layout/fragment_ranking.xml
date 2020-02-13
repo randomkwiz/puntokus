@@ -9,50 +9,46 @@
 
     <RadioGroup
         android:id="@+id/RGfiltrar"
+        android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-
         >
 
-
         <RadioButton
-
+            android:checked="true"
             android:id="@+id/RBAll"
             android:text="@string/all"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            />
 
         <RadioButton
             android:id="@+id/RBeasy"
             android:text="@string/easy"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            />
 
         <RadioButton
             android:id="@+id/RBnormal"
             android:text="@string/normal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <RadioButton
             android:id="@+id/RBhard"
             android:text="@string/hard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/RBsick"
             android:text="@string/sick"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </RadioGroup>
 
 
@@ -71,7 +67,8 @@
         android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#00FFFFFF"
+        android:divider="#7FEF6C00"
+        android:dividerHeight="1dp"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/logoRanking"
         />

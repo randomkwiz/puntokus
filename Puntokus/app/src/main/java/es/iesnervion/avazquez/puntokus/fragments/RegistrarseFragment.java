@@ -183,7 +183,8 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                                         Toast.makeText(getContext(),
                                                 "Se han registrado los datos",
                                                 Toast.LENGTH_SHORT).show();
-
+                                            //TODO hacer que vuelva a la pantalla de login
+                                        viewModel.setGoToLogIn(true);
                                     }
                                 }
                             });

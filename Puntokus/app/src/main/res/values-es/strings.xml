@@ -27,4 +27,7 @@
     <string name="dialog_newGame">¿Quieres empezar un juego nuevo? Se perderá el progreso actual</string>
     <string name="dialog_newGame_start">Partida nueva</string>
     <string name="ok">Ok</string>
+    <string name="all">TODO</string>
+    <string name="msgConfirmExit">¿Realmente desea salir? Se perderá todo el progreso.</string>
+    <string name="titleConfirmExit">Salir</string>
 </resources>

@@ -7,13 +7,13 @@ public class MyViewHolder {
 
     private ImageView imgMedalla;
     private TextView nickname;
-    private TextView dificultad;
+   // private TextView dificultad;
     private TextView tiempo;
 
-    public MyViewHolder(ImageView imgMedalla, TextView nickname, TextView dificultad, TextView tiempo) {
+    public MyViewHolder(ImageView imgMedalla, TextView nickname, TextView tiempo) {
         this.imgMedalla = imgMedalla;
         this.nickname = nickname;
-        this.dificultad = dificultad;
+        //this.dificultad = dificultad;
         this.tiempo = tiempo;
     }
 
@@ -33,13 +33,13 @@ public class MyViewHolder {
         this.nickname = nickname;
     }
 
-    public TextView getDificultad() {
-        return dificultad;
-    }
-
-    public void setDificultad(TextView dificultad) {
-        this.dificultad = dificultad;
-    }
+//    public TextView getDificultad() {
+//        return dificultad;
+//    }
+//
+//    public void setDificultad(TextView dificultad) {
+//        this.dificultad = dificultad;
+//    }
 
     public TextView getTiempo() {
         return tiempo;

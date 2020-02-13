@@ -55,11 +55,11 @@ public class GamesAdapter extends BaseAdapter {
             ImageView imgMedalla = (ImageView) convertView.findViewById(R.id.lblImgPrize);
 
             TextView nickname = (TextView) convertView.findViewById(R.id.lblNickname);
-            TextView dificultad = (TextView) convertView.findViewById(R.id.lblDificultad);
+            //TextView dificultad = (TextView) convertView.findViewById(R.id.lblDificultad);
             TextView tiempo = (TextView) convertView.findViewById(R.id.lblTime);
 
             nickname.setText(partida.getNickname());
-            dificultad.setText(partida.getLevel());
+            //dificultad.setText(partida.getLevel());
             tiempo.setText(partida.getTiempoFormateado());
 
             if(position >= 0 && position <= 2 ){
@@ -79,7 +79,7 @@ public class GamesAdapter extends BaseAdapter {
                 imgMedalla.setVisibility(View.GONE);
             }
 
-            viewHolder = new MyViewHolder(imgMedalla, nickname, dificultad, tiempo);
+            viewHolder = new MyViewHolder(imgMedalla, nickname, tiempo);
             convertView.setTag(viewHolder );
         }else{
             viewHolder = (MyViewHolder) convertView.getTag();
@@ -100,10 +100,10 @@ public class GamesAdapter extends BaseAdapter {
                     break;
             }
         }else{
-            viewHolder.getImgMedalla().setVisibility(View.GONE);
+        viewHolder.getImgMedalla().setVisibility(View.GONE);
         }
 
-        viewHolder.getDificultad().setText(partida.getLevel());
+        //viewHolder.getDificultad().setText(partida.getLevel());
         viewHolder.getNickname().setText(partida.getNickname());
         viewHolder.getTiempo().setText(partida.getTiempoFormateado());
 
