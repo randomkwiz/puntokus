@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
+    android:background="@color/colorPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.GameFragment">
 

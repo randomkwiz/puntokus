@@ -83,6 +83,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         //Cierra la sesión y te devuelve a la main activity
         firebaseAuth.signOut();
         startActivity(new Intent(getContext(),MainActivity.class));
+        getActivity().finish();
 
     }
 }
