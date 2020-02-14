@@ -31,4 +31,5 @@
     <string name="msgConfirmExit">¿Realmente desea salir? Se perderá todo el progreso.</string>
     <string name="titleConfirmExit">Salir</string>
     <string name="logout">Cerrar sesión</string>
+    <string name="msgExitLogin">¿Realmente desea salir de la aplicación?</string>
 </resources>

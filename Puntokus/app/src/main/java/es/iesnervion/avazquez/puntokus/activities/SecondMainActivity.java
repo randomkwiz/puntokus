@@ -73,7 +73,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragmentSecondActivity,gameFragment )
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .addToBackStack(null)   //este si puede volver atras
+                            //.addToBackStack(null)   //este si puede volver atras
                             .commit();
                 }
 
@@ -91,9 +91,9 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                 getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentSecondActivity, accountFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-
                         .commit()
                         ;
+                //getSupportFragmentManager().popBackStackImmediate();
 
                 break;
             case R.id.menu_play:
@@ -101,12 +101,14 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                         .replace(R.id.fragmentSecondActivity, playFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
+                //getSupportFragmentManager().popBackStack();
                 break;
             case R.id.menu_ranking:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, rankingFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
+                //getSupportFragmentManager().popBackStackImmediate();
                 break;
 
         }

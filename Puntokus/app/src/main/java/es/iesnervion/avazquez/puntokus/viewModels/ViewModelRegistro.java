@@ -12,18 +12,30 @@ public class ViewModelRegistro extends ViewModel {
     private MutableLiveData<Boolean> goToLogIn;
     private MutableLiveData<Boolean> isCorrectLogin;
     private MutableLiveData<User> user;
-
+    private MutableLiveData<Boolean> userWantToExit;
 
     public ViewModelRegistro() {
 
         this.goToSignUp = new MutableLiveData<>();
         this.goToLogIn = new MutableLiveData<>();
         this.isCorrectLogin = new MutableLiveData<>();
+        this.userWantToExit = new MutableLiveData<>();
         this.user = new MutableLiveData<>();
         this.user.setValue(new User());
+        this.userWantToExit.setValue(false);
     }
 
+    public LiveData<Boolean> getUserWantToExit() {
+        return userWantToExit;
+    }
 
+    public void setUserWantToExit(Boolean userWantToExit) {
+        if(userWantToExit){
+            this.userWantToExit.setValue(userWantToExit);
+            this.userWantToExit.setValue(false);
+        }
+
+    }
 
     public LiveData<Boolean> getIsCorrectLogin() {
         return isCorrectLogin;

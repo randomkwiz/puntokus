@@ -27,6 +27,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     final int NORMAL = 9 ;
     final int HARD = 11 ;
     final int SICK = 15 ;
+
     public PlayFragment() {
         // Required empty public constructor
     }

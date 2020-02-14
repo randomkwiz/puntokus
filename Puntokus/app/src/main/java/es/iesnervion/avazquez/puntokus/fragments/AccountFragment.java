@@ -84,6 +84,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         firebaseAuth.signOut();
         startActivity(new Intent(getContext(),MainActivity.class));
         getActivity().finish();
+        //TODO cambiar y poner con viewmodel
 
     }
 }

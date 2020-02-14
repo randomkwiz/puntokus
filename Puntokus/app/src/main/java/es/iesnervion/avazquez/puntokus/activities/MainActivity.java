@@ -9,11 +9,15 @@ import androidx.lifecycle.ViewModelProviders;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.LoginFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RegistrarseFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
@@ -83,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean){
                     intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    //finish();
+
+
                 }
 
             }
@@ -95,6 +101,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(R.id.fragment);
+        if(currentFragment instanceof LoginFragment){
+            //Si el usuario pulsa el boton de ir hacia atrás estando
+            //en el fragment del login, se le mostrará dialog de confirmación
+            AlertDialog.Builder builder;
+            AlertDialog dialog;
+            builder = new AlertDialog.Builder(this);
+            //pongo el titulo y los botones
+            builder.setTitle(R.string.titleConfirmExit);
+            builder.setMessage(R.string.msgExitLogin)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Si el usuario le da a que sí desea salir
+                            viewModel.setUserWantToExit(true);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null);
 
+            //lo muestro
+            dialog = builder.create();
+            dialog.show();
+
+
+            Observer<Boolean> exitObserver = new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if(aBoolean){
+                        salir();
+                    }
+                }
+            };
+            viewModel.getUserWantToExit().observe(this,exitObserver);
+
+
+
+        }else{
+            salir();
+        }
+    }
+
+
+    public void salir(){
+
+        super.onBackPressed();
+        finish();
+    }
 
 }
