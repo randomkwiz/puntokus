@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +51,8 @@ public class RankingFragment extends Fragment {
     RadioGroup radioGroup;
     @BindView(R.id.listView_ranking)
     ListView listViewRanking;
-
+    @BindView(R.id.animationLoadRanking)
+    LottieAnimationView animationView;
     //TODO hacer el filtro del ranking
 
     FirebaseAuth firebaseAuth;
@@ -72,9 +74,6 @@ public class RankingFragment extends Fragment {
         listaPartidasAMostrar.setValue(new ArrayList<>());
        GamesAdapter adapter =
                 new GamesAdapter(listaPartidasAMostrar.getValue(),getActivity());
-
-
-
 
 
         databaseReference.child("Games").addValueEventListener(new ValueEventListener() {
@@ -117,6 +116,8 @@ public class RankingFragment extends Fragment {
                             filtrarListado("SICK");
                             break;
                     }
+                    animationView.setVisibility(View.GONE);
+                    listViewRanking.setVisibility(View.VISIBLE);
                 }
             }
 

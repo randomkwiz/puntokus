@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8EAF6"
-    tools:context=".fragments.RegistrarseFragment">
+
+    tools:context=".fragments.RegistrarseFragment"
+    android:background="@drawable/bkground"
+    android:backgroundTint="@color/colorPrimary"
+    android:backgroundTintMode="multiply"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
