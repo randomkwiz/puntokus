@@ -39,12 +39,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:background="#A6FFFFFF"
+                android:theme="@style/TextLabel"
                 android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_email"
                     android:layout_width="match_parent"
+
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Email"
+                    android:hint="@string/lblEmail_account"
                     android:textColor="@color/colorIntermedio1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
@@ -53,14 +56,16 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:background="#A6FFFFFF"
                 android:layout_marginTop="8dp"
+                android:theme="@style/TextLabel"
                 android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:hint="Password"
+                    android:hint="@string/password"
+                    android:textColorHint="@color/colorOscuro1"
                     android:textColor="@color/colorIntermedio1"
                     />
             </com.google.android.material.textfield.TextInputLayout>
@@ -81,6 +86,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
+                android:textStyle="bold"
+                android:textColor="@color/colorIntermedio1"
                 android:layout_marginBottom="24dp"
                 android:text="@string/linkSignUp"
                 android:gravity="center"

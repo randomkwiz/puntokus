@@ -95,7 +95,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             case R.id.menu_account:
                 getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentSecondActivity, accountFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit()
                         ;
 
@@ -104,14 +104,14 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             case R.id.menu_play:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, playFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                       // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 ret = true;
                 break;
             case R.id.menu_ranking:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, rankingFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 ret = true;
                 break;
@@ -163,13 +163,39 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
 
         }else if(currentFragment instanceof PlayFragment){
-           //Intent intent = new Intent(this, MainActivity.class);
-            //finish();
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //startActivity(intent);
+            //Si está aquí y le da hacia atrás, le preguntaremos si desea salir
+            //Si el usuario pulsa el boton de ir hacia atrás estando
+            //en el fragment del login, se le mostrará dialog de confirmación
+            AlertDialog.Builder builder;
+            AlertDialog dialog;
+            builder = new AlertDialog.Builder(this);
+            //pongo el titulo y los botones
+            builder.setTitle(R.string.titleConfirmExit);
+            builder.setMessage(R.string.msgExitLogin)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Si el usuario le da a que sí desea salir
+                            viewModel.setUserWantToExit(true);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null);
 
-            //exit(0); //no funciona xddd
-            salir();
+            //lo muestro
+            dialog = builder.create();
+            dialog.show();
+
+
+            Observer<Boolean> exitObserver = new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if(aBoolean){
+                        salir();
+                    }
+                }
+            };
+            viewModel.getUserWantToExit().observe(this,exitObserver);
+
 
         }else if(currentFragment instanceof AccountFragment){
 

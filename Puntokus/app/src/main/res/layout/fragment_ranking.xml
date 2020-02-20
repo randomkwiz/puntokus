@@ -9,6 +9,7 @@
 
 
     <RadioGroup
+
         android:layout_margin="15dp"
         android:id="@+id/RGfiltrar"
         android:gravity="start"
@@ -22,6 +23,7 @@
 
 
         <RadioButton
+            android:buttonTint="@color/colorIntermedio1"
             android:checked="true"
             android:id="@+id/RBAll"
             android:text="@string/all"
@@ -30,6 +32,7 @@
             />
 
         <RadioButton
+            android:buttonTint="@color/colorIntermedio1"
             android:id="@+id/RBeasy"
             android:text="@string/easy"
             android:layout_width="wrap_content"
@@ -37,17 +40,20 @@
             />
 
         <RadioButton
+            android:buttonTint="@color/colorIntermedio1"
             android:id="@+id/RBnormal"
             android:text="@string/normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <RadioButton
+            android:buttonTint="@color/colorIntermedio1"
             android:id="@+id/RBhard"
             android:text="@string/hard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
+            android:buttonTint="@color/colorIntermedio1"
             android:id="@+id/RBsick"
             android:text="@string/sick"
             android:layout_width="wrap_content"

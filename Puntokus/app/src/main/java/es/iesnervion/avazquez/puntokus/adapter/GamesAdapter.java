@@ -89,6 +89,8 @@ public class GamesAdapter extends BaseAdapter {
 
         if(position >= 0 && position <= 2 ){
             viewHolder.getImgMedalla().setVisibility(View.VISIBLE);
+            ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#000000"));
+            ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#000000"));
             switch (position){
                 case 0:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_first);
@@ -106,9 +108,13 @@ public class GamesAdapter extends BaseAdapter {
         }else{
         viewHolder.getImgMedalla().setVisibility(View.GONE);
             if(position%2 == 0){
-                convertView.setBackgroundColor(Color.parseColor("#fef6fb"));
+                convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#666666"));
+                ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#666666"));
             }else{
-                convertView.setBackgroundColor(Color.parseColor("#d6e5fa"));
+                convertView.setBackgroundColor(Color.parseColor("#666666"));
+                ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#FFFFFF"));
+                ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#FFFFFF"));
             }
         }
 
