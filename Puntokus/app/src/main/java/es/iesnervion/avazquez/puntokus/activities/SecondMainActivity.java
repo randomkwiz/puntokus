@@ -90,7 +90,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
+        boolean ret = false;
         switch (menuItem.getItemId()){
             case R.id.menu_account:
                 getSupportFragmentManager().beginTransaction()
@@ -99,26 +99,26 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                         .commit()
                         ;
 
-
+                ret = true;
                 break;
             case R.id.menu_play:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, playFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-
+                ret = true;
                 break;
             case R.id.menu_ranking:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, rankingFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-
+                ret = true;
                 break;
 
         }
 
-        return true;
+        return ret;
     }
 
 
