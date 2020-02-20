@@ -82,14 +82,25 @@ public class RankingFragment extends Fragment {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot ds: dataSnapshot.getChildren()){
 
-                        for(DataSnapshot hijo: ds.getChildren()){
-                            partida = new Game();
-                            partida.setNickname(hijo.child("nickname").getValue().toString());
-                            partida.setEmail(hijo.child("email").getValue().toString());
-                            partida.setLevel(hijo.child("level").getValue().toString());
-                            partida.setTimeInMilis(Long.parseLong(hijo.child("timeInMilis").getValue().toString()));
-                            listaPartidas.getValue().add(partida);
+
+
+                        if(ds != null){
+                            for(DataSnapshot hijo: ds.getChildren()){
+
+                                if(hijo != null){
+                                    partida = new Game();
+                                    partida = hijo.getValue(Game.class);    //esta es la forma correcta de hacerlo
+
+//                                    partida.setNickname(hijo.child("nickname").getValue().toString());
+//                                    partida.setEmail(hijo.child("email").getValue().toString());
+//                                    partida.setLevel(hijo.child("level").getValue().toString());
+//                                    partida.setTimeInMilis(Long.parseLong(hijo.child("timeInMilis").getValue().toString()));
+
+                                    listaPartidas.getValue().add(partida);
+                                }
+                            }
                         }
+
 
                     }
 

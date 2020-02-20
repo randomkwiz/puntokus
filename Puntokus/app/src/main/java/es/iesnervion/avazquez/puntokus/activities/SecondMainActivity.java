@@ -140,7 +140,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                            //Si el usuario le da a que sí desea salir
-                            viewModel.setUserWantToExit(true);
+                            viewModel.setUserWantToGoBack(true);
                         }
                     })
                     .setNegativeButton(R.string.cancel, null);
@@ -158,7 +158,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                     }
                 }
             };
-            viewModel.getUserWantToExit().observe(this,exitObserver);
+            viewModel.getUserWantToGoBack().observe(this,exitObserver);
 
 
 

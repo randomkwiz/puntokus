@@ -152,7 +152,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     User user = dataSnapshot.getValue(User.class);
                                     viewModel.setUser(user);
-                                    Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
                                     viewModel.setIsCorrectLogin(true);
                                     progressDialog.dismiss();
                                 }
@@ -178,11 +178,35 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         if(firebaseAuth.getCurrentUser() != null){
-            //significa que esta logeado
-            Intent intent = new Intent(getContext(), SecondMainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-            startActivity(intent);
+            //Tengo que sacar sus datos para pasarlos, ya que si entra aqui no los tendra cogidos
+            viewModel.getUser().getValue().setId(firebaseAuth.getCurrentUser().getUid());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("Users").child(viewModel.getUser().getValue().getId())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            viewModel.setUser(user);
+                            //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
+                            //viewModel.setIsCorrectLogin(true);
+                            //significa que esta logeado
+                            Intent intent = new Intent(getContext(), SecondMainActivity.class);
+                            intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+//            viewModel.setIsCorrectLogin(true);
 
         }
 

@@ -89,14 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     //finish();
                     intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-
-
                     startActivity(intent);
-                   // System.exit(0);
-
-
-
                 }
 
             }
