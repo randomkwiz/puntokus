@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 if(aBoolean){
                     ft.replace(R.id.fragment, registro)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .addToBackStack(null)
+                            //.addToBackStack(null)
                             .commit();   //aqui si interesa el add to back stack
                 }
 
@@ -86,9 +86,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean){
+                    //finish();
                     intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+
+
                     startActivity(intent);
+                   // System.exit(0);
+
 
 
                 }
@@ -140,7 +146,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        }else{
+        }else if(currentFragment instanceof RegistrarseFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment, login)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+
+                    .commit();
+        }
+
+
+        else{
             salir();
         }
     }
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     public void salir(){
 
         super.onBackPressed();
-        finish();
+
     }
 
 }

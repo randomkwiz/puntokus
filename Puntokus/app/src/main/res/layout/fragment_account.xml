@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8EAF6"
+    android:background="@color/sombra"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AccountFragment">
 
@@ -71,7 +71,8 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_logout"
-        android:background="#FBBBBB"
+        android:background="@color/colorOscuro1"
+        android:textColor="@color/sombra"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"

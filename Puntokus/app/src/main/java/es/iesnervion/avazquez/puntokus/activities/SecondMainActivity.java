@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,8 @@ import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RankingFragment;
 import es.iesnervion.avazquez.puntokus.util.Utilidad;
 import es.iesnervion.avazquez.puntokus.viewModels.TableroViewModel;
+
+import static java.lang.System.exit;
 
 public class SecondMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -93,7 +98,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit()
                         ;
-                //getSupportFragmentManager().popBackStackImmediate();
+
 
                 break;
             case R.id.menu_play:
@@ -101,14 +106,14 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                         .replace(R.id.fragmentSecondActivity, playFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-                //getSupportFragmentManager().popBackStack();
+
                 break;
             case R.id.menu_ranking:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentSecondActivity, rankingFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-                //getSupportFragmentManager().popBackStackImmediate();
+
                 break;
 
         }
@@ -157,7 +162,31 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
 
 
-        }else{
+        }else if(currentFragment instanceof PlayFragment){
+           //Intent intent = new Intent(this, MainActivity.class);
+            //finish();
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //startActivity(intent);
+
+            //exit(0); //no funciona xddd
+            salir();
+
+        }else if(currentFragment instanceof AccountFragment){
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentSecondActivity, playFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+            bottomNavigationView.setSelectedItemId(R.id.menu_play);
+        }else if(currentFragment instanceof RankingFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentSecondActivity, playFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+            bottomNavigationView.setSelectedItemId(R.id.menu_play);
+        }
+
+        else{
             salir();
         }
     }

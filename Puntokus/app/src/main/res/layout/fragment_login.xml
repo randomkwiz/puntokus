@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.LoginFragment"
     android:background="@drawable/bkground"
-    android:backgroundTint="@color/colorPrimary"
+    android:backgroundTint="@color/sombra"
     android:backgroundTintMode="multiply"
 
 
@@ -44,20 +44,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Email" />
+                    android:hint="Email"
+                    android:textColor="@color/colorIntermedio1"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Label -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:hint="Password"/>
+                    android:hint="Password"
+                    android:textColor="@color/colorIntermedio1"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
@@ -67,6 +72,8 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
+                android:background="@color/colorOscuro1"
+                android:textColor="@color/sombra"
                 android:text="@string/login"/>
 
             <TextView android:id="@+id/link_signup"
