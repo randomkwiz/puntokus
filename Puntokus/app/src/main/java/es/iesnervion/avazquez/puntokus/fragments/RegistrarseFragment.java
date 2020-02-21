@@ -121,12 +121,6 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                 iniciarSesion();
                 break;
         }
-
-
-
-
-
-
     }
 
     /*
@@ -185,6 +179,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                                                 Toast.LENGTH_SHORT).show();
                                             //TODO hacer que vuelva a la pantalla de login
                                         viewModel.setGoToLogIn(true);
+
                                     }
                                 }
                             });

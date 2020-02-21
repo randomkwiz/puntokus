@@ -8,4 +8,10 @@
     <color name="colorClaro1">#ffa372</color>
     <color name="sombra">#FFFFFF</color>
     <color name="blancoAzulado">#a3bac3</color>
+    <color name="gold">#D4AF37</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="bronze">#cd7f32</color>
+    <color name="grease">#666666</color>
+
+
 </resources>

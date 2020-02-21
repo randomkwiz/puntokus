@@ -1,7 +1,9 @@
 package es.iesnervion.avazquez.puntokus.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,25 +96,59 @@ public class GamesAdapter extends BaseAdapter {
             switch (position){
                 case 0:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_first);
-                    convertView.setBackgroundColor(Color.parseColor("#D4AF37"));
-                    break;
+
+                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.gold)));
+                    }else{
+                        convertView.setBackgroundColor(Color.parseColor("#D4AF37"));
+
+                    }
+
+                     break;
                 case 1:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_second);
-                    convertView.setBackgroundColor(Color.parseColor("#C0C0C0"));
+
+                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.silver)));
+                    }else{
+                        convertView.setBackgroundColor(Color.parseColor("#C0C0C0"));
+
+                    }
+
+
                     break;
                 case 2:
                     viewHolder.getImgMedalla().setImageResource(R.drawable.ic_third);
-                    convertView.setBackgroundColor(Color.parseColor("#cd7f32"));
+
+                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.bronze)));
+                    }else{
+                        convertView.setBackgroundColor(Color.parseColor("#cd7f32"));
+                    }
                     break;
             }
         }else{
         viewHolder.getImgMedalla().setVisibility(View.GONE);
             if(position%2 == 0){
-                convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
+
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.sombra)));
+                }else{
+                    convertView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+
                 ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#666666"));
                 ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#666666"));
             }else{
-                convertView.setBackgroundColor(Color.parseColor("#666666"));
+
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.grease)));
+                }else{
+                    convertView.setBackgroundColor(Color.parseColor("#666666"));
+                }
+
+
                 ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#FFFFFF"));
                 ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#FFFFFF"));
             }
