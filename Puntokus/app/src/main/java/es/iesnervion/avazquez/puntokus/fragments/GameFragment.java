@@ -70,6 +70,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     User usuarioActual;
     MediaPlayer sonidoTap;
     MediaPlayer sonidoMec;
+    MediaPlayer easterEgg;
     MediaPlayer backgroundMusic;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -155,7 +156,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
             if(areSoundsAllowed){
 
-                sonidoTap.start();
+                if( ((int)( Math.random() * 100 )) == 42 ){
+                    easterEgg.start();
+                }else{
+                    sonidoTap.start();
+                }
+
+
             }
 
         }else if(v instanceof Button){
@@ -396,6 +403,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         sonidoTap.setVolume(volume, volume);
         sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
         sonidoMec.setVolume(volume, volume);
+        easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
+        easterEgg.setVolume(MAX_VOLUME,MAX_VOLUME);
 
         backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music_relaxing);
         backgroundMusic.setVolume(volume,volume);
