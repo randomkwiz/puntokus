@@ -2,7 +2,9 @@ package es.iesnervion.avazquez.puntokus.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +35,7 @@ import es.iesnervion.avazquez.puntokus.entities.User;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements View.OnClickListener {
+public class AccountFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 
     public AccountFragment() {
@@ -44,10 +49,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     TextView email;
     @BindView(R.id.btn_logout)
     Button btnLogout;
+
+    @BindView(R.id.toggleSounds)
+    Switch sounds;
+
+    @BindView(R.id.toggleMusic)
+    Switch music;
+
     DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
     String idUsuarioActual;
     ProgressDialog progressDialog;
+
+    SharedPreferences sharedPreferences;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +74,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         //progressDialog = new ProgressDialog(getContext());
         //progressDialog.setMessage("Cargando datos");
         //progressDialog.show();
+
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        boolean isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        boolean areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+
+        music.setChecked(isMusicAllowed);
+        sounds.setChecked(areSoundsAllowed);
+
         databaseReference.child("Users").child(idUsuarioActual).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -75,6 +98,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         });
 
         btnLogout.setOnClickListener(this);
+        sounds.setOnCheckedChangeListener(this);
+        music.setOnCheckedChangeListener(this);
+
+
+
         return view;
     }
 
@@ -85,6 +113,21 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         startActivity(new Intent(getContext(),MainActivity.class));
         getActivity().finish();
         //TODO cambiar y poner con viewmodel
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        switch (buttonView.getId()){
+            case R.id.toggleMusic:
+                editor.putBoolean("Music",isChecked);
+                break;
+            case R.id.toggleSounds:
+                editor.putBoolean("Sounds",isChecked);
+                break;
+        }
+        editor.commit();
 
     }
 }

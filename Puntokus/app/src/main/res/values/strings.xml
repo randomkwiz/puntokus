@@ -39,4 +39,6 @@
     <string name="emailNeeded">Email field needed</string>
     <string name="error_emailSent">Error sending the email</string>
     <string name="errorLogin">Error login</string>
+    <string name="sounds">Sounds</string>
+    <string name="music">Music</string>
 </resources>

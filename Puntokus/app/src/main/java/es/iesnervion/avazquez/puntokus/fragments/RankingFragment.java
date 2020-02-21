@@ -1,6 +1,9 @@
 package es.iesnervion.avazquez.puntokus.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -53,8 +56,9 @@ public class RankingFragment extends Fragment {
     ListView listViewRanking;
     @BindView(R.id.animationLoadRanking)
     LottieAnimationView animationView;
-    //TODO hacer el filtro del ranking
-
+    boolean areSoundsAllowed;
+    SharedPreferences sharedPreferences;
+    MediaPlayer sonidoTap;
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
     MutableLiveData<ArrayList<Game>> listaPartidas;
@@ -67,6 +71,11 @@ public class RankingFragment extends Fragment {
         ButterKnife.bind(this,view);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+
+        areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+
+
         listaPartidas = new MutableLiveData<ArrayList<Game>>();
         listaPartidasAMostrar = new MutableLiveData<ArrayList<Game>>();
         radioGroup.check(R.id.RBAll);
@@ -162,6 +171,12 @@ public class RankingFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
+
+                if(areSoundsAllowed){
+                    sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+                    sonidoTap.start();
+                }
+
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.RBAll:
                         listaPartidasAMostrar.setValue(listaPartidas.getValue());

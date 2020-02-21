@@ -4,7 +4,9 @@ package es.iesnervion.avazquez.puntokus.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -66,8 +68,15 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     Chronometer crono;
     TableroViewModel viewModel;
     User usuarioActual;
+    MediaPlayer sonidoTap;
+    MediaPlayer sonidoMec;
+    MediaPlayer backgroundMusic;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+
+    boolean isMusicAllowed;
+    boolean areSoundsAllowed;
+    SharedPreferences sharedPreferences;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,10 +85,24 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this,view);
         viewModel = ViewModelProviders.of(getActivity()).get(TableroViewModel.class);
         viewModel.inicializarPartida();
-
         establecerTablero(layout,view.getContext(),viewModel.getMapeo(),viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());
         crono.start();
+        //sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        //isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        //areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+
+
+//        sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
+//        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music);
+
+//        if(isMusicAllowed){
+//            backgroundMusic.start();
+//            backgroundMusic.setLooping(true);
+//        }else{
+//            backgroundMusic.stop();
+//        }
+
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
         newGameBtn.setOnClickListener(this);
@@ -112,15 +135,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         if(v instanceof ImageView){
             ImageView casilla = (ImageView) v;
             Utilidad utilidad = new Utilidad();
-
             //Obtengo el objeto casilla correspondiente a la vista pulsada
             Casilla objetoCasilla = utilidad.obtenerCasillaPorID(viewModel.getTablero(),v.getId());
+
 
 
             if(objetoCasilla.getImgSrc() == R.drawable.selecteditem){
                 casilla.setImageResource(R.drawable.nonselecteditem);
                 casilla.setTag(R.drawable.nonselecteditem);
-
                 objetoCasilla.setMarcada(false);
                 objetoCasilla.setImgSrc(R.drawable.nonselecteditem);
 
@@ -130,8 +152,18 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 objetoCasilla.setMarcada(true);
                 objetoCasilla.setImgSrc(R.drawable.selecteditem);
             }
+
+            if(areSoundsAllowed){
+
+                sonidoTap.start();
+            }
+
         }else if(v instanceof Button){
             Utilidad utilidad = new Utilidad();
+            if(areSoundsAllowed){
+
+                sonidoMec.start();
+            }
             AlertDialog.Builder builder;
             AlertDialog dialog;
             switch (v.getId()){
@@ -343,5 +375,38 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         cs.applyTo(layout);
 
     }
+
+    @Override
+    public void onPause() {
+        backgroundMusic.stop();
+        super.onPause();
+    }
+
+    @Override
+    public void onStart() {
+
+        final int MAX_VOLUME = 100;
+        final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
+
+
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+        sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
+        sonidoTap.setVolume(volume, volume);
+        sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        sonidoMec.setVolume(volume, volume);
+
+        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music_relaxing);
+        backgroundMusic.setVolume(volume,volume);
+        if(isMusicAllowed){
+            backgroundMusic.start();
+            backgroundMusic.setLooping(true);
+        }else{
+            backgroundMusic.stop();
+        }
+        super.onStart();
+    }
+
 
 }

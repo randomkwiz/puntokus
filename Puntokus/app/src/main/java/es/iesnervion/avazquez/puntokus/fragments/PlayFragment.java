@@ -1,6 +1,9 @@
 package es.iesnervion.avazquez.puntokus.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +35,13 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
+    MediaPlayer backgroundMusic;
+    MediaPlayer sonidoTap;
+    boolean isMusicAllowed;
+    SharedPreferences sharedPreferences;
+    boolean areSoundsAllowed;
+
+
 
     @BindView(R.id.view1)
     Button easyBtn;
@@ -46,6 +56,11 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_play, container, false);
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+
+
+        sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
         ButterKnife.bind(this,view);
         easyBtn.setOnClickListener(this);
         normalBtn.setOnClickListener(this);
@@ -59,6 +74,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int lado = 0;
+
         switch (v.getId()){
             case R.id.view1:
                 lado = EASY;
@@ -73,7 +89,39 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 lado = SICK;
                 break;
         }
+        if(areSoundsAllowed){
+            sonidoTap.start();
+        }
         viewModel.setLado(lado);
         viewModel.setIsGoingToPlay(true);
+    }
+
+
+    @Override
+    public void onStart() {
+
+        final int MAX_VOLUME = 100;
+        final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
+
+
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+
+        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music);
+        backgroundMusic.setVolume(volume,volume);
+        if(isMusicAllowed){
+            backgroundMusic.start();
+            backgroundMusic.setLooping(true);
+        }else{
+            backgroundMusic.stop();
+        }
+        super.onStart();
+    }
+
+
+    @Override
+    public void onPause() {
+        backgroundMusic.stop();
+        super.onPause();
     }
 }
