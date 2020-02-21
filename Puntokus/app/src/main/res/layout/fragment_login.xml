@@ -21,7 +21,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="56dp"
+            android:paddingTop="20dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="250dp"
                 app:srcCompat="@drawable/ic_puntokus1"
-                android:textSize="50dp"
+
                 android:layout_gravity="center_horizontal"
                 ></ImageView>
 
@@ -92,6 +92,20 @@
                 android:text="@string/linkSignUp"
                 android:gravity="center"
                 android:textSize="16dip"/>
+
+            <TextView android:id="@+id/rememberPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:textStyle="bold"
+
+                android:textColor="@color/colorIntermedio1"
+                android:layout_marginBottom="24dp"
+                android:text="@string/rememberPassword"
+                android:gravity="center"
+                android:textSize="16dip"/>
+
 
         </LinearLayout>
     </ScrollView>

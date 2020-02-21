@@ -34,4 +34,9 @@
     <string name="logout">Log out</string>
     <string name="msgExitLogin">Do you really want to exit the app?</string>
     <string name="password">Password</string>
+    <string name="rememberPassword"> <u>I\'ve forgotten my password</u> </string>
+    <string name="emailSent">Email sent</string>
+    <string name="emailNeeded">Email field needed</string>
+    <string name="error_emailSent">Error sending the email</string>
+    <string name="errorLogin">Error login</string>
 </resources>

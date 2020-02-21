@@ -33,4 +33,9 @@
     <string name="logout">Cerrar sesión</string>
     <string name="msgExitLogin">¿Realmente desea salir de la aplicación?</string>
     <string name="password">Contraseña</string>
+    <string name="rememberPassword"><u>He olvidado mi contraseña</u> </string>
+    <string name="emailSent">Correo enviado</string>
+    <string name="emailNeeded">Rellene el campo del correo electrónico</string>
+    <string name="error_emailSent">Hubo un problema</string>
+    <string name="errorLogin">Error en el inicio de sesión</string>
 </resources>

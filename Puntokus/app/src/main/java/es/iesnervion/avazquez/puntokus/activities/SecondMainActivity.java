@@ -150,15 +150,19 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             dialog.show();
 
 
-            Observer<Boolean> exitObserver = new Observer<Boolean>() {
+            Observer<Boolean> goBackObserver = new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
                     if(aBoolean){
-                        salir();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentSecondActivity, playFragment)
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .commit();
+                        bottomNavigationView.setSelectedItemId(R.id.menu_play);
                     }
                 }
             };
-            viewModel.getUserWantToGoBack().observe(this,exitObserver);
+            viewModel.getUserWantToGoBack().observe(this,goBackObserver);
 
 
 

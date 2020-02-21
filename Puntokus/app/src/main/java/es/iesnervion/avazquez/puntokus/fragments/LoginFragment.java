@@ -57,6 +57,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnLogin;
     @BindView(R.id.link_signup)
     TextView linkSignUp;
+
+
+    @BindView(R.id.rememberPassword)
+    TextView rememberPassword;
+
     private FirebaseAuth firebaseAuth;
     ViewModelRegistro viewModel;
     ProgressDialog progressDialog;
@@ -88,6 +93,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         btnLogin.setOnClickListener(this);
         linkSignUp.setOnClickListener(this);
+        rememberPassword.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext());
 
         return view;
@@ -109,12 +115,40 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.link_signup:
                 registrarse();
                 break;
+            case R.id.rememberPassword:
+                recordarPassword();
+                break;
         }
 
 
 
 
 
+    }
+
+    //Manda correo para recordar la contraseña
+    private void recordarPassword() {
+        String email = this.email.getText().toString().trim();
+
+        if(!email.isEmpty()){
+            firebaseAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getContext(),
+                                        getResources().getText(R.string.emailSent), Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getContext(),
+                                        getResources().getText(R.string.error_emailSent), Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
+        }else{
+            Toast.makeText(getContext(),
+                    getResources().getText(R.string.emailNeeded), Toast.LENGTH_LONG).show();
+        }
     }
 
     /*
@@ -165,7 +199,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
                         } else {
-                            Toast.makeText(getContext(), "Esa combinación no existe", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                         }
 
