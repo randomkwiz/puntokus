@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -82,6 +85,29 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         music.setChecked(isMusicAllowed);
         sounds.setChecked(areSoundsAllowed);
 
+
+
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(isMusicAllowed){
+                music.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+                music.setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+            }else{
+                music.setTrackTintList(ColorStateList.valueOf(Color.GRAY));
+                music.setThumbTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+
+            if(areSoundsAllowed){
+                sounds.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+                sounds.setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+            }else{
+                sounds.setTrackTintList(ColorStateList.valueOf(Color.GRAY));
+                sounds.setThumbTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+        }
+
+
+
+
         databaseReference.child("Users").child(idUsuarioActual).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,12 +148,25 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         switch (buttonView.getId()){
             case R.id.toggleMusic:
                 editor.putBoolean("Music",isChecked);
+
                 break;
             case R.id.toggleSounds:
                 editor.putBoolean("Sounds",isChecked);
                 break;
         }
         editor.commit();
+
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(isChecked){
+                ((Switch)buttonView).setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+                ((Switch)buttonView).setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+            }else{
+                ((Switch)buttonView).setTrackTintList(ColorStateList.valueOf(Color.GRAY));
+                ((Switch)buttonView).setThumbTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+        }
+
+
 
     }
 }

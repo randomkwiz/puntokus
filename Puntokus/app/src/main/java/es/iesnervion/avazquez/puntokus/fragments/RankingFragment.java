@@ -78,13 +78,17 @@ public class RankingFragment extends Fragment {
 
         listaPartidas = new MutableLiveData<ArrayList<Game>>();
         listaPartidasAMostrar = new MutableLiveData<ArrayList<Game>>();
-        radioGroup.check(R.id.RBAll);
+
+
+
         listaPartidas.setValue(new ArrayList<>());
         listaPartidasAMostrar.setValue(new ArrayList<>());
        GamesAdapter adapter =
                 new GamesAdapter(listaPartidasAMostrar.getValue(),getActivity());
-
-
+//
+//        if(radioGroup.getCheckedRadioButtonId() == -1){ //ninguno está seleccionado
+//            radioGroup.check(R.id.RBAll);
+//        }
         databaseReference.child("Games").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -119,6 +123,12 @@ public class RankingFragment extends Fragment {
                         //Es para que el ranking tenga max 150 partidas
                     }
                 //listViewRanking.setAdapter(adapter);
+
+                    //Esta comprobación debe ir aquí, si la pongo antes
+                    //no pilla el cheked
+                    if(radioGroup.getCheckedRadioButtonId() == -1){ //ninguno está seleccionado
+                        radioGroup.check(R.id.RBAll);
+                    }
                     switch (radioGroup.getCheckedRadioButtonId()) {
                         case R.id.RBAll:
                             listaPartidasAMostrar.setValue(listaPartidas.getValue());

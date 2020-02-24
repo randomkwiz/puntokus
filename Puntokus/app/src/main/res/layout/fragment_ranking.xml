@@ -24,7 +24,7 @@
 
         <RadioButton
             android:buttonTint="@color/colorIntermedio1"
-            android:checked="true"
+
             android:id="@+id/RBAll"
             android:text="@string/all"
             android:layout_width="wrap_content"
