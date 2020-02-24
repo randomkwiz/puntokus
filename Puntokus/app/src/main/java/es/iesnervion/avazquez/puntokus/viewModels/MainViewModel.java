@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.SparseIntArray;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,7 +24,7 @@ import es.iesnervion.avazquez.puntokus.util.Utilidad;
 * No lo cambies mas
 * */
 
-public class TableroViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
     private Tablero tablero;
     private SparseIntArray mapeo = new SparseIntArray();
     MutableLiveData<Boolean> isGoingToPlay;
@@ -31,19 +32,22 @@ public class TableroViewModel extends ViewModel {
     MutableLiveData<User> usuarioActual;
     MutableLiveData<Boolean> userWantToExit;
     MutableLiveData<Boolean> userWantToGoBack;
+    MutableLiveData<String> currentFragment;
 
 
 
-    public TableroViewModel() {
+    public MainViewModel() {
 
         this.isGoingToPlay = new MutableLiveData<>();
         this.userWantToExit = new MutableLiveData<>();
         this.userWantToGoBack = new MutableLiveData<>();
         this.lado = new MutableLiveData<>();
         this.usuarioActual = new MutableLiveData<>();
+        this.currentFragment = new MutableLiveData<>();
         this.usuarioActual.setValue(new User());
         this.userWantToExit.setValue(false);
         this.userWantToGoBack.setValue(false);
+        this.currentFragment.setValue("");
     }
 
 
@@ -60,6 +64,15 @@ public class TableroViewModel extends ViewModel {
             utilidad.establecerNumeroDeMarcasHorizontalesYVerticales(tablero);
         }
 
+    }
+
+
+    public LiveData<String> getCurrentFragment() {
+        return currentFragment;
+    }
+
+    public void setCurrentFragment(String currentFragment) {
+        this.currentFragment.setValue(currentFragment);
     }
 
     public LiveData<Boolean> getUserWantToGoBack() {

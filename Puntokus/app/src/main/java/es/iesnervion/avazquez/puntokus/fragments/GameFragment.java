@@ -43,7 +43,7 @@ import es.iesnervion.avazquez.puntokus.entities.Casilla;
 import es.iesnervion.avazquez.puntokus.entities.Tablero;
 import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.util.Utilidad;
-import es.iesnervion.avazquez.puntokus.viewModels.TableroViewModel;
+import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +66,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     ConstraintLayout layout;
     @BindView(R.id.cronoTime)
     Chronometer crono;
-    TableroViewModel viewModel;
+    MainViewModel viewModel;
     User usuarioActual;
     MediaPlayer sonidoTap;
     MediaPlayer sonidoMec;
@@ -84,7 +84,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
         ButterKnife.bind(this,view);
-        viewModel = ViewModelProviders.of(getActivity()).get(TableroViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         viewModel.inicializarPartida();
         establecerTablero(layout,view.getContext(),viewModel.getMapeo(),viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());

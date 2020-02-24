@@ -31,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.entities.User;
-import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
+import es.iesnervion.avazquez.puntokus.viewModels.AutenticacionViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +54,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     TextView linkLogin;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    ViewModelRegistro viewModel;
+    AutenticacionViewModel viewModel;
     ProgressDialog progressDialog;
 
     @Override
@@ -74,7 +74,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
 
         View view = inflater.inflate(R.layout.fragment_registrarse, container, false);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(ViewModelRegistro.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(AutenticacionViewModel.class);
         ButterKnife.bind(this,view); //le mandas la view con la que realizará el binding
 
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)

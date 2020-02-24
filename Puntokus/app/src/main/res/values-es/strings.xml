@@ -40,4 +40,5 @@
     <string name="errorLogin">Error en el inicio de sesión</string>
     <string name="music">Música</string>
     <string name="sounds">Sonidos</string>
+    <string name="pressBack">Por favor presione el botón atrás para volver</string>
 </resources>

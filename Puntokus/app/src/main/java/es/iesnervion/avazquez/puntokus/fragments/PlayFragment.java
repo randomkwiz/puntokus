@@ -17,8 +17,7 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
-import es.iesnervion.avazquez.puntokus.entities.Tablero;
-import es.iesnervion.avazquez.puntokus.viewModels.TableroViewModel;
+import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +50,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     Button hardBtn;
     @BindView(R.id.view4)
     Button sickBtn;
-    TableroViewModel viewModel;
+    MainViewModel viewModel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         normalBtn.setOnClickListener(this);
         hardBtn.setOnClickListener(this);
         sickBtn.setOnClickListener(this);
-        viewModel = ViewModelProviders.of(getActivity()).get(TableroViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         return view;
     }
 

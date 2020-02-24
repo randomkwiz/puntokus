@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import es.iesnervion.avazquez.puntokus.entities.User;
 
-public class ViewModelRegistro extends ViewModel {
+public class AutenticacionViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> goToSignUp;
     private MutableLiveData<Boolean> goToLogIn;
@@ -14,7 +14,7 @@ public class ViewModelRegistro extends ViewModel {
     private MutableLiveData<User> user;
     private MutableLiveData<Boolean> userWantToExit;
 
-    public ViewModelRegistro() {
+    public AutenticacionViewModel() {
 
         this.goToSignUp = new MutableLiveData<>();
         this.goToLogIn = new MutableLiveData<>();

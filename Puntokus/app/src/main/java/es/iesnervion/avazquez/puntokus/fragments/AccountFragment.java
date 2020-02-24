@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
-import es.iesnervion.avazquez.puntokus.activities.MainActivity;
+import es.iesnervion.avazquez.puntokus.activities.AutenticacionActivity;
 import es.iesnervion.avazquez.puntokus.entities.User;
 
 /**
@@ -136,7 +135,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     public void onClick(View v) {
         //Cierra la sesión y te devuelve a la main activity
         firebaseAuth.signOut();
-        startActivity(new Intent(getContext(),MainActivity.class));
+        startActivity(new Intent(getContext(), AutenticacionActivity.class));
         getActivity().finish();
         //TODO cambiar y poner con viewmodel
 

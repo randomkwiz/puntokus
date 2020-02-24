@@ -7,20 +7,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,10 +25,7 @@ import es.iesnervion.avazquez.puntokus.fragments.AccountFragment;
 import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RankingFragment;
-import es.iesnervion.avazquez.puntokus.util.Utilidad;
-import es.iesnervion.avazquez.puntokus.viewModels.TableroViewModel;
-
-import static java.lang.System.exit;
+import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 public class SecondMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -43,7 +36,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
     PlayFragment playFragment;
     RankingFragment rankingFragment;
     GameFragment gameFragment;
-    TableroViewModel viewModel;
+    MainViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +52,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         gameFragment = new GameFragment();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-        viewModel = ViewModelProviders.of(this).get(TableroViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         viewModel.getUsuarioActual().getValue().setNickname(intent.getStringExtra("nickname"));
         viewModel.getUsuarioActual().getValue().setEmail(firebaseAuth.getCurrentUser().getEmail());
@@ -67,7 +60,15 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         bottomNavigationView.setSelectedItemId(R.id.menu_play);
-        fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
+       // if(viewModel.getCurrentFragment().getValue().isEmpty()){
+            fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
+        //}else{
+//            Fragment destinationFragment = getSupportFragmentManager()
+//                    .findFragmentByTag(viewModel.getCurrentFragment().getValue());
+//            fragmentTransaction.replace(R.id.fragmentSecondActivity, destinationFragment).commit();
+//
+//        }
+
 
         Observer<Boolean> playObserver = new Observer<Boolean>() {
             @Override
@@ -76,10 +77,16 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                 if(aBoolean){
                     //Cambiar el fragment de play por el de game
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentSecondActivity,gameFragment )
+                            .replace(R.id.fragmentSecondActivity,gameFragment, "GAME" )
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)   //este si puede volver atras
                             .commit();
+
+                    //Deshabilito el bottom nav menu
+                    //Lo pongo así y no con setEnable porque entonces no entraria en el on nav item selected y no me deja poner el toast
+                    bottomNavigationView.getMenu().getItem(0).setCheckable(false);
+                    bottomNavigationView.getMenu().getItem(1).setCheckable(false);
+                    bottomNavigationView.getMenu().getItem(2).setCheckable(false);
                 }
 
             }
@@ -88,35 +95,51 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
     }
 
+
+
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         boolean ret = false;
-        switch (menuItem.getItemId()){
-            case R.id.menu_account:
-                getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentSecondActivity, accountFragment)
-                        //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit()
-                        ;
 
-                ret = true;
-                break;
-            case R.id.menu_play:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentSecondActivity, playFragment)
-                       // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-                ret = true;
-                break;
-            case R.id.menu_ranking:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentSecondActivity, rankingFragment)
-                        //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-                ret = true;
-                break;
+        if(!menuItem.isCheckable()){
+            Toast.makeText(this,
+                    getResources().getText(R.string.pressBack), Toast.LENGTH_SHORT)
+                    .show();
 
+        }else{
+            switch (menuItem.getItemId()){
+                case R.id.menu_account:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentSecondActivity, accountFragment, "ACCOUNT")
+                            //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit()
+                    ;
+                    viewModel.setCurrentFragment("ACCOUNT");
+                    ret = true;
+                    break;
+                case R.id.menu_play:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
+                            // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+                    viewModel.setCurrentFragment("PLAY");
+                    ret = true;
+                    break;
+                case R.id.menu_ranking:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentSecondActivity, rankingFragment, "RANKING")
+                            //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .commit();
+                    viewModel.setCurrentFragment("RANKING");
+                    ret = true;
+                    break;
+
+            }
         }
+
+
 
         return ret;
     }
@@ -155,9 +178,16 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                 public void onChanged(Boolean aBoolean) {
                     if(aBoolean){
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragmentSecondActivity, playFragment)
+                                .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 .commit();
+
+                        viewModel.setCurrentFragment("PLAY");
+
+                        //Habilitamos el menu
+                        bottomNavigationView.getMenu().getItem(0).setCheckable(true);
+                        bottomNavigationView.getMenu().getItem(1).setCheckable(true);
+                        bottomNavigationView.getMenu().getItem(2).setCheckable(true);
                         bottomNavigationView.setSelectedItemId(R.id.menu_play);
                     }
                 }
@@ -204,16 +234,18 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         }else if(currentFragment instanceof AccountFragment){
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentSecondActivity, playFragment)
+                    .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
+            viewModel.setCurrentFragment("PLAY");
         }else if(currentFragment instanceof RankingFragment){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentSecondActivity, playFragment)
+                    .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
+            viewModel.setCurrentFragment("PLAY");
         }
 
         else{

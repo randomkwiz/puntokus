@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +22,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,10 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
-import es.iesnervion.avazquez.puntokus.activities.MainActivity;
 import es.iesnervion.avazquez.puntokus.activities.SecondMainActivity;
 import es.iesnervion.avazquez.puntokus.entities.User;
-import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
+import es.iesnervion.avazquez.puntokus.viewModels.AutenticacionViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +60,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     TextView rememberPassword;
 
     private FirebaseAuth firebaseAuth;
-    ViewModelRegistro viewModel;
+    AutenticacionViewModel viewModel;
     ProgressDialog progressDialog;
 
 
@@ -81,7 +78,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(ViewModelRegistro.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(AutenticacionViewModel.class);
         ButterKnife.bind(this,view); //le mandas la view con la que realizará el binding
 
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)

@@ -14,19 +14,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import es.iesnervion.avazquez.puntokus.R;
-import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.LoginFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RegistrarseFragment;
-import es.iesnervion.avazquez.puntokus.viewModels.ViewModelRegistro;
+import es.iesnervion.avazquez.puntokus.viewModels.AutenticacionViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class AutenticacionActivity extends AppCompatActivity {
 
     Fragment login;
     Fragment registro;
-    ViewModelRegistro viewModel;
+    AutenticacionViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         login = new LoginFragment();
         registro = new RegistrarseFragment();
         Intent intent = new Intent(this, SecondMainActivity.class);
-        viewModel = ViewModelProviders.of(this).get(ViewModelRegistro.class);
+        viewModel = ViewModelProviders.of(this).get(AutenticacionViewModel.class);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
