@@ -42,4 +42,9 @@
     <string name="sounds">Sounds</string>
     <string name="music">Music</string>
     <string name="pressBack">Please press back button to go back</string>
+    <string name="deleteAccount">Delete Account</string>
+    <string name="msgConfirmLogout">Do you really want to log out?</string>
+    <string name="msgConfirmDeleteAccount">All the data will be deleted, including game data.</string>
+    <string name="accountDeleted">User account and game date deleted.</string>
+    <string name="error">Error</string>
 </resources>

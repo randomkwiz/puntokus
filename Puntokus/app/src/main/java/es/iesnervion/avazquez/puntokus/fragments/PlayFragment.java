@@ -17,6 +17,7 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 /**
@@ -34,14 +35,9 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    MediaPlayer backgroundMusic;
     MediaPlayer sonidoTap;
-    boolean isMusicAllowed;
     SharedPreferences sharedPreferences;
     boolean areSoundsAllowed;
-
-
-
     @BindView(R.id.view1)
     Button easyBtn;
     @BindView(R.id.view2)
@@ -51,14 +47,13 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.view4)
     Button sickBtn;
     MainViewModel viewModel;
+    User user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_play, container, false);
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-
-
         sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
         ButterKnife.bind(this,view);
         easyBtn.setOnClickListener(this);
@@ -66,6 +61,11 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         hardBtn.setOnClickListener(this);
         sickBtn.setOnClickListener(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        user = new User(sharedPreferences.getString("UserID", ""),
+                sharedPreferences.getString("UserNICK", ""),
+                sharedPreferences.getString("UserEMAIL", ""),
+                "");
+        viewModel.setUsuarioActual(user);
         return view;
     }
 
@@ -95,32 +95,4 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         viewModel.setIsGoingToPlay(true);
     }
 
-
-    @Override
-    public void onStart() {
-
-        final int MAX_VOLUME = 100;
-        final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
-
-
-        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-
-        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music);
-        backgroundMusic.setVolume(volume,volume);
-        if(isMusicAllowed){
-            backgroundMusic.start();
-            backgroundMusic.setLooping(true);
-        }else{
-            backgroundMusic.stop();
-        }
-        super.onStart();
-    }
-
-
-    @Override
-    public void onPause() {
-        backgroundMusic.stop();
-        super.onPause();
-    }
 }

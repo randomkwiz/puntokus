@@ -30,7 +30,7 @@ public class AutenticacionViewModel extends ViewModel {
     }
 
     public void setUserWantToExit(Boolean userWantToExit) {
-        if(userWantToExit){
+        if (userWantToExit) {
             this.userWantToExit.setValue(userWantToExit);
             this.userWantToExit.setValue(false);
         }
@@ -42,7 +42,7 @@ public class AutenticacionViewModel extends ViewModel {
     }
 
     public void setIsCorrectLogin(boolean isCorrectLogin) {
-        if(isCorrectLogin){
+        if (isCorrectLogin) {
             this.isCorrectLogin.setValue(isCorrectLogin);
             this.isCorrectLogin.setValue(false);
         }
@@ -62,7 +62,7 @@ public class AutenticacionViewModel extends ViewModel {
     }
 
     public void setGoToLogIn(boolean goToLogIn) {
-        if(goToLogIn){
+        if (goToLogIn) {
             this.goToLogIn.setValue(goToLogIn);
             this.goToLogIn.setValue(false);
         }
@@ -73,7 +73,7 @@ public class AutenticacionViewModel extends ViewModel {
     }
 
     public void setGoToSignUp(boolean goToSignUp) {
-        if(goToSignUp){
+        if (goToSignUp) {
             this.goToSignUp.setValue(goToSignUp);
             this.goToSignUp.setValue(false);
         }

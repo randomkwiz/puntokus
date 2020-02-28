@@ -64,27 +64,24 @@ public class RankingFragment extends Fragment {
     MutableLiveData<ArrayList<Game>> listaPartidas;
     MutableLiveData<ArrayList<Game>> listaPartidasAMostrar;
     Game partida;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-
 
         listaPartidas = new MutableLiveData<ArrayList<Game>>();
         listaPartidasAMostrar = new MutableLiveData<ArrayList<Game>>();
 
-
-
         listaPartidas.setValue(new ArrayList<>());
         listaPartidasAMostrar.setValue(new ArrayList<>());
-       GamesAdapter adapter =
-                new GamesAdapter(listaPartidasAMostrar.getValue(),getActivity());
+        GamesAdapter adapter =
+                new GamesAdapter(listaPartidasAMostrar.getValue(), getActivity());
 //
 //        if(radioGroup.getCheckedRadioButtonId() == -1){ //ninguno está seleccionado
 //            radioGroup.check(R.id.RBAll);
@@ -92,41 +89,29 @@ public class RankingFragment extends Fragment {
         databaseReference.child("Games").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-
-
-
-                        if(ds != null){
-                            for(DataSnapshot hijo: ds.getChildren()){
-
-                                if(hijo != null){
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds != null) {
+                            for (DataSnapshot hijo : ds.getChildren()) {
+                                if (hijo != null) {
                                     partida = new Game();
                                     partida = hijo.getValue(Game.class);    //esta es la forma correcta de hacerlo
-
-//                                    partida.setNickname(hijo.child("nickname").getValue().toString());
-//                                    partida.setEmail(hijo.child("email").getValue().toString());
-//                                    partida.setLevel(hijo.child("level").getValue().toString());
-//                                    partida.setTimeInMilis(Long.parseLong(hijo.child("timeInMilis").getValue().toString()));
-
                                     listaPartidas.getValue().add(partida);
                                 }
                             }
                         }
-
-
                     }
 
                     Collections.sort(listaPartidas.getValue());
-                    if(listaPartidas.getValue().size() >= 150){
+                    if (listaPartidas.getValue().size() >= 150) {
                         listaPartidas.getValue().subList(149, listaPartidas.getValue().size()).clear();   //elimina los elementos a partir de la posicion 149
                         //Es para que el ranking tenga max 150 partidas
                     }
-                //listViewRanking.setAdapter(adapter);
+                    //listViewRanking.setAdapter(adapter);
 
                     //Esta comprobación debe ir aquí, si la pongo antes
                     //no pilla el cheked
-                    if(radioGroup.getCheckedRadioButtonId() == -1){ //ninguno está seleccionado
+                    if (radioGroup.getCheckedRadioButtonId() == -1) { //ninguno está seleccionado
                         radioGroup.check(R.id.RBAll);
                     }
                     switch (radioGroup.getCheckedRadioButtonId()) {
@@ -176,17 +161,15 @@ public class RankingFragment extends Fragment {
         listaPartidasAMostrar.observe(this, listObserver);
 
 
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
 
-                if(areSoundsAllowed){
+                if (areSoundsAllowed) {
                     sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
                     sonidoTap.start();
                 }
-
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.RBAll:
                         listaPartidasAMostrar.setValue(listaPartidas.getValue());
@@ -211,16 +194,16 @@ public class RankingFragment extends Fragment {
         return view;
     }
 
-    public void filtrarListado(String dificultadPorLaQueFiltro){
+    public void filtrarListado(String dificultadPorLaQueFiltro) {
         ArrayList<Game> nuevaListaFiltrada = new ArrayList<>();
-        if(dificultadPorLaQueFiltro.equals("EASY") ||
+        if (dificultadPorLaQueFiltro.equals("EASY") ||
                 dificultadPorLaQueFiltro.equals("NORMAL") ||
                 dificultadPorLaQueFiltro.equals("HARD") ||
                 dificultadPorLaQueFiltro.equals("SICK")
-        ){
-            for(int i = 0; i < listaPartidas.getValue().size(); i ++){
+        ) {
+            for (int i = 0; i < listaPartidas.getValue().size(); i++) {
 
-                if(listaPartidas.getValue().get(i).getLevel().trim().contains(dificultadPorLaQueFiltro)){
+                if (listaPartidas.getValue().get(i).getLevel().trim().contains(dificultadPorLaQueFiltro)) {
                     nuevaListaFiltrada.add(listaPartidas.getValue().get(i));
                 }
             }
@@ -230,9 +213,9 @@ public class RankingFragment extends Fragment {
 
     }
 
-    public List<Game> copiarListaEnOtraLista(List<Game> listaACopiar, ArrayList<Game> nuevaLista){
-       nuevaLista = new ArrayList<>();
-        for(int i = 0; i < listaACopiar.size(); i ++){
+    public List<Game> copiarListaEnOtraLista(List<Game> listaACopiar, ArrayList<Game> nuevaLista) {
+        nuevaLista = new ArrayList<>();
+        for (int i = 0; i < listaACopiar.size(); i++) {
             nuevaLista.add(listaACopiar.get(i));
         }
         return nuevaLista;

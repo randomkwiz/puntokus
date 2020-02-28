@@ -67,11 +67,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.cronoTime)
     Chronometer crono;
     MainViewModel viewModel;
-    User usuarioActual;
     MediaPlayer sonidoTap;
     MediaPlayer sonidoMec;
     MediaPlayer easterEgg;
-    MediaPlayer backgroundMusic;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
@@ -85,25 +83,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         ButterKnife.bind(this,view);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         viewModel.inicializarPartida();
         establecerTablero(layout,view.getContext(),viewModel.getMapeo(),viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());
         crono.start();
-        //sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        //isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        //areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-
-
-//        sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
-//        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music);
-
-//        if(isMusicAllowed){
-//            backgroundMusic.start();
-//            backgroundMusic.setLooping(true);
-//        }else{
-//            backgroundMusic.stop();
-//        }
-
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
         newGameBtn.setOnClickListener(this);
@@ -112,9 +96,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         firebaseAuth = FirebaseAuth.getInstance();
         //Database
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        usuarioActual = new User();
-        usuarioActual.setId(firebaseAuth.getCurrentUser().getUid());
-        usuarioActual.setEmail(firebaseAuth.getCurrentUser().getEmail());
+
         return view;
     }
     public void colocarListeners(ConstraintLayout layout, Tablero tablero, SparseIntArray mapeo){
@@ -138,8 +120,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             Utilidad utilidad = new Utilidad();
             //Obtengo el objeto casilla correspondiente a la vista pulsada
             Casilla objetoCasilla = utilidad.obtenerCasillaPorID(viewModel.getTablero(),v.getId());
-
-
 
             if(objetoCasilla.getImgSrc() == R.drawable.selecteditem){
                 casilla.setImageResource(R.drawable.nonselecteditem);
@@ -184,16 +164,14 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         //Guarda la partida en la BBDD
                         long milisegundosQueHanPasado = SystemClock.elapsedRealtime() - crono.getBase();
                         Map<String, Object> map = new HashMap<>();
-                        map.put("idUser", usuarioActual.getId());
+                        map.put("idUser", viewModel.getUsuarioActual().getValue().getId());
                         map.put("nickname", viewModel.getUsuarioActual().getValue().getNickname());
                         map.put("email", viewModel.getUsuarioActual().getValue().getEmail());
                         map.put("timeInMilis", milisegundosQueHanPasado);
                         map.put("level", utilidad.getLevelName(viewModel.getLado().getValue()));
                         evaluateBtn.setEnabled(false);
-
-
                         databaseReference.child("Games").
-                                child(usuarioActual.getId()).   //lo anidara en las partidas del usuario
+                                child(viewModel.getUsuarioActual().getValue().getId()).   //lo anidara en las partidas del usuario
                                 push(). //le pondra una id a la partida
                                 setValue(map).
                                 addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -214,7 +192,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
                     break;
                 case R.id.refreshBtn:
-
                     builder = new AlertDialog.Builder(getContext());
                     //pongo el titulo y los botones
                     builder.setTitle(R.string.refresh);
@@ -384,20 +361,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onPause() {
-        backgroundMusic.stop();
-        super.onPause();
-    }
-
-    @Override
     public void onStart() {
 
         final int MAX_VOLUME = 100;
         final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
-
-
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
         sonidoTap.setVolume(volume, volume);
@@ -406,14 +375,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
         easterEgg.setVolume(MAX_VOLUME,MAX_VOLUME);
 
-        backgroundMusic = MediaPlayer.create(getContext(), R.raw.background_music_relaxing);
-        backgroundMusic.setVolume(volume,volume);
-        if(isMusicAllowed){
-            backgroundMusic.start();
-            backgroundMusic.setLooping(true);
-        }else{
-            backgroundMusic.stop();
-        }
         super.onStart();
     }
 

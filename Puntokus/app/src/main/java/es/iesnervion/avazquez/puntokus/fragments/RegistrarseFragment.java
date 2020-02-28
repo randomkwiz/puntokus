@@ -2,6 +2,8 @@ package es.iesnervion.avazquez.puntokus.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,8 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     private DatabaseReference databaseReference;
     AutenticacionViewModel viewModel;
     ProgressDialog progressDialog;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public void onPause() { //para que se borren las credenciales
@@ -86,6 +90,8 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         databaseReference = FirebaseDatabase.getInstance().getReference();
         //Así hacemos referencia al nodo principal de la DB
 
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         btnSignup.setOnClickListener(this);
         linkLogin.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext());
@@ -143,29 +149,17 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if(task.isSuccessful()){
-
-//                            Toast.makeText(getContext(),
-//                                    "Se ha registrado el usuario con el email: "
-//                                            + viewModel.getUser().getValue().getEmail(),
-//                                    Toast.LENGTH_LONG).show();
-
-                            //Aqui vamos a guardar los datos del usuario en la BBDD Realtime DB
-                            //TODO esto
-
                             //Debemos obtener el ID que nos proporciona Firebase
                             User usuarioActual = new User(firebaseAuth.getCurrentUser().getUid(),
                                     viewModel.getUser().getValue().getNickname(),
                                     viewModel.getUser().getValue().getEmail(),
                                     viewModel.getUser().getValue().getPassword());
-
                             viewModel.setUser(usuarioActual);
-
                             Map<String, Object> map = new HashMap<>();
                             map.put("id", viewModel.getUser().getValue().getId());
                             map.put("nickname", viewModel.getUser().getValue().getNickname());
                             map.put("email", viewModel.getUser().getValue().getEmail());
                             //map.put("password", viewModel.getUser().getValue().getPassword()); //no debe guardarse la password
-
 
                             databaseReference.child("Users").
                                     child(usuarioActual.getId()).
@@ -177,17 +171,20 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                                         Toast.makeText(getContext(),
                                                 "Se han registrado los datos",
                                                 Toast.LENGTH_SHORT).show();
-                                            //TODO hacer que vuelva a la pantalla de login
+                                        editor.putString("UserID",viewModel.getUser().getValue().getId());
+                                        editor.putString("UserEMAIL",viewModel.getUser().getValue().getEmail());
+                                        editor.putString("UserNICK",viewModel.getUser().getValue().getNickname());
+                                        editor.putBoolean("IsLogged",true); //para que inicie sesión directamente tras registrarse
+                                        editor.commit();
+
                                         viewModel.setGoToLogIn(true);
 
                                     }
                                 }
                             });
 
-
                             //https://www.youtube.com/watch?v=xwhEHb_AZ6k&t=171s
                             //mas info aqui: https://firebase.google.com/docs/database/admin/save-data
-
 
                         }else{
 

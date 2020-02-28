@@ -2,7 +2,9 @@ package es.iesnervion.avazquez.puntokus.fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -54,11 +56,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnLogin;
     @BindView(R.id.link_signup)
     TextView linkSignUp;
-
-
     @BindView(R.id.rememberPassword)
     TextView rememberPassword;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     private FirebaseAuth firebaseAuth;
     AutenticacionViewModel viewModel;
     ProgressDialog progressDialog;
@@ -80,7 +81,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(AutenticacionViewModel.class);
         ButterKnife.bind(this,view); //le mandas la view con la que realizará el binding
-
+        sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)
         //si es en activity se pone Butterknife.bind(this)
 
@@ -170,10 +172,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if (task.isSuccessful()) {
-
                             //TODO aquí haces que se vaya a la siguiente pantalla.
                             //TODO por aquí y sólo por aquí puede avanzar a la siguiente pantalla!!
-
                             //viewModel.getUser().getValue().setEmail(email);
                             viewModel.getUser().getValue().setId(firebaseAuth.getCurrentUser().getUid());
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -183,11 +183,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     User user = dataSnapshot.getValue(User.class);
                                     viewModel.setUser(user);
+                                    editor.putString("UserID",firebaseAuth.getCurrentUser().getUid());
+                                    editor.putString("UserEMAIL",firebaseAuth.getCurrentUser().getEmail());
+                                    editor.putString("UserNICK",user.getNickname());
+                                    editor.putBoolean("IsLogged",true);
+                                    editor.commit();
                                     //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
                                     viewModel.setIsCorrectLogin(true);
                                     progressDialog.dismiss();
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -208,37 +212,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        if(firebaseAuth.getCurrentUser() != null){
-
-            //Tengo que sacar sus datos para pasarlos, ya que si entra aqui no los tendra cogidos
-            viewModel.getUser().getValue().setId(firebaseAuth.getCurrentUser().getUid());
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.child("Users").child(viewModel.getUser().getValue().getId())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-                            viewModel.setUser(user);
-                            //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
-                            //viewModel.setIsCorrectLogin(true);
-                            //significa que esta logeado
-                            Intent intent = new Intent(getContext(), SecondMainActivity.class);
-                            intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-
-//            viewModel.setIsCorrectLogin(true);
-
+        boolean isLogged = sharedPreferences.getBoolean("IsLogged", false);
+        if(isLogged){
+            Intent intent = new Intent(getContext(), SecondMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
 
     }

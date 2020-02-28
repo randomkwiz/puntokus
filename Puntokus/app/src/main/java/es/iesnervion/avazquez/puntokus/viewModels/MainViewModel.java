@@ -16,13 +16,13 @@ import es.iesnervion.avazquez.puntokus.util.Utilidad;
 
 //Nota para mi misma:
 /*
-* A ver, que necesitas tocar el factory porque tienes que pasarle
-* por parametro el lado
-* y como tienes que pasarle parametro, no puedes extender
-* de AndroidViewModel
-* por eso le pasas tb el contexto
-* No lo cambies mas
-* */
+ * A ver, que necesitas tocar el factory porque tienes que pasarle
+ * por parametro el lado
+ * y como tienes que pasarle parametro, no puedes extender
+ * de AndroidViewModel
+ * por eso le pasas tb el contexto
+ * No lo cambies mas
+ * */
 
 public class MainViewModel extends ViewModel {
     private Tablero tablero;
@@ -33,7 +33,6 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<Boolean> userWantToExit;
     MutableLiveData<Boolean> userWantToGoBack;
     MutableLiveData<String> currentFragment;
-
 
 
     public MainViewModel() {
@@ -51,9 +50,8 @@ public class MainViewModel extends ViewModel {
     }
 
 
-
-    public void inicializarPartida(){
-        if(lado.getValue()!=null ){
+    public void inicializarPartida() {
+        if (lado.getValue() != null) {
             this.tablero = new Tablero(lado.getValue());
             Utilidad utilidad = new Utilidad();
             //establezco cuales son las casillas jugables
@@ -80,7 +78,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void setUserWantToGoBack(Boolean userWantToGoBack) {
-        if(userWantToGoBack){
+        if (userWantToGoBack) {
             this.userWantToGoBack.setValue(userWantToGoBack);
             this.userWantToGoBack.setValue(false);
         }
@@ -91,7 +89,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void setUserWantToExit(Boolean userWantToExit) {
-        if(userWantToExit){
+        if (userWantToExit) {
             this.userWantToExit.setValue(userWantToExit);
             this.userWantToExit.setValue(false);
         }
@@ -119,7 +117,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void setIsGoingToPlay(Boolean isGoingToPlay) {
-        if(isGoingToPlay){
+        if (isGoingToPlay) {
             this.isGoingToPlay.setValue(isGoingToPlay);
             this.isGoingToPlay.setValue(false);
         }

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -25,6 +26,7 @@ public class AutenticacionActivity extends AppCompatActivity {
     Fragment login;
     Fragment registro;
     AutenticacionViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class AutenticacionActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-                if(aBoolean){
+                if (aBoolean) {
                     ft.replace(R.id.fragment, registro)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)
@@ -58,7 +60,7 @@ public class AutenticacionActivity extends AppCompatActivity {
             }
         };
         //Observo
-        viewModel.getGoToSignUp().observe(this,signUpObserver);
+        viewModel.getGoToSignUp().observe(this, signUpObserver);
 
 
         /*El observer*/
@@ -67,7 +69,7 @@ public class AutenticacionActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-                if(aBoolean){
+                if (aBoolean) {
                     ft.replace(R.id.fragment, login)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)
@@ -76,14 +78,14 @@ public class AutenticacionActivity extends AppCompatActivity {
             }
         };
         //Observo
-        viewModel.getGoToLogIn().observe(this,logInObserver);
+        viewModel.getGoToLogIn().observe(this, logInObserver);
 
 
         /*El observer*/
         final Observer<Boolean> isCorrectLoginObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     //finish();
                     intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -93,16 +95,16 @@ public class AutenticacionActivity extends AppCompatActivity {
             }
         };
         //Observo
-        viewModel.getIsCorrectLogin().observe(this,isCorrectLoginObserver);
+        viewModel.getIsCorrectLogin().observe(this, isCorrectLoginObserver);
 
 
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.fragment);
-        if(currentFragment instanceof LoginFragment){
+        if (currentFragment instanceof LoginFragment) {
             //Si el usuario pulsa el boton de ir hacia atrás estando
             //en el fragment del login, se le mostrará dialog de confirmación
             AlertDialog.Builder builder;
@@ -128,31 +130,27 @@ public class AutenticacionActivity extends AppCompatActivity {
             Observer<Boolean> exitObserver = new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    if(aBoolean){
+                    if (aBoolean) {
                         salir();
                     }
                 }
             };
-            viewModel.getUserWantToExit().observe(this,exitObserver);
+            viewModel.getUserWantToExit().observe(this, exitObserver);
 
 
-
-        }else if(currentFragment instanceof RegistrarseFragment){
+        } else if (currentFragment instanceof RegistrarseFragment) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment, login)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 
                     .commit();
-        }
-
-
-        else{
+        } else {
             salir();
         }
     }
 
 
-    public void salir(){
+    public void salir() {
 
         super.onBackPressed();
 

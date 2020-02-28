@@ -41,4 +41,9 @@
     <string name="music">Música</string>
     <string name="sounds">Sonidos</string>
     <string name="pressBack">Por favor presione el botón atrás para volver</string>
+    <string name="deleteAccount">Eliminar cuenta</string>
+    <string name="msgConfirmLogout">¿Desea cerrar sesión?</string>
+    <string name="msgConfirmDeleteAccount">Se borrarán todos los datos, incluyendo los datos de las partidas.</string>
+    <string name="accountDeleted">Usuario y datos de juego eliminados.</string>
+    <string name="error">Error</string>
 </resources>

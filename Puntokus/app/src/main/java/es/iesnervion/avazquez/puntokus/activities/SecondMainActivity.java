@@ -9,8 +9,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -27,7 +30,11 @@ import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RankingFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
-public class SecondMainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class SecondMainActivity extends AppCompatActivity
+        implements BottomNavigationView.OnNavigationItemSelectedListener ,
+        SharedPreferences.OnSharedPreferenceChangeListener
+
+{
 
 
     @BindView(R.id.menu_nav_bottom)
@@ -37,6 +44,72 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
     RankingFragment rankingFragment;
     GameFragment gameFragment;
     MainViewModel viewModel;
+    MediaPlayer backgroundMusic;
+    MediaPlayer sonidoTap;
+    boolean isMusicAllowed;
+    SharedPreferences sharedPreferences;
+    boolean areSoundsAllowed;
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        if(key.equals("Music"))  {
+            Fragment currentFragment = getSupportFragmentManager()
+                    .findFragmentById(R.id.fragmentSecondActivity);
+
+            if(isMusicAllowed){
+                if(!backgroundMusic.isPlaying()){
+                    backgroundMusic.start();
+                    backgroundMusic.setLooping(true);
+                }
+
+            }else{
+                if(backgroundMusic.isPlaying()){
+                    backgroundMusic.stop();
+
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentSecondActivity);
+        final int MAX_VOLUME = 100;
+        final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
+        sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
+        backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
+
+        backgroundMusic.setVolume(volume,volume);
+        if(isMusicAllowed){
+            if(!backgroundMusic.isPlaying()){
+                backgroundMusic.start();
+                backgroundMusic.setLooping(true);
+            }
+
+        }else{
+            if(backgroundMusic.isPlaying()){
+                backgroundMusic.stop();
+
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        backgroundMusic.stop();
+        //backgroundMusic.release();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +133,8 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         bottomNavigationView.setSelectedItemId(R.id.menu_play);
-       // if(viewModel.getCurrentFragment().getValue().isEmpty()){
-            fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
+        // if(viewModel.getCurrentFragment().getValue().isEmpty()){
+        fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
         //}else{
 //            Fragment destinationFragment = getSupportFragmentManager()
 //                    .findFragmentByTag(viewModel.getCurrentFragment().getValue());
@@ -74,10 +147,10 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             @Override
             public void onChanged(Boolean aBoolean) {
 
-                if(aBoolean){
+                if (aBoolean) {
                     //Cambiar el fragment de play por el de game
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentSecondActivity,gameFragment, "GAME" )
+                            .replace(R.id.fragmentSecondActivity, gameFragment, "GAME")
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)   //este si puede volver atras
                             .commit();
@@ -91,25 +164,22 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
 
             }
         };
-        viewModel.getIsGoingToPlay().observe(this,playObserver);
+        viewModel.getIsGoingToPlay().observe(this, playObserver);
 
     }
-
-
-
 
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         boolean ret = false;
 
-        if(!menuItem.isCheckable()){
+        if (!menuItem.isCheckable()) {
             Toast.makeText(this,
                     getResources().getText(R.string.pressBack), Toast.LENGTH_SHORT)
                     .show();
 
-        }else{
-            switch (menuItem.getItemId()){
+        } else {
+            switch (menuItem.getItemId()) {
                 case R.id.menu_account:
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragmentSecondActivity, accountFragment, "ACCOUNT")
@@ -140,17 +210,15 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
         }
 
 
-
         return ret;
     }
 
 
-
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentSecondActivity);
-        if(currentFragment instanceof GameFragment){
+        if (currentFragment instanceof GameFragment) {
             //Si el usuario pulsa el boton de ir hacia atrás estando
             //en el fragment del juego, se le mostrará dialog de confirmación
             AlertDialog.Builder builder;
@@ -162,7 +230,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                           //Si el usuario le da a que sí desea salir
+                            //Si el usuario le da a que sí desea salir
                             viewModel.setUserWantToGoBack(true);
                         }
                     })
@@ -176,7 +244,7 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             Observer<Boolean> goBackObserver = new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    if(aBoolean){
+                    if (aBoolean) {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -192,11 +260,10 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                     }
                 }
             };
-            viewModel.getUserWantToGoBack().observe(this,goBackObserver);
+            viewModel.getUserWantToGoBack().observe(this, goBackObserver);
 
 
-
-        }else if(currentFragment instanceof PlayFragment){
+        } else if (currentFragment instanceof PlayFragment) {
             //Si está aquí y le da hacia atrás, le preguntaremos si desea salir
             //Si el usuario pulsa el boton de ir hacia atrás estando
             //en el fragment del login, se le mostrará dialog de confirmación
@@ -223,15 +290,15 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
             Observer<Boolean> exitObserver = new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    if(aBoolean){
+                    if (aBoolean) {
                         salir();
                     }
                 }
             };
-            viewModel.getUserWantToExit().observe(this,exitObserver);
+            viewModel.getUserWantToExit().observe(this, exitObserver);
 
 
-        }else if(currentFragment instanceof AccountFragment){
+        } else if (currentFragment instanceof AccountFragment) {
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
@@ -239,23 +306,23 @@ public class SecondMainActivity extends AppCompatActivity implements BottomNavig
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
             viewModel.setCurrentFragment("PLAY");
-        }else if(currentFragment instanceof RankingFragment){
+        } else if (currentFragment instanceof RankingFragment) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
             viewModel.setCurrentFragment("PLAY");
-        }
-
-        else{
+        } else {
             salir();
         }
     }
 
 
-    public void salir(){
+    public void salir() {
         super.onBackPressed();
     }
+
+
 
 }

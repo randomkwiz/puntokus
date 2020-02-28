@@ -13,12 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.SecondMainActivity" android:screenOrientation="portrait"
-
             ></activity>
         <activity android:name=".activities.AutenticacionActivity"
-
             >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
