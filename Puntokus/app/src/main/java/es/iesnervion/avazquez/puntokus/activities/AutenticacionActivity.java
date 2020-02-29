@@ -1,6 +1,8 @@
 package es.iesnervion.avazquez.puntokus.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,10 +13,16 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.io.IOException;
 
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.fragments.LoginFragment;
@@ -26,6 +34,10 @@ public class AutenticacionActivity extends AppCompatActivity {
     Fragment login;
     Fragment registro;
     AutenticacionViewModel viewModel;
+    Intent intent;
+    FragmentManager fm;
+    FragmentTransaction fragmentTransaction;
+    private final int MY_PERMISSIONS_REQUEST_INTERNET = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +48,11 @@ public class AutenticacionActivity extends AppCompatActivity {
                 Analytics.class, Crashes.class);
         login = new LoginFragment();
         registro = new RegistrarseFragment();
-        Intent intent = new Intent(this, SecondMainActivity.class);
+        intent = new Intent(this, SecondMainActivity.class);
         viewModel = ViewModelProviders.of(this).get(AutenticacionViewModel.class);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
+        fm = getSupportFragmentManager();
+        fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, login).commit();
-
 
         /*El observer*/
         final Observer<Boolean> signUpObserver = new Observer<Boolean>() {
@@ -62,7 +72,6 @@ public class AutenticacionActivity extends AppCompatActivity {
         //Observo
         viewModel.getGoToSignUp().observe(this, signUpObserver);
 
-
         /*El observer*/
         final Observer<Boolean> logInObserver = new Observer<Boolean>() {
             @Override
@@ -80,7 +89,6 @@ public class AutenticacionActivity extends AppCompatActivity {
         //Observo
         viewModel.getGoToLogIn().observe(this, logInObserver);
 
-
         /*El observer*/
         final Observer<Boolean> isCorrectLoginObserver = new Observer<Boolean>() {
             @Override
@@ -91,12 +99,10 @@ public class AutenticacionActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
-
             }
         };
         //Observo
         viewModel.getIsCorrectLogin().observe(this, isCorrectLoginObserver);
-
 
     }
 
@@ -149,11 +155,9 @@ public class AutenticacionActivity extends AppCompatActivity {
         }
     }
 
-
-    public void salir() {
+    private void salir() {
 
         super.onBackPressed();
 
     }
-
 }

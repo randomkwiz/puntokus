@@ -33,6 +33,7 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<Boolean> userWantToExit;
     MutableLiveData<Boolean> userWantToGoBack;
     MutableLiveData<String> currentFragment;
+    MutableLiveData<Boolean> showDialog;
 
 
     public MainViewModel() {
@@ -40,6 +41,7 @@ public class MainViewModel extends ViewModel {
         this.isGoingToPlay = new MutableLiveData<>();
         this.userWantToExit = new MutableLiveData<>();
         this.userWantToGoBack = new MutableLiveData<>();
+        this.showDialog = new MutableLiveData<>();
         this.lado = new MutableLiveData<>();
         this.usuarioActual = new MutableLiveData<>();
         this.currentFragment = new MutableLiveData<>();
@@ -47,6 +49,7 @@ public class MainViewModel extends ViewModel {
         this.userWantToExit.setValue(false);
         this.userWantToGoBack.setValue(false);
         this.currentFragment.setValue("");
+        this.showDialog.setValue(false);
     }
 
 
@@ -64,6 +67,18 @@ public class MainViewModel extends ViewModel {
 
     }
 
+
+    public LiveData<Boolean> getShowDialog() {
+        return showDialog;
+    }
+
+    public void setShowDialog(Boolean showDialog) {
+        if(showDialog){
+            this.showDialog.setValue(showDialog);
+            this.showDialog.setValue(false);
+        }
+
+    }
 
     public LiveData<String> getCurrentFragment() {
         return currentFragment;

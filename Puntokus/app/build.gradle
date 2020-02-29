@@ -42,7 +42,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
 
-
     //app center
     def appCenterSdkVersion = '2.5.1'
     implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"

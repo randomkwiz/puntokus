@@ -28,6 +28,7 @@ import es.iesnervion.avazquez.puntokus.fragments.AccountFragment;
 import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RankingFragment;
+import es.iesnervion.avazquez.puntokus.fragments.customDialogs.InfoDialogFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 public class SecondMainActivity extends AppCompatActivity
@@ -43,6 +44,7 @@ public class SecondMainActivity extends AppCompatActivity
     PlayFragment playFragment;
     RankingFragment rankingFragment;
     GameFragment gameFragment;
+    InfoDialogFragment infoDialogFragment;
     MainViewModel viewModel;
     MediaPlayer backgroundMusic;
     MediaPlayer sonidoTap;
@@ -123,6 +125,8 @@ public class SecondMainActivity extends AppCompatActivity
         playFragment = new PlayFragment();
         rankingFragment = new RankingFragment();
         gameFragment = new GameFragment();
+        infoDialogFragment = new InfoDialogFragment();
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
@@ -165,6 +169,28 @@ public class SecondMainActivity extends AppCompatActivity
             }
         };
         viewModel.getIsGoingToPlay().observe(this, playObserver);
+
+
+        Observer<Boolean> showDialogObserver = new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+                if (aBoolean) {
+                    //Mostrar dialog
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentSecondActivity, infoDialogFragment, "DIALOG")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //.addToBackStack(null)   //este si puede volver atras
+                            .commit();
+
+                }
+
+            }
+        };
+        viewModel.getShowDialog().observe(this, showDialogObserver);
+
+
+
 
     }
 
@@ -298,23 +324,17 @@ public class SecondMainActivity extends AppCompatActivity
             viewModel.getUserWantToExit().observe(this, exitObserver);
 
 
-        } else if (currentFragment instanceof AccountFragment) {
-
+        }
+//        else if(currentFragment instanceof InfoDialogFragment){
+//            infoDialogFragment.dismiss();
+//        }
+        else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
             viewModel.setCurrentFragment("PLAY");
-        } else if (currentFragment instanceof RankingFragment) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-            bottomNavigationView.setSelectedItemId(R.id.menu_play);
-            viewModel.setCurrentFragment("PLAY");
-        } else {
-            salir();
         }
     }
 

@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -76,21 +77,25 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     boolean isMusicAllowed;
     boolean areSoundsAllowed;
     SharedPreferences sharedPreferences;
+//    @BindView(R.id.infobtn)
+//    FloatingActionButton infoBtn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         viewModel.inicializarPartida();
-        establecerTablero(layout,view.getContext(),viewModel.getMapeo(),viewModel.getTablero());
+        establecerTablero(layout, view.getContext(), viewModel.getMapeo(), viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());
         crono.start();
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
         newGameBtn.setOnClickListener(this);
+       // infoBtn.setOnClickListener(this);
         evaluateBtn.setEnabled(true);
         // Inicializa el Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
@@ -99,12 +104,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
         return view;
     }
-    public void colocarListeners(ConstraintLayout layout, Tablero tablero, SparseIntArray mapeo){
+
+    public void colocarListeners(ConstraintLayout layout, Tablero tablero, SparseIntArray mapeo) {
         for (int iRow = 0; iRow < tablero.getLado(); iRow++) {
             for (int iCol = 0; iCol < tablero.getLado(); iCol++) {
 
-                if(tablero.getCasillas()[iRow][iCol].isJugable() )
-                {
+                if (tablero.getCasillas()[iRow][iCol].isJugable()) {
                     //Poner Listener
                     View view = layout.getViewById(tablero.getCasillas()[iRow][iCol].getId());
                     view.setOnClickListener(this);
@@ -115,47 +120,51 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v instanceof ImageView){
+
+//        if(v.getId()== R.id.infobtn){
+//            viewModel.setShowDialog(true);
+//        }else
+            if (v instanceof ImageView) {
             ImageView casilla = (ImageView) v;
             Utilidad utilidad = new Utilidad();
             //Obtengo el objeto casilla correspondiente a la vista pulsada
-            Casilla objetoCasilla = utilidad.obtenerCasillaPorID(viewModel.getTablero(),v.getId());
+            Casilla objetoCasilla = utilidad.obtenerCasillaPorID(viewModel.getTablero(), v.getId());
 
-            if(objetoCasilla.getImgSrc() == R.drawable.selecteditem){
+            if (objetoCasilla.getImgSrc() == R.drawable.selecteditem) {
                 casilla.setImageResource(R.drawable.nonselecteditem);
                 casilla.setTag(R.drawable.nonselecteditem);
                 objetoCasilla.setMarcada(false);
                 objetoCasilla.setImgSrc(R.drawable.nonselecteditem);
 
-            }else{
+            } else {
                 casilla.setImageResource(R.drawable.selecteditem);
                 casilla.setTag(R.drawable.selecteditem);
                 objetoCasilla.setMarcada(true);
                 objetoCasilla.setImgSrc(R.drawable.selecteditem);
             }
 
-            if(areSoundsAllowed){
+            if (areSoundsAllowed) {
 
-                if( ((int)( Math.random() * 100 )) == 42 ){
+                if (((int) (Math.random() * 10000)) == 42) {
                     easterEgg.start();
-                }else{
+                } else {
                     sonidoTap.start();
                 }
 
 
             }
 
-        }else if(v instanceof Button){
+        } else if (v instanceof Button) {
             Utilidad utilidad = new Utilidad();
-            if(areSoundsAllowed){
+            if (areSoundsAllowed) {
 
                 sonidoMec.start();
             }
             AlertDialog.Builder builder;
             AlertDialog dialog;
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.evaluateBtn:
-                    if(utilidad.comprobarSiLaSolucionEsCorrecta(viewModel.getTablero())){
+                    if (utilidad.comprobarSiLaSolucionEsCorrecta(viewModel.getTablero())) {
 
                         //HA GANADO
                         utilidad.mostrarToast(getString((R.string.isCorrect)), getContext());
@@ -177,7 +186,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                                 addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task2) {
-                                        if(task2.isSuccessful()){
+                                        if (task2.isSuccessful()) {
                                             Toast.makeText(getContext(),
                                                     getResources().getText(R.string.gameDataSaved),
                                                     Toast.LENGTH_SHORT).show();
@@ -186,13 +195,13 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                                     }
                                 });
 
-                    }else{
+                    } else {
                         utilidad.mostrarToast(getString((R.string.isWrong)), getContext());
                     }
 
                     break;
                 case R.id.refreshBtn:
-                    builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                    builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
                     //pongo el titulo y los botones
                     builder.setTitle(R.string.refresh);
                     builder.setMessage(R.string.dialog_clean)
@@ -212,10 +221,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     dialog.show();
 
 
-
                     break;
                 case R.id.newGameBtn:
-                    builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                    builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
                     builder.setTitle(R.string.newGame);
                     builder.setMessage(R.string.dialog_newGame)
                             .setPositiveButton(R.string.dialog_newGame_start, new DialogInterface.OnClickListener() {
@@ -248,12 +256,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
      * y la marca negra si la casilla la tiene o no (esto sirve
      * para cuando cambia la configuracion)
      * */
-    public void establecerTablero(ConstraintLayout layout, Context context, SparseIntArray mapeo, Tablero tablero){
+    public void establecerTablero(ConstraintLayout layout, Context context, SparseIntArray mapeo, Tablero tablero) {
 
         //lo he tenido que poner como view porque van a ser ImageView o TextView dependiendo de donde esten
         View view;
         ConstraintLayout.LayoutParams lp;
-        int id ;
+        int id;
         int contador = 0;
         int contadorCol = 0;
         int contadorRow = 0;
@@ -270,19 +278,18 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 id = View.generateViewId();     //es unico por eso tenias el fallo de que se acumulaban (y es necesario tb)
 
                 mapeo.append(contador, id); //sistema de clave- valor solo que ambos son int (pa este caso el SparseIntArray es mejor que el hash map)
-                contador ++;
+                contador++;
 
                 tablero.getCasillas()[iRow][iCol].setId(id);
                 idArray[iRow][iCol] = id;   //lo necesito abajo
 
 
-                if(iRow != 0 || iCol != 0)
-                {
-                    if(contador <= tablero.getLado() ){
+                if (iRow != 0 || iCol != 0) {
+                    if (contador <= tablero.getLado()) {
                         view = new TextView(context);
                         //((TextView) view).setText(("H"));
 
-                        ((TextView)view).setText(String.valueOf(tablero.getMarcasHorizontales()[contadorCol]));
+                        ((TextView) view).setText(String.valueOf(tablero.getMarcasHorizontales()[contadorCol]));
                         contadorCol++;
                         ((TextView) view).setGravity(Gravity.CENTER);
                         ((TextView) view).setTextColor(Color.BLACK);
@@ -290,25 +297,24 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         //Estas casillas son donde se ponen los numeros
                         tablero.getCasillas()[iRow][iCol].setJugable(false);
 
-                    }else if( (contador-1) % tablero.getLado() == 0){ //er gitaneo weno pa que me pille la primera casilla de cada fila
+                    } else if ((contador - 1) % tablero.getLado() == 0) { //er gitaneo weno pa que me pille la primera casilla de cada fila
                         view = new TextView(context);
                         //((TextView)view).setText(("V"));
 
-                        ((TextView)view).setText(String.valueOf(tablero.getMarcasVerticales()[contadorRow]));
+                        ((TextView) view).setText(String.valueOf(tablero.getMarcasVerticales()[contadorRow]));
                         contadorRow++;
 
                         ((TextView) view).setGravity(Gravity.CENTER);
                         ((TextView) view).setTextColor(Color.BLACK);
                         //Estas casillas son donde se ponen los numeros
                         tablero.getCasillas()[iRow][iCol].setJugable(false);
-                    }else{
+                    } else {
                         view = new ImageView(context);
-                        view.setPaddingRelative(10,10,10,10);
+                        view.setPaddingRelative(10, 10, 10, 10);
                         //Esta parte la querria hacer sin esto, solo usando los atributos isMarcada
                         //-> Ver metodo onClick para saber por que no lo hice asi
 
-                        ((ImageView)view).setImageResource(tablero.getCasillas()[iRow][iCol].getImgSrc());
-
+                        ((ImageView) view).setImageResource(tablero.getCasillas()[iRow][iCol].getImgSrc());
 
 
                         //view.setTag(R.drawable.nonselecteditem);
@@ -321,7 +327,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                     view.setBackgroundResource(R.drawable.border_shape);
 
                     layout.addView(view, lp);
-                }else{
+                } else {
                     view = new View(context);
                     view.setId(id);
                     view.setBackgroundResource(R.drawable.border_shape);
@@ -373,7 +379,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
         sonidoMec.setVolume(volume, volume);
         easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
-        easterEgg.setVolume(MAX_VOLUME,MAX_VOLUME);
+        easterEgg.setVolume(MAX_VOLUME, MAX_VOLUME);
 
         super.onStart();
     }

@@ -14,10 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.entities.User;
+import es.iesnervion.avazquez.puntokus.fragments.customDialogs.InfoDialogFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 /**
@@ -48,6 +51,10 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
     Button sickBtn;
     MainViewModel viewModel;
     User user;
+
+    @BindView(R.id.infobtn)
+    FloatingActionButton infoBtn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +67,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         normalBtn.setOnClickListener(this);
         hardBtn.setOnClickListener(this);
         sickBtn.setOnClickListener(this);
+        infoBtn.setOnClickListener(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         user = new User(sharedPreferences.getString("UserID", ""),
                 sharedPreferences.getString("UserNICK", ""),
@@ -87,12 +95,19 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
             case R.id.view4:
                 lado = SICK;
                 break;
+            case R.id.infobtn:
+                    viewModel.setShowDialog(true);
+
+                break;
         }
         if(areSoundsAllowed){
             sonidoTap.start();
         }
-        viewModel.setLado(lado);
-        viewModel.setIsGoingToPlay(true);
+        if(lado > 0){
+            viewModel.setLado(lado);
+            viewModel.setIsGoingToPlay(true);
+        }
+
     }
 
 }

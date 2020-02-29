@@ -50,4 +50,9 @@
     <string name="gameDataSaved">Se han registrado los datos de la partida</string>
     <string name="userAlreadyExists">Ese usuario ya existe</string>
     <string name="registeringUser">Registrando usuario</string>
+
+    <string name="infoColumn">"Debes poner tantos puntos en cada<font fgcolor="#FF0000"> columna </font>como número te indique el <font fgcolor="#4656b4">marcador </font>de la columna"</string>
+    <string name="infoRow">"Debes poner tantos puntos en cada<font fgcolor="#FF0000"> fila </font>como número te indique el <font fgcolor="#4656b4">marcador </font>de la fila"</string>
+    <string name="solvedExample">"Ejemplo resuelto"</string>
+
 </resources>
