@@ -136,7 +136,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     public void onClick(View v) {
         AlertDialog.Builder builder;
         AlertDialog dialog;
-        builder = new AlertDialog.Builder(getContext());
+        builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
         switch (v.getId()){
             case R.id.btn_logout:
                 //Pide confirmación, Cierra la sesión y te devuelve a la main activity

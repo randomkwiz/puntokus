@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnLogin.setOnClickListener(this);
         linkSignUp.setOnClickListener(this);
         rememberPassword.setOnClickListener(this);
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(getContext(), R.style.ProgressDialogStyle);
 
         return view;
     }
@@ -162,7 +162,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     * Inicia sesión en firebase con un email y contraseña
     * */
     private void iniciarSesion(String email, String password) {
-        progressDialog.setMessage("Iniciando sesión. Ten paciencia, esta operación puede tardar varios segundos.");
+        progressDialog.setMessage(getResources().getString(R.string.loggingInWait));
         progressDialog.show();
 
         //loguear usuario

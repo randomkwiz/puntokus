@@ -46,4 +46,8 @@
     <string name="msgConfirmDeleteAccount">Se borrarán todos los datos, incluyendo los datos de las partidas.</string>
     <string name="accountDeleted">Usuario y datos de juego eliminados.</string>
     <string name="error">Error</string>
+    <string name="loggingInWait">Iniciando sesión. Ten paciencia, esta operación puede tardar varios segundos.</string>
+    <string name="gameDataSaved">Se han registrado los datos de la partida</string>
+    <string name="userAlreadyExists">Ese usuario ya existe</string>
+    <string name="registeringUser">Registrando usuario</string>
 </resources>

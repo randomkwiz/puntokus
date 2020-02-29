@@ -18,6 +18,15 @@
         <item name="colorControlActivated">@color/colorOscuro1</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">@color/colorOscuro1</item>
+        <item name="android:textColorPrimary">@color/colorIntermedio1</item>
+    </style>
 
 
+    <style name="ProgressDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorOscuro1</item>
+        <item name="android:textColorPrimary">@color/colorIntermedio1</item>
+        <item name="android:background">@color/sombra</item>
+    </style>
 </resources>

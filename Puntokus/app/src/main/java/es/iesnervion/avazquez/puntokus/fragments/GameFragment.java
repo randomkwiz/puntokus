@@ -179,7 +179,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<Void> task2) {
                                         if(task2.isSuccessful()){
                                             Toast.makeText(getContext(),
-                                                    "Se han registrado los datos de la partida",
+                                                    getResources().getText(R.string.gameDataSaved),
                                                     Toast.LENGTH_SHORT).show();
 
                                         }
@@ -192,7 +192,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
                     break;
                 case R.id.refreshBtn:
-                    builder = new AlertDialog.Builder(getContext());
+                    builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
                     //pongo el titulo y los botones
                     builder.setTitle(R.string.refresh);
                     builder.setMessage(R.string.dialog_clean)
@@ -215,7 +215,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
                     break;
                 case R.id.newGameBtn:
-                    builder = new AlertDialog.Builder(getContext());
+                    builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
                     builder.setTitle(R.string.newGame);
                     builder.setMessage(R.string.dialog_newGame)
                             .setPositiveButton(R.string.dialog_newGame_start, new DialogInterface.OnClickListener() {

@@ -139,7 +139,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     /*Metodo para registrarse*/
     private void registrarse(String email, String password) {
 
-        progressDialog.setMessage("Registrando usuario");
+        progressDialog.setMessage(getResources().getString(R.string.registeringUser));
         progressDialog.show();
 
         //creating a new user
@@ -189,9 +189,9 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                         }else{
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si ya existe
-                                Toast.makeText(getContext(), "Ese usuario ya existe ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getText(R.string.userAlreadyExists), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "No se pudo registrar el usuario ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getText(R.string.error), Toast.LENGTH_SHORT).show();
                             }
                         }
                         progressDialog.dismiss();

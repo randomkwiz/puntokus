@@ -109,7 +109,7 @@ public class AutenticacionActivity extends AppCompatActivity {
             //en el fragment del login, se le mostrará dialog de confirmación
             AlertDialog.Builder builder;
             AlertDialog dialog;
-            builder = new AlertDialog.Builder(this);
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
             //pongo el titulo y los botones
             builder.setTitle(R.string.titleConfirmExit);
             builder.setMessage(R.string.msgExitLogin)

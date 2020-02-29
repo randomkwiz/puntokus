@@ -47,4 +47,8 @@
     <string name="msgConfirmDeleteAccount">All the data will be deleted, including game data.</string>
     <string name="accountDeleted">User account and game date deleted.</string>
     <string name="error">Error</string>
+    <string name="loggingInWait">Logging in, be patient, this may take a while.</string>
+    <string name="gameDataSaved">Game data saved</string>
+    <string name="userAlreadyExists">The user already exists</string>
+    <string name="registeringUser">Registering user</string>
 </resources>
