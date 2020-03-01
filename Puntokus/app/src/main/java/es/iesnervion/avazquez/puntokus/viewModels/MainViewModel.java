@@ -32,9 +32,9 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<User> usuarioActual;
     MutableLiveData<Boolean> userWantToExit;
     MutableLiveData<Boolean> userWantToGoBack;
-    MutableLiveData<String> currentFragment;
+    //MutableLiveData<String> currentFragment;
     MutableLiveData<Boolean> showDialog;
-
+    MutableLiveData<Long> timeInMilis;
 
     public MainViewModel() {
 
@@ -44,11 +44,14 @@ public class MainViewModel extends ViewModel {
         this.showDialog = new MutableLiveData<>();
         this.lado = new MutableLiveData<>();
         this.usuarioActual = new MutableLiveData<>();
-        this.currentFragment = new MutableLiveData<>();
+        this.timeInMilis = new MutableLiveData<>();
+
+        this.timeInMilis.setValue((long)0);
+       // this.currentFragment = new MutableLiveData<>();
         this.usuarioActual.setValue(new User());
         this.userWantToExit.setValue(false);
         this.userWantToGoBack.setValue(false);
-        this.currentFragment.setValue("");
+       // this.currentFragment.setValue("");
         this.showDialog.setValue(false);
     }
 
@@ -68,6 +71,14 @@ public class MainViewModel extends ViewModel {
     }
 
 
+    public LiveData<Long> getTimeInMilis() {
+        return timeInMilis;
+    }
+
+    public void setTimeInMilis(Long timeInMilis) {
+        this.timeInMilis.setValue(timeInMilis);
+    }
+
     public LiveData<Boolean> getShowDialog() {
         return showDialog;
     }
@@ -79,14 +90,14 @@ public class MainViewModel extends ViewModel {
         }
 
     }
-
-    public LiveData<String> getCurrentFragment() {
-        return currentFragment;
-    }
-
-    public void setCurrentFragment(String currentFragment) {
-        this.currentFragment.setValue(currentFragment);
-    }
+//
+//    public LiveData<String> getCurrentFragment() {
+//        return currentFragment;
+//    }
+//
+//    public void setCurrentFragment(String currentFragment) {
+//        this.currentFragment.setValue(currentFragment);
+//    }
 
     public LiveData<Boolean> getUserWantToGoBack() {
         return userWantToGoBack;

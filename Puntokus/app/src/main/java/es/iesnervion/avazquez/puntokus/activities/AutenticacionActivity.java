@@ -25,6 +25,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.fragments.LoginFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RegistrarseFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.AutenticacionViewModel;
@@ -52,7 +53,10 @@ public class AutenticacionActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(AutenticacionViewModel.class);
         fm = getSupportFragmentManager();
         fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, login).commit();
+        if(savedInstanceState == null){
+            fragmentTransaction.replace(R.id.fragment, login).commit();
+        }
+
 
         /*El observer*/
         final Observer<Boolean> signUpObserver = new Observer<Boolean>() {
@@ -61,6 +65,10 @@ public class AutenticacionActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 if (aBoolean) {
+
+                    viewModel.setUser(new User());
+                //Si cambias de pantalla, sí se deben borrar los textos de los edit texts
+                    //Se pone aquí y no en el onPause porque si giras la pantalla no se deben borrar
                     ft.replace(R.id.fragment, registro)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)
@@ -79,6 +87,9 @@ public class AutenticacionActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                 if (aBoolean) {
+                    viewModel.setUser(new User());
+                    //Si cambias de pantalla, sí se deben borrar los textos de los edit texts
+                    //Se pone aquí y no en el onPause porque si giras la pantalla no se deben borrar
                     ft.replace(R.id.fragment, login)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             //.addToBackStack(null)
@@ -95,7 +106,7 @@ public class AutenticacionActivity extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     //finish();
-                    intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
+                    //intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
@@ -145,11 +156,7 @@ public class AutenticacionActivity extends AppCompatActivity {
 
 
         } else if (currentFragment instanceof RegistrarseFragment) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment, login)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-
-                    .commit();
+                viewModel.setGoToLogIn(true);
         } else {
             salir();
         }

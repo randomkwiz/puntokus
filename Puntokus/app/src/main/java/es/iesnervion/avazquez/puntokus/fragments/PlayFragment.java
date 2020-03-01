@@ -76,11 +76,12 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         sickBtn.setOnClickListener(this);
         infoBtn.setOnClickListener(this);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        user = new User(sharedPreferences.getString("UserID", ""),
-                sharedPreferences.getString("UserNICK", ""),
-                sharedPreferences.getString("UserEMAIL", ""),
-                "");
-        viewModel.setUsuarioActual(user);
+        //Ya lo hago en la actividad
+//        user = new User(sharedPreferences.getString("UserID", ""),
+//                sharedPreferences.getString("UserNICK", ""),
+//                sharedPreferences.getString("UserEMAIL", ""),
+//                "");
+//        viewModel.setUsuarioActual(user);
 
 
             //https://androidexample365.com/material-intro-view-is-a-showcase-android-library/
@@ -132,6 +133,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         if(lado > 0){
             viewModel.setLado(lado);
             viewModel.setIsGoingToPlay(true);
+            viewModel.inicializarPartida(); //esto debe ir aquí
         }
     }
 

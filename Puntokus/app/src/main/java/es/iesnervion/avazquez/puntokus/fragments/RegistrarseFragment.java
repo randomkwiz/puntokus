@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,12 +66,12 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     @Override
     public void onPause() { //para que se borren las credenciales
         super.onPause();
-        nickname.setText("");
-        password.setText("");
-        email.setText("");
-        viewModel.getUser().getValue().setEmail("");
-        viewModel.getUser().getValue().setPassword("");
-        viewModel.getUser().getValue().setNickname("");
+//        nickname.setText("");
+//        password.setText("");
+//        email.setText("");
+//        viewModel.getUser().getValue().setEmail("");
+//        viewModel.getUser().getValue().setPassword("");
+//        viewModel.getUser().getValue().setNickname("");
     }
 
     @Override
@@ -95,8 +97,58 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         btnSignup.setOnClickListener(this);
         linkLogin.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext());
+        email.setText(viewModel.getUser().getValue().getEmail());
+        password.setText(viewModel.getUser().getValue().getPassword());
+        nickname.setText(viewModel.getUser().getValue().getNickname());
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.getUser().getValue().setEmail(email.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //viewModel.getUser().getValue().setEmail(email.getText().toString());
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.getUser().getValue().setPassword(password.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //viewModel.getUser().getValue().setPassword(password.getText().toString());
+            }
+        });
+
+        nickname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.getUser().getValue().setNickname(nickname.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return view;
     }
 
@@ -124,17 +176,12 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.link_login:
-                iniciarSesion();
+                viewModel.setGoToLogIn(true);
                 break;
         }
     }
 
-    /*
-     * Metodo que pone el atributo de go to login a true
-     *  */
-    private void iniciarSesion() {
-        viewModel.setGoToLogIn(true);
-    }
+
 
     /*Metodo para registrarse*/
     private void registrarse(String email, String password) {

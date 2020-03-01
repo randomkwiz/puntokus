@@ -49,7 +49,10 @@ import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GameFragment extends Fragment implements View.OnClickListener {
+public class GameFragment extends Fragment
+        implements View.OnClickListener,
+        Chronometer.OnChronometerTickListener
+{
 
 
     public GameFragment() {
@@ -73,7 +76,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     MediaPlayer easterEgg;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-
     boolean isMusicAllowed;
     boolean areSoundsAllowed;
     SharedPreferences sharedPreferences;
@@ -88,9 +90,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        viewModel.inicializarPartida();
+        //viewModel.inicializarPartida(); //->esto no puede ir aquí (cada vez que cambia la orientación genera nueva partida)
         establecerTablero(layout, view.getContext(), viewModel.getMapeo(), viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());
+        crono.setOnChronometerTickListener(this);
         crono.start();
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
@@ -171,12 +174,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         //Para el cronometro
                         crono.stop();
                         //Guarda la partida en la BBDD
-                        long milisegundosQueHanPasado = SystemClock.elapsedRealtime() - crono.getBase();
+
                         Map<String, Object> map = new HashMap<>();
                         map.put("idUser", viewModel.getUsuarioActual().getValue().getId());
                         map.put("nickname", viewModel.getUsuarioActual().getValue().getNickname());
                         map.put("email", viewModel.getUsuarioActual().getValue().getEmail());
-                        map.put("timeInMilis", milisegundosQueHanPasado);
+                        map.put("timeInMilis", viewModel.getTimeInMilis().getValue());
                         map.put("level", utilidad.getLevelName(viewModel.getLado().getValue()));
                         evaluateBtn.setEnabled(false);
                         databaseReference.child("Games").
@@ -265,6 +268,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         int contador = 0;
         int contadorCol = 0;
         int contadorRow = 0;
+        crono.setBase(SystemClock.elapsedRealtime() - viewModel.getTimeInMilis().getValue());
         int[][] idArray = new int[tablero.getLado()][tablero.getLado()];    //lo necesito abajo
         ConstraintSet cs = new ConstraintSet();
 
@@ -385,4 +389,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    @Override
+    public void onChronometerTick(Chronometer chronometer) {
+        viewModel.setTimeInMilis(SystemClock.elapsedRealtime() - chronometer.getBase());
+    }
 }

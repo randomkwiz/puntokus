@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,11 +70,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() { //para que se borren las credenciales
         super.onPause();
-        email.setText("");
-        password.setText("");
-        viewModel.getUser().getValue().setEmail("");
-        viewModel.getUser().getValue().setPassword("");
-        viewModel.getUser().getValue().setNickname("");
+//        email.setText("");
+//        password.setText("");
+//        viewModel.getUser().getValue().setEmail("");
+//        viewModel.getUser().getValue().setPassword("");
+//        viewModel.getUser().getValue().setNickname("");
     }
 
     @Override
@@ -85,16 +87,47 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         editor = sharedPreferences.edit();
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)
         //si es en activity se pone Butterknife.bind(this)
-
         // Inicializa el Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
-
-
         btnLogin.setOnClickListener(this);
         linkSignUp.setOnClickListener(this);
         rememberPassword.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext(), R.style.ProgressDialogStyle);
+        email.setText(viewModel.getUser().getValue().getEmail());
+        password.setText(viewModel.getUser().getValue().getPassword());
 
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    viewModel.getUser().getValue().setEmail(email.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    viewModel.getUser().getValue().setPassword(password.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return view;
     }
 
@@ -112,7 +145,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.link_signup:
-                registrarse();
+                viewModel.setGoToSignUp(true);
                 break;
             case R.id.rememberPassword:
                 recordarPassword();
@@ -150,13 +183,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /*
-    * Registra un usuario
-    * */
-    private void registrarse() {
 
-        viewModel.setGoToSignUp(true);
-    }
 
     /*
     * Inicia sesión en firebase con un email y contraseña

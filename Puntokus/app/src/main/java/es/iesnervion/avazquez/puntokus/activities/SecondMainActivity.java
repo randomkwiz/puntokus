@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.fragments.AccountFragment;
 import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
 import es.iesnervion.avazquez.puntokus.fragments.PlayFragment;
@@ -32,10 +33,8 @@ import es.iesnervion.avazquez.puntokus.fragments.customDialogs.InfoDialogFragmen
 import es.iesnervion.avazquez.puntokus.viewModels.MainViewModel;
 
 public class SecondMainActivity extends AppCompatActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener ,
-        SharedPreferences.OnSharedPreferenceChangeListener
-
-{
+        implements BottomNavigationView.OnNavigationItemSelectedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     @BindView(R.id.menu_nav_bottom)
@@ -51,23 +50,23 @@ public class SecondMainActivity extends AppCompatActivity
     boolean isMusicAllowed;
     SharedPreferences sharedPreferences;
     boolean areSoundsAllowed;
-
+    User user;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        if(key.equals("Music"))  {
+        if (key.equals("Music")) {
             Fragment currentFragment = getSupportFragmentManager()
                     .findFragmentById(R.id.fragmentSecondActivity);
 
-            if(isMusicAllowed){
-                if(!backgroundMusic.isPlaying()){
+            if (isMusicAllowed) {
+                if (!backgroundMusic.isPlaying()) {
                     backgroundMusic.start();
                     backgroundMusic.setLooping(true);
                 }
 
-            }else{
-                if(backgroundMusic.isPlaying()){
+            } else {
+                if (backgroundMusic.isPlaying()) {
                     backgroundMusic.stop();
 
                 }
@@ -90,15 +89,15 @@ public class SecondMainActivity extends AppCompatActivity
         sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
         backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
 
-        backgroundMusic.setVolume(volume,volume);
-        if(isMusicAllowed){
-            if(!backgroundMusic.isPlaying()){
+        backgroundMusic.setVolume(volume, volume);
+        if (isMusicAllowed) {
+            if (!backgroundMusic.isPlaying()) {
                 backgroundMusic.start();
                 backgroundMusic.setLooping(true);
             }
 
-        }else{
-            if(backgroundMusic.isPlaying()){
+        } else {
+            if (backgroundMusic.isPlaying()) {
                 backgroundMusic.stop();
 
             }
@@ -132,15 +131,19 @@ public class SecondMainActivity extends AppCompatActivity
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        viewModel.getUsuarioActual().getValue().setNickname(intent.getStringExtra("nickname"));
-        viewModel.getUsuarioActual().getValue().setEmail(firebaseAuth.getCurrentUser().getEmail());
+        //Puedo coger estos datos del sharedPreferences
+        user = new User(sharedPreferences.getString("UserID", ""),
+                sharedPreferences.getString("UserNICK", ""),
+                sharedPreferences.getString("UserEMAIL", ""),
+                "");
+        viewModel.setUsuarioActual(user);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-        bottomNavigationView.setSelectedItemId(R.id.menu_play);
 
-        if(savedInstanceState == null){
-        fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
+        if (savedInstanceState == null) {
+            bottomNavigationView.setSelectedItemId(R.id.menu_play);
+            fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
         }
 
 
@@ -183,8 +186,6 @@ public class SecondMainActivity extends AppCompatActivity
         viewModel.getShowDialog().observe(this, showDialogObserver);
 
 
-
-
     }
 
 
@@ -205,7 +206,7 @@ public class SecondMainActivity extends AppCompatActivity
                             //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit()
                     ;
-                    viewModel.setCurrentFragment("ACCOUNT");
+                  //  viewModel.setCurrentFragment("ACCOUNT");
                     ret = true;
                     break;
                 case R.id.menu_play:
@@ -213,7 +214,7 @@ public class SecondMainActivity extends AppCompatActivity
                             .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                             // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
-                    viewModel.setCurrentFragment("PLAY");
+                  //  viewModel.setCurrentFragment("PLAY");
                     ret = true;
                     break;
                 case R.id.menu_ranking:
@@ -221,7 +222,7 @@ public class SecondMainActivity extends AppCompatActivity
                             .replace(R.id.fragmentSecondActivity, rankingFragment, "RANKING")
                             //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
-                    viewModel.setCurrentFragment("RANKING");
+                  //  viewModel.setCurrentFragment("RANKING");
                     ret = true;
                     break;
 
@@ -242,7 +243,7 @@ public class SecondMainActivity extends AppCompatActivity
             //en el fragment del juego, se le mostrará dialog de confirmación
             AlertDialog.Builder builder;
             AlertDialog dialog;
-            builder =  new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
             //pongo el titulo y los botones
             builder.setTitle(R.string.titleConfirmExit);
             builder.setMessage(R.string.msgConfirmExit)
@@ -269,7 +270,7 @@ public class SecondMainActivity extends AppCompatActivity
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 .commit();
 
-                        viewModel.setCurrentFragment("PLAY");
+                     //   viewModel.setCurrentFragment("PLAY");
 
                         //Habilitamos el menu
                         bottomNavigationView.getMenu().getItem(0).setCheckable(true);
@@ -288,7 +289,7 @@ public class SecondMainActivity extends AppCompatActivity
             //en el fragment del login, se le mostrará dialog de confirmación
             AlertDialog.Builder builder;
             AlertDialog dialog;
-            builder =  new AlertDialog.Builder(this, R.style.AlertDialogStyle);
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogStyle);
             //pongo el titulo y los botones
             builder.setTitle(R.string.titleConfirmExit);
             builder.setMessage(R.string.msgExitLogin)
@@ -317,17 +318,15 @@ public class SecondMainActivity extends AppCompatActivity
             viewModel.getUserWantToExit().observe(this, exitObserver);
 
 
-        }
-        else if(currentFragment instanceof InfoDialogFragment){
+        } else if (currentFragment instanceof InfoDialogFragment) {
             infoDialogFragment.dismiss();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
-            viewModel.setCurrentFragment("PLAY");
+          //  viewModel.setCurrentFragment("PLAY");
         }
     }
 
@@ -335,7 +334,6 @@ public class SecondMainActivity extends AppCompatActivity
     public void salir() {
         super.onBackPressed();
     }
-
 
 
 }
