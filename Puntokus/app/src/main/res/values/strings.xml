@@ -57,6 +57,7 @@
     <string name="moreThanOneSol">Remember that there may be more than one possible solution.</string>
     <string name="howToPlay">How to play</string>
     <string name="scv_info">Click here to learn how to play!</string>
+    <string name="errorLoading">Error loading data. Check internet conecction and retry later.</string>
 
 
 </resources>

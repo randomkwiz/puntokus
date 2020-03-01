@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.avazquez.puntokus.R;
+import es.iesnervion.avazquez.puntokus.entities.Game;
 import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.fragments.AccountFragment;
 import es.iesnervion.avazquez.puntokus.fragments.GameFragment;
@@ -61,8 +62,10 @@ public class SecondMainActivity extends AppCompatActivity
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
-        if(backgroundMusic == null){
+        if(sonidoTap == null){
+            sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
+        }
+        if (backgroundMusic == null) {
             backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
             //Lo pongo así porque si no a veces se bugea y se crea dos veces y hace cosas raras
         }
@@ -87,7 +90,7 @@ public class SecondMainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if(backgroundMusic.isPlaying()){
+        if (backgroundMusic.isPlaying()) {
             backgroundMusic.pause();
         }
         //backgroundMusic.release();
@@ -128,6 +131,14 @@ public class SecondMainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
             fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
+        } else {
+            //Cuando cambia la configuración debe comprobar si está en el fragment de juego -> debe deshabilitar los botones otra vez
+            if (getSupportFragmentManager()
+                    .findFragmentById(R.id.fragmentSecondActivity) instanceof GameFragment) {
+                bottomNavigationView.getMenu().getItem(0).setCheckable(false);
+                bottomNavigationView.getMenu().getItem(1).setCheckable(false);
+                bottomNavigationView.getMenu().getItem(2).setCheckable(false);
+            }
         }
 
 
@@ -177,11 +188,14 @@ public class SecondMainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         boolean ret = false;
 
+        //Los menu item los pongo como no checkable en vez de
+        //not enabled para que sí entren aquí y muestren el toast
+        //indicando que deben pulsar atrás
+        //De la otra forma directamente ni entraría aquí
         if (!menuItem.isCheckable()) {
             Toast.makeText(this,
                     getResources().getText(R.string.pressBack), Toast.LENGTH_SHORT)
                     .show();
-
         } else {
             switch (menuItem.getItemId()) {
                 case R.id.menu_account:
@@ -190,7 +204,7 @@ public class SecondMainActivity extends AppCompatActivity
                             //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit()
                     ;
-                  //  viewModel.setCurrentFragment("ACCOUNT");
+                    //  viewModel.setCurrentFragment("ACCOUNT");
                     ret = true;
                     break;
                 case R.id.menu_play:
@@ -198,7 +212,7 @@ public class SecondMainActivity extends AppCompatActivity
                             .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
                             // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
-                  //  viewModel.setCurrentFragment("PLAY");
+                    //  viewModel.setCurrentFragment("PLAY");
                     ret = true;
                     break;
                 case R.id.menu_ranking:
@@ -206,7 +220,7 @@ public class SecondMainActivity extends AppCompatActivity
                             .replace(R.id.fragmentSecondActivity, rankingFragment, "RANKING")
                             //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
-                  //  viewModel.setCurrentFragment("RANKING");
+                    //  viewModel.setCurrentFragment("RANKING");
                     ret = true;
                     break;
 
@@ -254,7 +268,7 @@ public class SecondMainActivity extends AppCompatActivity
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 .commit();
 
-                     //   viewModel.setCurrentFragment("PLAY");
+                        //   viewModel.setCurrentFragment("PLAY");
 
                         //Habilitamos el menu
                         bottomNavigationView.getMenu().getItem(0).setCheckable(true);
@@ -310,7 +324,7 @@ public class SecondMainActivity extends AppCompatActivity
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.menu_play);
-          //  viewModel.setCurrentFragment("PLAY");
+            //  viewModel.setCurrentFragment("PLAY");
         }
     }
 

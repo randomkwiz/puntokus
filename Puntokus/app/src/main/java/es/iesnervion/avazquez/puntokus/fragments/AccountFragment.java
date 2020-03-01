@@ -95,7 +95,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-        sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        if(sonidoTap == null){
+            sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        }
+
         music.setChecked(isMusicAllowed);
         sounds.setChecked(areSoundsAllowed);
 

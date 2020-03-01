@@ -67,7 +67,10 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this,view);
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-        sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        if(sonidoTap == null){
+            sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        }
+
 
 
         easyBtn.setOnClickListener(this);

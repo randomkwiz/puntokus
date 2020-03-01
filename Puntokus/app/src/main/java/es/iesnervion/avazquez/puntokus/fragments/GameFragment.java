@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -168,13 +169,11 @@ public class GameFragment extends Fragment
             switch (v.getId()) {
                 case R.id.evaluateBtn:
                     if (utilidad.comprobarSiLaSolucionEsCorrecta(viewModel.getTablero())) {
-
                         //HA GANADO
                         utilidad.mostrarToast(getString((R.string.isCorrect)), getContext());
                         //Para el cronometro
                         crono.stop();
                         //Guarda la partida en la BBDD
-
                         Map<String, Object> map = new HashMap<>();
                         map.put("idUser", viewModel.getUsuarioActual().getValue().getId());
                         map.put("nickname", viewModel.getUsuarioActual().getValue().getNickname());
@@ -185,14 +184,28 @@ public class GameFragment extends Fragment
                         databaseReference.child("Games").
                                 child(viewModel.getUsuarioActual().getValue().getId()).   //lo anidara en las partidas del usuario
                                 push(). //le pondra una id a la partida
-                                setValue(map).
-                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                                setValue(map)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task2) {
                                         if (task2.isSuccessful()) {
-                                            Toast.makeText(getContext(),
-                                                    getResources().getText(R.string.gameDataSaved),
-                                                    Toast.LENGTH_SHORT).show();
+                                            if(getActivity() != null){
+                                                //Esto es porque si no tenías internet cuando jugaste
+                                                //pero al cabo de un rato sí, firebase hará la petición igualmente
+                                                //y si al devolver los datos no estás en esa misma pantalla
+                                                //petará al intentar mostrarte un toast
+                                                Toast.makeText(getActivity(),
+                                                        getResources().getText(R.string.gameDataSaved),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+
+                                        }else{
+                                            if(getActivity() != null){
+                                                Toast.makeText(getActivity(),
+                                                        getResources().getText(R.string.loadingData),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
 
                                         }
                                     }
@@ -378,12 +391,19 @@ public class GameFragment extends Fragment
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
 
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-        sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
-        sonidoTap.setVolume(volume, volume);
-        sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
-        sonidoMec.setVolume(volume, volume);
-        easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
-        easterEgg.setVolume(MAX_VOLUME, MAX_VOLUME);
+        if(sonidoTap == null){
+            sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
+            sonidoTap.setVolume(volume, volume);
+        }
+        if(sonidoMec == null){
+            sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
+            sonidoMec.setVolume(volume, volume);
+        }
+        if(easterEgg == null){
+            easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
+            easterEgg.setVolume(MAX_VOLUME, MAX_VOLUME);
+        }
+
 
         super.onStart();
     }
