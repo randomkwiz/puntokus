@@ -56,5 +56,6 @@
     <string name="solvedExample">"Ejemplo resuelto"</string>
     <string name="moreThanOneSol">Recuerda que puede haber más de una solución posible.</string>
     <string name="howToPlay">Cómo jugar</string>
+    <string name="scv_info">Haz click aquí para aprender a jugar</string>
 
 </resources>

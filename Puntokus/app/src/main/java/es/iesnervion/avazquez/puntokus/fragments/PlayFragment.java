@@ -59,7 +59,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.infobtn)
     FloatingActionButton infoBtn;
-    SharedPreferences.Editor editor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,7 +68,6 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
-
 
 
         easyBtn.setOnClickListener(this);

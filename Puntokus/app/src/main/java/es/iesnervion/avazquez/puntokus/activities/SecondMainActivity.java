@@ -138,14 +138,10 @@ public class SecondMainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         bottomNavigationView.setSelectedItemId(R.id.menu_play);
-        // if(viewModel.getCurrentFragment().getValue().isEmpty()){
+
+        if(savedInstanceState == null){
         fragmentTransaction.replace(R.id.fragmentSecondActivity, playFragment).commit();
-        //}else{
-//            Fragment destinationFragment = getSupportFragmentManager()
-//                    .findFragmentByTag(viewModel.getCurrentFragment().getValue());
-//            fragmentTransaction.replace(R.id.fragmentSecondActivity, destinationFragment).commit();
-//
-//        }
+        }
 
 
         Observer<Boolean> playObserver = new Observer<Boolean>() {
