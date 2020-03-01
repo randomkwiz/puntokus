@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
@@ -70,12 +72,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() { //para que se borren las credenciales
         super.onPause();
-//        email.setText("");
-//        password.setText("");
-//        viewModel.getUser().getValue().setEmail("");
-//        viewModel.getUser().getValue().setPassword("");
-//        viewModel.getUser().getValue().setNickname("");
+        viewModel.getUser().getValue().setEmail(email.getText().toString());
+        viewModel.getUser().getValue().setPassword(password.getText().toString());
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,41 +94,31 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         linkSignUp.setOnClickListener(this);
         rememberPassword.setOnClickListener(this);
         progressDialog = new ProgressDialog(getContext(), R.style.ProgressDialogStyle);
+
+        //https://stackoverflow.com/questions/13303469/edittext-settext-not-working-with-fragment -> parece ser que hay un problema
+        //con set text de edit text en onCreateView -> al parecer no me da problemas
         email.setText(viewModel.getUser().getValue().getEmail());
         password.setText(viewModel.getUser().getValue().getPassword());
 
-        email.addTextChangedListener(new TextWatcher() {
+
+        /*El observer*/
+        final Observer<Boolean> hayQueBorrarCredencialesObserver = new Observer<Boolean>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    viewModel.setUser(new User());
+                    email.setText(viewModel.getUser().getValue().getEmail());
+                    password.setText(viewModel.getUser().getValue().getPassword());
 
+                }
             }
+        };
+        //Observo
+        //Esto es así no lo toques más
+        //viewModel.getGoToLogIn().observe(this, hayQueBorrarCredencialesObserver);
+        viewModel.getGoToSignUp().observe(this, hayQueBorrarCredencialesObserver);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    viewModel.getUser().getValue().setEmail(email.getText().toString());
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    viewModel.getUser().getValue().setPassword(password.getText().toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         return view;
     }
 
@@ -151,11 +142,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 recordarPassword();
                 break;
         }
-
-
-
-
-
     }
 
     //Manda correo para recordar la contraseña
@@ -240,6 +226,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         boolean isLogged = sharedPreferences.getBoolean("IsLogged", false);
+
+
         if(isLogged){
             Intent intent = new Intent(getContext(), SecondMainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

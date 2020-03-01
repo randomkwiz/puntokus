@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">Puntokus</string>
     <string name="fillFields">No dejes campos vacíos</string>
-    <string name="linkSignUp">¿No tienes una cuenta? Créate una</string>
+    <string name="linkSignUp">¿No tienes una cuenta? <u>Créate una</u></string>
     <string name="login">Iniciar sesión</string>
     <string name="signup">Registrarme</string>
-    <string name="linkLogin">¿Ya tienes una cuenta? Inicia sesión</string>
+    <string name="linkLogin">¿Ya tienes una cuenta? <u>Inicia sesión</u></string>
     <string name="menu_account">Cuenta</string>
     <string name="menu_play">Jugar</string>
     <string name="menu_ranking">Clasificación</string>

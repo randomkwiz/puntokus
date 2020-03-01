@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Puntokus</string>
     <string name="title_activity_main2" translatable="false">Main2Activity</string>
-    <string name="linkSignUp">No account yet? Create one</string>
-    <string name="linkLogin">Already have an account? Log in</string>
+    <string name="linkSignUp">No account yet? <u>Create one</u></string>
+    <string name="linkLogin">Already have an account? <u>Log in</u></string>
     <string name="fillFields">Don\'t let any empty field</string>
     <string name="signup">Sign up</string>
     <string name="login">Login</string>

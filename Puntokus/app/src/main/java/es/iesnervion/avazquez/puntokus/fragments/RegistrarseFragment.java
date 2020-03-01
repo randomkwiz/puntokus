@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
@@ -46,6 +47,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     public RegistrarseFragment() {
         // Required empty public constructor
     }
+
     @BindView(R.id.input_email)
     EditText email;
     @BindView(R.id.input_nickname)
@@ -66,12 +68,9 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
     @Override
     public void onPause() { //para que se borren las credenciales
         super.onPause();
-//        nickname.setText("");
-//        password.setText("");
-//        email.setText("");
-//        viewModel.getUser().getValue().setEmail("");
-//        viewModel.getUser().getValue().setPassword("");
-//        viewModel.getUser().getValue().setNickname("");
+        viewModel.getUser().getValue().setEmail(email.getText().toString().trim());
+        viewModel.getUser().getValue().setPassword(password.getText().toString().trim());
+        viewModel.getUser().getValue().setNickname(nickname.getText().toString().trim());
     }
 
     @Override
@@ -81,7 +80,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_registrarse, container, false);
 
         viewModel = ViewModelProviders.of(getActivity()).get(AutenticacionViewModel.class);
-        ButterKnife.bind(this,view); //le mandas la view con la que realizará el binding
+        ButterKnife.bind(this, view); //le mandas la view con la que realizará el binding
 
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)
         //si es en activity se pone Butterknife.bind(this)
@@ -100,55 +99,26 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         email.setText(viewModel.getUser().getValue().getEmail());
         password.setText(viewModel.getUser().getValue().getPassword());
         nickname.setText(viewModel.getUser().getValue().getNickname());
-        email.addTextChangedListener(new TextWatcher() {
+
+        /*El observer*/
+        final Observer<Boolean> hayQueBorrarCredencialesObserver = new Observer<Boolean>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    viewModel.setUser(new User());
+                    email.setText(viewModel.getUser().getValue().getEmail());
+                    password.setText(viewModel.getUser().getValue().getPassword());
+                    nickname.setText(viewModel.getUser().getValue().getNickname());
+                }
             }
+        };
+        //Observo
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.getUser().getValue().setEmail(email.getText().toString());
-            }
+        //Esto es así no lo toques más
+        viewModel.getGoToLogIn().observe(this, hayQueBorrarCredencialesObserver);
+        //viewModel.getGoToSignUp().observe(this, hayQueBorrarCredencialesObserver);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                //viewModel.getUser().getValue().setEmail(email.getText().toString());
-            }
-        });
-        password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.getUser().getValue().setPassword(password.getText().toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //viewModel.getUser().getValue().setPassword(password.getText().toString());
-            }
-        });
-
-        nickname.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                viewModel.getUser().getValue().setNickname(nickname.getText().toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         return view;
     }
 
@@ -157,21 +127,20 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         viewModel.getUser().getValue().setEmail(email.getText().toString().trim());
         viewModel.getUser().getValue().setPassword(password.getText().toString().trim());
         viewModel.getUser().getValue().setNickname(nickname.getText().toString().trim());
-
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_signup:
-                if(!viewModel.getUser().getValue().getEmail().isEmpty() || !viewModel.getUser().getValue().getPassword().isEmpty()
-                || !viewModel.getUser().getValue().getNickname().isEmpty()
-                ){
-                    if(viewModel.getUser().getValue().getPassword().length() < 6){   //lo pide firebase
+                if (!viewModel.getUser().getValue().getEmail().isEmpty() || !viewModel.getUser().getValue().getPassword().isEmpty()
+                        || !viewModel.getUser().getValue().getNickname().isEmpty()
+                ) {
+                    if (viewModel.getUser().getValue().getPassword().length() < 6) {   //lo pide firebase
                         Toast.makeText(getContext(), R.string.invalidPassword, Toast.LENGTH_SHORT).show();
 
-                    }else{
+                    } else {
                         //TODO por aqué aquí envío los datos tal cual si los tengo en el view model!!
                         registrarse(viewModel.getUser().getValue().getEmail(), viewModel.getUser().getValue().getPassword());
                     }
 
-                }else{
+                } else {
                     Toast.makeText(getContext(), R.string.fillFields, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -180,7 +149,6 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
-
 
 
     /*Metodo para registrarse*/
@@ -195,7 +163,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             //Debemos obtener el ID que nos proporciona Firebase
                             User usuarioActual = new User(firebaseAuth.getCurrentUser().getUid(),
                                     viewModel.getUser().getValue().getNickname(),
@@ -212,28 +180,28 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                                     child(usuarioActual.getId()).
                                     setValue(map).
                                     addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task2) {
-                                    if(task2.isSuccessful()){
-                                        Toast.makeText(getContext(),
-                                                "Se han registrado los datos",
-                                                Toast.LENGTH_SHORT).show();
-                                        editor.putString("UserID",viewModel.getUser().getValue().getId());
-                                        editor.putString("UserEMAIL",viewModel.getUser().getValue().getEmail());
-                                        editor.putString("UserNICK",viewModel.getUser().getValue().getNickname());
-                                        editor.putBoolean("IsLogged",true); //para que inicie sesión directamente tras registrarse
-                                        editor.commit();
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task2) {
+                                            if (task2.isSuccessful()) {
+                                                Toast.makeText(getContext(),
+                                                        "Se han registrado los datos",
+                                                        Toast.LENGTH_SHORT).show();
+                                                editor.putString("UserID", viewModel.getUser().getValue().getId());
+                                                editor.putString("UserEMAIL", viewModel.getUser().getValue().getEmail());
+                                                editor.putString("UserNICK", viewModel.getUser().getValue().getNickname());
+                                                editor.putBoolean("IsLogged", true); //para que inicie sesión directamente tras registrarse
+                                                editor.commit();
 
-                                        viewModel.setGoToLogIn(true);
+                                                viewModel.setGoToLogIn(true);
 
-                                    }
-                                }
-                            });
+                                            }
+                                        }
+                                    });
 
                             //https://www.youtube.com/watch?v=xwhEHb_AZ6k&t=171s
                             //mas info aqui: https://firebase.google.com/docs/database/admin/save-data
 
-                        }else{
+                        } else {
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si ya existe
                                 Toast.makeText(getContext(), getResources().getText(R.string.userAlreadyExists), Toast.LENGTH_SHORT).show();
@@ -244,7 +212,5 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                         progressDialog.dismiss();
                     }
                 });
-
-
     }
 }

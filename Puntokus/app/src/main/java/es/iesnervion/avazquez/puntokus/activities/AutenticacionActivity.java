@@ -62,10 +62,8 @@ public class AutenticacionActivity extends AppCompatActivity {
         final Observer<Boolean> signUpObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
                 if (aBoolean) {
-
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     viewModel.setUser(new User());
                 //Si cambias de pantalla, sí se deben borrar los textos de los edit texts
                     //Se pone aquí y no en el onPause porque si giras la pantalla no se deben borrar
@@ -84,10 +82,9 @@ public class AutenticacionActivity extends AppCompatActivity {
         final Observer<Boolean> logInObserver = new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
                 if (aBoolean) {
-                    viewModel.setUser(new User());
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    //viewModel.setUser(new User());
                     //Si cambias de pantalla, sí se deben borrar los textos de los edit texts
                     //Se pone aquí y no en el onPause porque si giras la pantalla no se deben borrar
                     ft.replace(R.id.fragment, login)

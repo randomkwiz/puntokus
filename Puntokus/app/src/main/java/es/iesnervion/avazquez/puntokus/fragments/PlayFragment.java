@@ -134,6 +134,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
             viewModel.setLado(lado);
             viewModel.setIsGoingToPlay(true);
             viewModel.inicializarPartida(); //esto debe ir aquí
+            viewModel.resetTime();
         }
     }
 

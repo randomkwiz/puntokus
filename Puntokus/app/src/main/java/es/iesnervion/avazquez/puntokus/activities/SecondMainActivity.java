@@ -53,37 +53,12 @@ public class SecondMainActivity extends AppCompatActivity
     User user;
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        if (key.equals("Music")) {
-            Fragment currentFragment = getSupportFragmentManager()
-                    .findFragmentById(R.id.fragmentSecondActivity);
-
-            if (isMusicAllowed) {
-                if (!backgroundMusic.isPlaying()) {
-                    backgroundMusic.start();
-                    backgroundMusic.setLooping(true);
-                }
-
-            } else {
-                if (backgroundMusic.isPlaying()) {
-                    backgroundMusic.stop();
-
-                }
-            }
-        }
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
 
-        Fragment currentFragment = getSupportFragmentManager()
-                .findFragmentById(R.id.fragmentSecondActivity);
         final int MAX_VOLUME = 100;
         final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
         sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
@@ -98,17 +73,19 @@ public class SecondMainActivity extends AppCompatActivity
 
         } else {
             if (backgroundMusic.isPlaying()) {
-                backgroundMusic.stop();
+                backgroundMusic.pause();
 
             }
         }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        backgroundMusic.stop();
+        if(backgroundMusic.isPlaying()){
+            backgroundMusic.pause();
+        }
         //backgroundMusic.release();
     }
 
@@ -121,6 +98,7 @@ public class SecondMainActivity extends AppCompatActivity
         Intent intent = getIntent();
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         accountFragment = new AccountFragment();
         playFragment = new PlayFragment();
         rankingFragment = new RankingFragment();
@@ -137,6 +115,8 @@ public class SecondMainActivity extends AppCompatActivity
                 sharedPreferences.getString("UserEMAIL", ""),
                 "");
         viewModel.setUsuarioActual(user);
+
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
@@ -335,5 +315,23 @@ public class SecondMainActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("Music")) {
+            if (sharedPreferences.getBoolean("Music", true)) {
+                if (!backgroundMusic.isPlaying()) {
+                    backgroundMusic.start();
+                    backgroundMusic.setLooping(true);
+                }
+
+            } else {
+                if (backgroundMusic.isPlaying()) {
+                    backgroundMusic.pause();
+
+                }
+            }
+        }
+    }
 
 }

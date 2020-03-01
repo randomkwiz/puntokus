@@ -99,6 +99,9 @@ public class MainViewModel extends ViewModel {
 //        this.currentFragment.setValue(currentFragment);
 //    }
 
+    public void resetTime(){
+        this.setTimeInMilis((long)0);
+    }
     public LiveData<Boolean> getUserWantToGoBack() {
         return userWantToGoBack;
     }
