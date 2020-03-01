@@ -119,7 +119,7 @@ public class SecondMainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-
+        sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         accountFragment = new AccountFragment();
         playFragment = new PlayFragment();
