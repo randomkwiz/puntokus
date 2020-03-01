@@ -68,6 +68,7 @@ public class RankingFragment extends Fragment {
     boolean areSoundsAllowed;
     SharedPreferences sharedPreferences;
     MediaPlayer sonidoTap;
+    MediaPlayer alertSound;
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
     MutableLiveData<ArrayList<Game>> listaPartidas;
@@ -83,7 +84,9 @@ public class RankingFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-
+        if(alertSound==null){
+            alertSound = MediaPlayer.create(getContext(), R.raw.alert);
+        }
         listaPartidas = new MutableLiveData<ArrayList<Game>>();
         listaPartidasAMostrar = new MutableLiveData<ArrayList<Game>>();
 
@@ -92,6 +95,7 @@ public class RankingFragment extends Fragment {
         GamesAdapter adapter =
                 new GamesAdapter(listaPartidasAMostrar.getValue(), getActivity());
 
+        animationView.setVisibility(View.VISIBLE);
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -167,6 +171,9 @@ public class RankingFragment extends Fragment {
                                     //lo muestro
                                     dialog = builder.create();
                                     dialog.show();
+                                    if(areSoundsAllowed){
+                                        alertSound.start();
+                                    }
 
                                     listViewRanking.setVisibility(View.GONE);
                                     animationView.setVisibility(View.GONE);
@@ -197,7 +204,7 @@ public class RankingFragment extends Fragment {
 
                             if (areSoundsAllowed) {
                                 if(sonidoTap == null){
-                                    sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+                                    sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
                                 }
 
                                 sonidoTap.start();
@@ -228,11 +235,15 @@ public class RankingFragment extends Fragment {
                     //pongo el titulo y los botones
                     builder.setTitle(R.string.error);
                     builder.setMessage(R.string.errorLoading)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.ok, null);
+                            .setCancelable(true);
+
                     //lo muestro
                     dialog = builder.create();
                     dialog.show();
+                    if(areSoundsAllowed){
+                        alertSound.start();
+                    }
+
                     listViewRanking.setVisibility(View.GONE);
                     animationView.setVisibility(View.GONE);
                     imgErrorLoadingData.setVisibility(View.VISIBLE);

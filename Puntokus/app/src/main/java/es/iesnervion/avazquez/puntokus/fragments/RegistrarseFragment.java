@@ -183,9 +183,11 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if (task2.isSuccessful()) {
-                                                Toast.makeText(getContext(),
-                                                        "Se han registrado los datos",
-                                                        Toast.LENGTH_SHORT).show();
+                                                if(getContext() != null){
+                                                    Toast.makeText(getContext(),
+                                                            "Se han registrado los datos",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
                                                 editor.putString("UserID", viewModel.getUser().getValue().getId());
                                                 editor.putString("UserEMAIL", viewModel.getUser().getValue().getEmail());
                                                 editor.putString("UserNICK", viewModel.getUser().getValue().getNickname());
@@ -204,9 +206,15 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
                         } else {
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {//si ya existe
-                                Toast.makeText(getContext(), getResources().getText(R.string.userAlreadyExists), Toast.LENGTH_SHORT).show();
+                                if(getContext() != null){
+                                    Toast.makeText(getContext(), getResources().getText(R.string.userAlreadyExists), Toast.LENGTH_SHORT).show();
+                                }
+
                             } else {
-                                Toast.makeText(getContext(), getResources().getText(R.string.error), Toast.LENGTH_SHORT).show();
+                                if(getContext() != null){
+                                    Toast.makeText(getContext(), getResources().getText(R.string.error), Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }
                         progressDialog.dismiss();

@@ -16,20 +16,26 @@
         android:layout_width="wrap_content"
         app:fabSize="mini"
         app:borderWidth="0dp"
+        android:elevation="0dp"
+        app:elevation="10dp"
+        android:scaleType="center"
+
         app:rippleColor="@color/sombra"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_height="wrap_content"
+
         ></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
     <Button
+
         android:id="@+id/view1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="20dp"
-        android:background="#00E676"
-        android:textSize="20dp"
+        android:background="#2FFF00"
 
+        android:textSize="20dp"
         android:text="@string/easy"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +49,7 @@
         android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#C6FF00"
+        android:background="#FFEA00"
 
         android:text="@string/normal"
         app:layout_constraintTop_toBottomOf="@+id/view1"
@@ -56,10 +62,11 @@
         android:id="@+id/view3"
         android:padding="20dp"
         android:textSize="20dp"
-        android:background="#FF6D00"
+        android:background="#FF6A00"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/hard"
+
         app:layout_constraintTop_toBottomOf="@+id/view2"
         app:layout_constraintBottom_toTopOf="@id/view4"
         app:layout_constraintVertical_chainStyle="packed"
@@ -68,16 +75,18 @@
 
     <Button
         android:id="@+id/view4"
-        android:background="#D50000"
-        android:padding="20dp"
-        android:textSize="20dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#FF0000"
+        android:padding="20dp"
         android:text="@string/sick"
-        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:textSize="20dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        app:layout_constraintVertical_chainStyle="packed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

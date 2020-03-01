@@ -78,11 +78,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     boolean isMusicAllowed;
     boolean areSoundsAllowed;
     MediaPlayer sonidoTap;
+    MediaPlayer alertSound;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -95,28 +98,30 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-        if(sonidoTap == null){
+        if (sonidoTap == null) {
             sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
+        }
+        if(alertSound == null){
+            alertSound = MediaPlayer.create(getContext(),R.raw.alert);
         }
 
         music.setChecked(isMusicAllowed);
         sounds.setChecked(areSoundsAllowed);
 
 
-
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(isMusicAllowed){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isMusicAllowed) {
                 music.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
                 music.setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
-            }else{
+            } else {
                 music.setTrackTintList(ColorStateList.valueOf(Color.GRAY));
                 music.setThumbTintList(ColorStateList.valueOf(Color.GRAY));
             }
 
-            if(areSoundsAllowed){
+            if (areSoundsAllowed) {
                 sounds.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
                 sounds.setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
-            }else{
+            } else {
                 sounds.setTrackTintList(ColorStateList.valueOf(Color.GRAY));
                 sounds.setThumbTintList(ColorStateList.valueOf(Color.GRAY));
             }
@@ -127,12 +132,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         email.setText(sharedPreferences.getString("UserEMAIL", ""));
 
 
-
         btnLogout.setOnClickListener(this);
         btn_delete.setOnClickListener(this);
         sounds.setOnCheckedChangeListener(this);
         music.setOnCheckedChangeListener(this);
-
 
 
         return view;
@@ -142,13 +145,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     public void onClick(View v) {
         AlertDialog.Builder builder;
         AlertDialog dialog;
-        builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+        builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
 
-        if(sharedPreferences.getBoolean("Sounds", true)){
+        if (sharedPreferences.getBoolean("Sounds", true)) {
             sonidoTap.start();
         }
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_logout:
                 //Pide confirmación, Cierra la sesión y te devuelve a la main activity
 
@@ -159,11 +162,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 //Si el usuario le da a que sí desea salir
-                                editor.putString("UserID","");
-                                editor.putString("UserEMAIL","");
-                                editor.putString("UserNICK","");
+                                editor.putString("UserID", "");
+                                editor.putString("UserEMAIL", "");
+                                editor.putString("UserNICK", "");
                                 //No hagas clear que borras lo de la música también!
-                                editor.putBoolean("IsLogged",false);
+                                editor.putBoolean("IsLogged", false);
                                 editor.commit();
                                 firebaseAuth.signOut();
                                 startActivity(new Intent(getContext(), AutenticacionActivity.class));
@@ -176,6 +179,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                 //lo muestro
                 dialog = builder.create();
                 dialog.show();
+                if(areSoundsAllowed){
+                    alertSound.start();
+                }
 
 
                 break;
@@ -188,13 +194,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                if(sharedPreferences.getBoolean("IsLogged", false)){
+                                if (sharedPreferences.getBoolean("IsLogged", false)) {
                                     eliminarTodosLosDatos();    //esto debe ir antes de borrar los datos de shared preferences
-                                    editor.putString("UserID","");
-                                    editor.putString("UserEMAIL","");
-                                    editor.putString("UserNICK","");
+                                    editor.putString("UserID", "");
+                                    editor.putString("UserEMAIL", "");
+                                    editor.putString("UserNICK", "");
                                     //No hagas clear que borras lo de la música también!
-                                    editor.putBoolean("IsLogged",false);
+                                    editor.putBoolean("IsLogged", false);
                                     editor.commit();
                                     firebaseAuth.getCurrentUser()
                                             .delete()
@@ -202,20 +208,31 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                    Intent intent = new Intent(getContext(), AutenticacionActivity.class);
-                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        Toast toast1 =
-                                                                Toast.makeText(getContext(),
-                                                                        R.string.accountDeleted, Toast.LENGTH_SHORT);
-                                                        toast1.show();
+                                                        Intent intent = new Intent(getContext(), AutenticacionActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        if (getContext() != null) {   //por el internet
+                                                            Toast toast1 =
+                                                                    Toast.makeText(getContext(),
+                                                                            R.string.accountDeleted, Toast.LENGTH_SHORT);
+                                                            toast1.show();
+                                                        }
                                                         startActivity(intent);
                                                         getActivity().finish(); //TODO cambiar y poner con viewmodel
 
-                                                    }else{
-                                                        Toast toast1 =
-                                                                Toast.makeText(getContext(),
-                                                                        R.string.error, Toast.LENGTH_SHORT);
-                                                        toast1.show();
+                                                    } else {
+
+                                                        Intent intent = new Intent(getContext(), AutenticacionActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        if (getContext() != null) {
+                                                            Toast toast1 =
+                                                                    Toast.makeText(getContext(),
+                                                                            R.string.error, Toast.LENGTH_SHORT);
+                                                            toast1.show();
+                                                        }
+                                                        startActivity(intent);
+                                                        getActivity().finish(); //TODO cambiar y poner con viewmodel
+
+
                                                     }
                                                 }
                                             });
@@ -227,6 +244,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                 //lo muestro
                 dialog = builder.create();
                 dialog.show();
+                if(areSoundsAllowed){
+                    alertSound.start();
+                }
                 break;
 
         }
@@ -236,32 +256,32 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(sharedPreferences.getBoolean("Sounds", true)){
+        if (sharedPreferences.getBoolean("Sounds", true)) {
             sonidoTap.start();
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.toggleMusic:
-                editor.putBoolean("Music",isChecked);
+                editor.putBoolean("Music", isChecked);
                 break;
             case R.id.toggleSounds:
-                editor.putBoolean("Sounds",isChecked);
+                editor.putBoolean("Sounds", isChecked);
                 break;
         }
         editor.commit();
 
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(isChecked){
-                ((Switch)buttonView).setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
-                ((Switch)buttonView).setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
-            }else{
-                ((Switch)buttonView).setTrackTintList(ColorStateList.valueOf(Color.GRAY));
-                ((Switch)buttonView).setThumbTintList(ColorStateList.valueOf(Color.GRAY));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isChecked) {
+                ((Switch) buttonView).setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+                ((Switch) buttonView).setThumbTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
+            } else {
+                ((Switch) buttonView).setTrackTintList(ColorStateList.valueOf(Color.GRAY));
+                ((Switch) buttonView).setThumbTintList(ColorStateList.valueOf(Color.GRAY));
             }
         }
     }
 
-    public void eliminarTodosLosDatos(){
+    public void eliminarTodosLosDatos() {
         //esto molaría hacerlo en una transacción pero no sé como se haría
         databaseReference.child("Users").
                 child(sharedPreferences.getString("UserID", "")).removeValue();

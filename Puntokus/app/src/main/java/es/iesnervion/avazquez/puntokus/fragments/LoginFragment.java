@@ -77,13 +77,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(AutenticacionViewModel.class);
-        ButterKnife.bind(this,view); //le mandas la view con la que realizará el binding
+        ButterKnife.bind(this, view); //le mandas la view con la que realizará el binding
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         //nota importante: si es en fragment se pone ButterKnife.bind(this,view)
@@ -127,11 +126,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         viewModel.getUser().getValue().setEmail(email.getText().toString().trim());
         viewModel.getUser().getValue().setPassword(password.getText().toString().trim());
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_login:
-                if(!viewModel.getUser().getValue().getEmail().equals("") && !viewModel.getUser().getValue().getPassword().equals("") ){
+                if (!viewModel.getUser().getValue().getEmail().equals("") && !viewModel.getUser().getValue().getPassword().equals("")) {
                     iniciarSesion(viewModel.getUser().getValue().getEmail(), viewModel.getUser().getValue().getPassword());
-                }else{
+                } else {
                     Toast.makeText(getContext(), R.string.fillFields, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -148,32 +147,37 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void recordarPassword() {
         String email = this.email.getText().toString().trim();
 
-        if(!email.isEmpty()){
+        if (!email.isEmpty()) {
             firebaseAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(getContext(),
-                                        getResources().getText(R.string.emailSent), Toast.LENGTH_LONG).show();
-                            }else{
-                                Toast.makeText(getContext(),
-                                        getResources().getText(R.string.error_emailSent), Toast.LENGTH_LONG).show();
+                            if (task.isSuccessful()) {
+                                if (getContext() != null) {
+                                    Toast.makeText(getContext(),
+                                            getResources().getText(R.string.emailSent), Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                if (getContext() != null) {
+                                    Toast.makeText(getContext(),
+                                            getResources().getText(R.string.error_emailSent), Toast.LENGTH_LONG).show();
+                                }
+
 
                             }
                         }
                     });
-        }else{
+        } else {
             Toast.makeText(getContext(),
                     getResources().getText(R.string.emailNeeded), Toast.LENGTH_LONG).show();
         }
     }
 
 
-
     /*
-    * Inicia sesión en firebase con un email y contraseña
-    * */
+     * Inicia sesión en firebase con un email y contraseña
+     * */
     private void iniciarSesion(String email, String password) {
         progressDialog.setMessage(getResources().getString(R.string.loggingInWait));
         progressDialog.show();
@@ -192,28 +196,42 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                             databaseReference.child("Users").child(viewModel.getUser().getValue().getId())
                                     .addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    viewModel.setUser(user);
-                                    editor.putString("UserID",firebaseAuth.getCurrentUser().getUid());
-                                    editor.putString("UserEMAIL",firebaseAuth.getCurrentUser().getEmail());
-                                    editor.putString("UserNICK",user.getNickname());
-                                    editor.putBoolean("IsLogged",true);
-                                    editor.commit();
-                                    //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
-                                    viewModel.setIsCorrectLogin(true);
-                                    progressDialog.dismiss();
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            User user = dataSnapshot.getValue(User.class);
+                                            if(user != null){
+                                                viewModel.setUser(user);
+                                                editor.putString("UserID", firebaseAuth.getCurrentUser().getUid());
+                                                editor.putString("UserEMAIL", firebaseAuth.getCurrentUser().getEmail());
+                                                editor.putString("UserNICK", user.getNickname());
+                                                editor.putBoolean("IsLogged", true);
+                                                editor.commit();
+                                                //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
+                                                viewModel.setIsCorrectLogin(true);
+                                                progressDialog.dismiss();
+                                            }else{
+                                                if(getContext() != null){
+                                                    Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_SHORT).show();
+                                                    if(progressDialog.isShowing()){
+                                                        progressDialog.dismiss();
+                                                    }
+                                                }
 
-                                }
-                            });
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
 
                         } else {
-                            Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_LONG).show();
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_LONG).show();
+                            }
                             progressDialog.dismiss();
                         }
 
@@ -228,7 +246,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         boolean isLogged = sharedPreferences.getBoolean("IsLogged", false);
 
 
-        if(isLogged){
+        if (isLogged) {
             Intent intent = new Intent(getContext(), SecondMainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

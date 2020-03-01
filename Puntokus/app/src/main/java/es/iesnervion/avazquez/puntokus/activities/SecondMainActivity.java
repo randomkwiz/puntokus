@@ -48,6 +48,7 @@ public class SecondMainActivity extends AppCompatActivity
     MainViewModel viewModel;
     MediaPlayer backgroundMusic;
     MediaPlayer sonidoTap;
+    MediaPlayer alertSound;
     boolean isMusicAllowed;
     SharedPreferences sharedPreferences;
     boolean areSoundsAllowed;
@@ -69,7 +70,9 @@ public class SecondMainActivity extends AppCompatActivity
             backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
             //Lo pongo así porque si no a veces se bugea y se crea dos veces y hace cosas raras
         }
-
+        if(alertSound == null){
+            alertSound = MediaPlayer.create(this,R.raw.alert);
+        }
 
         backgroundMusic.setVolume(volume, volume);
         if (isMusicAllowed) {
@@ -173,7 +176,9 @@ public class SecondMainActivity extends AppCompatActivity
                 if (aBoolean) {
                     //Mostrar dialog
                     infoDialogFragment.show(getSupportFragmentManager(), "INFODIALOG");
-
+                    if(areSoundsAllowed){
+                        alertSound.start();
+                    }
                 }
 
             }
@@ -187,7 +192,9 @@ public class SecondMainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         boolean ret = false;
-
+        if(areSoundsAllowed){
+            sonidoTap.start();
+        }
         //Los menu item los pongo como no checkable en vez de
         //not enabled para que sí entren aquí y muestren el toast
         //indicando que deben pulsar atrás
@@ -257,7 +264,9 @@ public class SecondMainActivity extends AppCompatActivity
             //lo muestro
             dialog = builder.create();
             dialog.show();
-
+            if(areSoundsAllowed){
+                alertSound.start();
+            }
 
             Observer<Boolean> goBackObserver = new Observer<Boolean>() {
                 @Override
@@ -303,7 +312,9 @@ public class SecondMainActivity extends AppCompatActivity
             //lo muestro
             dialog = builder.create();
             dialog.show();
-
+            if(areSoundsAllowed){
+                alertSound.start();
+            }
 
             Observer<Boolean> exitObserver = new Observer<Boolean>() {
                 @Override
@@ -349,6 +360,8 @@ public class SecondMainActivity extends AppCompatActivity
 
                 }
             }
+        }else if(key.equals("Sounds")){
+            areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         }
     }
 

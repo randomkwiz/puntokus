@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.SparseIntArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,6 +75,9 @@ public class GameFragment extends Fragment
     MainViewModel viewModel;
     MediaPlayer sonidoTap;
     MediaPlayer sonidoMec;
+    MediaPlayer correctSound;
+    MediaPlayer wrongSound;
+    MediaPlayer alertSound;
     MediaPlayer easterEgg;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -171,6 +175,9 @@ public class GameFragment extends Fragment
                     if (utilidad.comprobarSiLaSolucionEsCorrecta(viewModel.getTablero())) {
                         //HA GANADO
                         utilidad.mostrarToast(getString((R.string.isCorrect)), getContext());
+                        if(areSoundsAllowed){
+                            correctSound.start();
+                        }
                         //Para el cronometro
                         crono.stop();
                         //Guarda la partida en la BBDD
@@ -213,6 +220,9 @@ public class GameFragment extends Fragment
 
                     } else {
                         utilidad.mostrarToast(getString((R.string.isWrong)), getContext());
+                        if(areSoundsAllowed){
+                            wrongSound.start();
+                        }
                     }
 
                     break;
@@ -235,6 +245,10 @@ public class GameFragment extends Fragment
                     //lo muestro
                     dialog = builder.create();
                     dialog.show();
+                    if(areSoundsAllowed){
+                        alertSound.start();
+                    }
+
 
 
                     break;
@@ -260,6 +274,10 @@ public class GameFragment extends Fragment
                     //lo muestro
                     dialog = builder.create();
                     dialog.show();
+                    if(areSoundsAllowed){
+                        alertSound.start();
+                    }
+
                     break;
 
             }
@@ -389,15 +407,23 @@ public class GameFragment extends Fragment
         final int MAX_VOLUME = 100;
         final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
-
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+        if(correctSound == null){
+            correctSound = MediaPlayer.create(getContext(),R.raw.correct2);
+        }
+        if(alertSound == null){
+            alertSound = MediaPlayer.create(getContext(),R.raw.alert);
+        }
+        if(wrongSound == null){
+            wrongSound = MediaPlayer.create(getContext(),R.raw.incorrect);
+        }
         if(sonidoTap == null){
             sonidoTap = MediaPlayer.create(getContext(), R.raw.tap);
-            sonidoTap.setVolume(volume, volume);
+
         }
         if(sonidoMec == null){
             sonidoMec = MediaPlayer.create(getContext(), R.raw.mec_switch);
-            sonidoMec.setVolume(volume, volume);
+
         }
         if(easterEgg == null){
             easterEgg = MediaPlayer.create(getContext(), R.raw.duck_quack);
