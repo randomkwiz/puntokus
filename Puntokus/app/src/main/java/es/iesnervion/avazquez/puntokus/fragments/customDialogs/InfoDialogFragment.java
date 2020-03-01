@@ -1,5 +1,7 @@
 package es.iesnervion.avazquez.puntokus.fragments.customDialogs;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -24,6 +26,8 @@ public class InfoDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info_dialog, container, false);
+
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
         return view;

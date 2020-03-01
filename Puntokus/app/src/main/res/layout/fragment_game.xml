@@ -27,9 +27,10 @@
     <TextView
         android:id="@+id/nombre"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/app_name"
-        android:textSize="50dp"
+        android:textColor="@color/colorIntermedio1"
+        android:textSize="50sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +40,8 @@
         android:id="@+id/cronoTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/gridFrame"
+        app:layout_constraintEnd_toEndOf="@id/gridFrame"
+        android:layout_margin="1dp"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@id/gridFrame"
 
@@ -67,7 +69,6 @@
         android:layout_height="wrap_content"
         android:background="#C8E6C9"
         android:text="@string/evaluate"
-
 
         app:layout_constraintBottom_toTopOf="@+id/newGameBtn"
         app:layout_constraintEnd_toEndOf="@+id/refreshBtn"

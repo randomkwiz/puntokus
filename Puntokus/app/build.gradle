@@ -30,6 +30,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
 
+    //ShowCaseView
+    implementation 'com.github.iammert:MaterialIntroView:1.6.0'
+
     def lifecycle_version = "2.1.0"
 
     // ViewModel and LiveData

@@ -14,10 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.shape.ShapeType;
+import co.mobiwise.materialintro.view.MaterialIntroView;
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.fragments.customDialogs.InfoDialogFragment;
@@ -54,15 +59,18 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.infobtn)
     FloatingActionButton infoBtn;
-
+    SharedPreferences.Editor editor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_play, container, false);
+        ButterKnife.bind(this,view);
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
-        ButterKnife.bind(this,view);
+
+
+
         easyBtn.setOnClickListener(this);
         normalBtn.setOnClickListener(this);
         hardBtn.setOnClickListener(this);
@@ -74,6 +82,25 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                 sharedPreferences.getString("UserEMAIL", ""),
                 "");
         viewModel.setUsuarioActual(user);
+
+
+            //https://androidexample365.com/material-intro-view-is-a-showcase-android-library/
+            new MaterialIntroView.Builder(getActivity())
+                    .enableDotAnimation(false) //Shows dot animation center of focus area
+                    .enableIcon(false) //Turn off helper icon, default is true
+                    .setFocusGravity(FocusGravity.CENTER)
+                    .setFocusType(Focus.NORMAL)
+                    .setDelayMillis(100)
+                    .enableFadeAnimation(true)
+                    .performClick(true) //Trigger click operation when user click focused area.
+                    .setInfoText(getResources().getString(R.string.scv_info))
+                    //.setShapeType(ShapeType.CIRCLE)
+                    .setTarget(infoBtn)
+                    .setUsageId("scv_infoBtn") //THIS SHOULD BE UNIQUE ID -> con esto sabe si ya se ha mostrado o no
+                    .show();
+
+
+
         return view;
     }
 
@@ -107,7 +134,6 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
             viewModel.setLado(lado);
             viewModel.setIsGoingToPlay(true);
         }
-
     }
 
 }

@@ -51,10 +51,12 @@
     <string name="gameDataSaved">Game data saved</string>
     <string name="userAlreadyExists">The user already exists</string>
     <string name="registeringUser">Registering user</string>
-    <string name="infoColumn">"Debes poner tantos puntos en cada<font fgcolor="#FF0000"> columna </font>como número te indique el <font fgcolor="#4656b4">marcador </font>de la columna"</string>
-    <string name="infoRow">"Debes poner tantos puntos en cada<font fgcolor="#FF0000"> fila </font>como número te indique el <font fgcolor="#4656b4">marcador </font>de la fila"</string>
-    <string name="solvedExample">"Solved example"</string>
-
+    <string name="infoColumn">You must put as many points in each<font fgcolor="#FF0000"> column </font>as the number indicates the <font fgcolor="#4656b4">column marker </font></string>
+    <string name="infoRow">You must put as many points in each<font fgcolor="#FF0000"> row </font>as the number indicates the <font fgcolor="#4656b4">row marker </font></string>
+    <string name="solvedExample">Example solved</string>
+    <string name="moreThanOneSol">Remember that there may be more than one possible solution.</string>
+    <string name="howToPlay">How to play</string>
+    <string name="scv_info">Click here to learn how to play!</string>
 
 
 </resources>

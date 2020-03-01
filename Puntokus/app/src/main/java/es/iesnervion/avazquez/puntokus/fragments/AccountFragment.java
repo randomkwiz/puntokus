@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -74,7 +75,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     MainViewModel viewModel;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-
+    boolean isMusicAllowed;
+    boolean areSoundsAllowed;
+    MediaPlayer sonidoTap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,9 +93,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        boolean isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        boolean areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
-
+        isMusicAllowed = sharedPreferences.getBoolean("Music", true);
+        areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
+        sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
         music.setChecked(isMusicAllowed);
         sounds.setChecked(areSoundsAllowed);
 
@@ -137,6 +140,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         AlertDialog.Builder builder;
         AlertDialog dialog;
         builder =  new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+
+        if(sharedPreferences.getBoolean("Sounds", true)){
+            sonidoTap.start();
+        }
+
         switch (v.getId()){
             case R.id.btn_logout:
                 //Pide confirmación, Cierra la sesión y te devuelve a la main activity
@@ -225,6 +233,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(sharedPreferences.getBoolean("Sounds", true)){
+            sonidoTap.start();
+        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (buttonView.getId()){
             case R.id.toggleMusic:

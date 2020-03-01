@@ -84,6 +84,7 @@ public class SecondMainActivity extends AppCompatActivity
         final int MAX_VOLUME = 100;
         final float volume = (float) (1 - (Math.log(MAX_VOLUME - 50) / Math.log(MAX_VOLUME)));
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
         sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
@@ -177,11 +178,7 @@ public class SecondMainActivity extends AppCompatActivity
 
                 if (aBoolean) {
                     //Mostrar dialog
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentSecondActivity, infoDialogFragment, "DIALOG")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            //.addToBackStack(null)   //este si puede volver atras
-                            .commit();
+                    infoDialogFragment.show(getSupportFragmentManager(), "INFODIALOG");
 
                 }
 
@@ -325,9 +322,9 @@ public class SecondMainActivity extends AppCompatActivity
 
 
         }
-//        else if(currentFragment instanceof InfoDialogFragment){
-//            infoDialogFragment.dismiss();
-//        }
+        else if(currentFragment instanceof InfoDialogFragment){
+            infoDialogFragment.dismiss();
+        }
         else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragmentSecondActivity, playFragment, "PLAY")
