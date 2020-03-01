@@ -62,7 +62,11 @@ public class SecondMainActivity extends AppCompatActivity
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
         sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
-        backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
+        if(backgroundMusic == null){
+            backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
+            //Lo pongo así porque si no a veces se bugea y se crea dos veces y hace cosas raras
+        }
+
 
         backgroundMusic.setVolume(volume, volume);
         if (isMusicAllowed) {
