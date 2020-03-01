@@ -95,7 +95,7 @@ public class RegistrarseFragment extends Fragment implements View.OnClickListene
         editor = sharedPreferences.edit();
         btnSignup.setOnClickListener(this);
         linkLogin.setOnClickListener(this);
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(getContext(),R.style.ProgressDialogStyle);
         email.setText(viewModel.getUser().getValue().getEmail());
         password.setText(viewModel.getUser().getValue().getPassword());
         nickname.setText(viewModel.getUser().getValue().getNickname());

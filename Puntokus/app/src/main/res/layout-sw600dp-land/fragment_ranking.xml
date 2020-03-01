@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@color/sombra"
+    >
+
+<RadioGroup
+
+    android:layout_margin="15dp"
+    android:id="@+id/RGfiltrar"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    >
+
+
+
+    <RadioButton
+        android:buttonTint="@color/colorIntermedio1"
+
+        android:id="@+id/RBAll"
+        android:text="@string/all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <RadioButton
+        android:buttonTint="@color/colorIntermedio1"
+        android:id="@+id/RBeasy"
+        android:text="@string/easy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <RadioButton
+        android:buttonTint="@color/colorIntermedio1"
+        android:id="@+id/RBnormal"
+        android:text="@string/normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RadioButton
+        android:buttonTint="@color/colorIntermedio1"
+        android:id="@+id/RBhard"
+        android:text="@string/hard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <RadioButton
+        android:buttonTint="@color/colorIntermedio1"
+        android:id="@+id/RBsick"
+        android:text="@string/sick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RadioGroup>
+
+
+
+<ImageView
+    android:visibility="visible"
+    android:layout_margin="15dp"
+    android:id="@+id/logoRanking"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    app:srcCompat="@drawable/ic_podiumcoloured"
+    app:layout_constraintTop_toBottomOf="@id/RGfiltrar"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_centerHorizontal="true"/>
+
+
+<com.airbnb.lottie.LottieAnimationView
+    android:id="@+id/animationLoadRanking"
+    app:lottie_loop="true"
+    app:lottie_fileName="animation-dots.json"
+    app:lottie_autoPlay="true"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.65"
+
+    />
+
+
+<ListView
+    android:visibility="gone"
+    android:listSelector="@android:color/transparent"
+    android:id="@+id/listView_ranking"
+    android:layout_width="match_parent"
+    android:background="@drawable/roundedrectangleshape"
+    android:layout_height="0dp"
+    android:layout_margin="10dp"
+    android:divider="#00FFFFFF"
+    android:dividerHeight="1dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/logoRanking"
+    app:layout_constraintVertical_bias="0.0"
+    tools:layout_editor_absoluteX="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

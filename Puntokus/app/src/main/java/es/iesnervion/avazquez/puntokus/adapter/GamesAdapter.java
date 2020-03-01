@@ -61,12 +61,13 @@ public class GamesAdapter extends BaseAdapter {
             //TextView dificultad = (TextView) convertView.findViewById(R.id.lblDificultad);
             TextView tiempo = (TextView) convertView.findViewById(R.id.lblTime);
 
-            nickname.setText(partida.getNickname());
+
             //dificultad.setText(partida.getLevel());
             tiempo.setText(partida.getTiempoFormateado());
 
             if(position >= 0 && position <= 2 ){
                 imgMedalla.setVisibility(View.VISIBLE);
+                nickname.setText(partida.getNickname());
                 switch (position){
                     case 0:
                         imgMedalla.setImageResource(R.drawable.ic_first);
@@ -79,7 +80,9 @@ public class GamesAdapter extends BaseAdapter {
                         break;
                 }
             }else{
+                String nickWithPosition = (position+1) +"º "  +partida.getNickname();
                 imgMedalla.setVisibility(View.GONE);
+                nickname.setText( nickWithPosition);
             }
 
             viewHolder = new MyViewHolder(imgMedalla, nickname, tiempo);
@@ -91,6 +94,8 @@ public class GamesAdapter extends BaseAdapter {
 
         if(position >= 0 && position <= 2 ){
             viewHolder.getImgMedalla().setVisibility(View.VISIBLE);
+
+            viewHolder.getNickname().setText(partida.getNickname());
             ((TextView) convertView.findViewById(R.id.lblNickname)).setTextColor(Color.parseColor("#000000"));
             ((TextView) convertView.findViewById(R.id.lblTime)).setTextColor(Color.parseColor("#000000"));
             switch (position){
@@ -128,10 +133,10 @@ public class GamesAdapter extends BaseAdapter {
                     break;
             }
         }else{
+            String nickWithPosition = (position+1) +"º "  +partida.getNickname();
         viewHolder.getImgMedalla().setVisibility(View.GONE);
+            viewHolder.getNickname().setText( nickWithPosition);
             if(position%2 == 0){
-
-
                 if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.sombra)));
                 }else{
@@ -157,7 +162,7 @@ public class GamesAdapter extends BaseAdapter {
 
 
         //viewHolder.getDificultad().setText(partida.getLevel());
-        viewHolder.getNickname().setText(partida.getNickname());
+        //viewHolder.getNickname().setText(partida.getNickname());
         viewHolder.getTiempo().setText(partida.getTiempoFormateado());
 
 

@@ -97,6 +97,7 @@ public class RankingFragment extends Fragment {
                                     partida = new Game();
                                     partida = hijo.getValue(Game.class);    //esta es la forma correcta de hacerlo
                                     listaPartidas.getValue().add(partida);
+                                    //adapter.notifyDataSetChanged(); //esto no hace que no se duplique la lista xd
                                 }
                             }
                         }
