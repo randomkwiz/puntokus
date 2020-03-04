@@ -65,6 +65,16 @@ public class GamesAdapter extends BaseAdapter {
             //dificultad.setText(partida.getLevel());
             tiempo.setText(partida.getTiempoFormateado());
 
+            /*
+            Si la posición es 0,1 ó 2,
+            la medalla será visible y el textView
+            sólo tendrá el nick del jugador.
+
+            Si no, la medalla no será visible
+            y el textView tendrá el nick del jugador
+            y la posición del mismo
+             */
+
             if(position >= 0 && position <= 2 ){
                 imgMedalla.setVisibility(View.VISIBLE);
                 nickname.setText(partida.getNickname());
@@ -80,6 +90,7 @@ public class GamesAdapter extends BaseAdapter {
                         break;
                 }
             }else{
+
                 String nickWithPosition = (position+1) +"º "  +partida.getNickname();
                 imgMedalla.setVisibility(View.GONE);
                 nickname.setText( nickWithPosition);
@@ -136,6 +147,13 @@ public class GamesAdapter extends BaseAdapter {
             String nickWithPosition = (position+1) +"º "  +partida.getNickname();
         viewHolder.getImgMedalla().setVisibility(View.GONE);
             viewHolder.getNickname().setText( nickWithPosition);
+
+            /*
+            * Según si la posición es par o impar
+            * el color de fondo será uno u otro.
+            * Si la versión de Android es superior a Marshmallow,
+            * el borde se verá redondeado, si no, no.
+            * */
             if(position%2 == 0){
                 if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                     convertView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.sombra)));

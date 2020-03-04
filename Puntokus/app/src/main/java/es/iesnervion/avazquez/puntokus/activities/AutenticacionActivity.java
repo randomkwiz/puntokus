@@ -38,7 +38,7 @@ public class AutenticacionActivity extends AppCompatActivity {
     Intent intent;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-    private final int MY_PERMISSIONS_REQUEST_INTERNET = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

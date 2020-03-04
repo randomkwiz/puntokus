@@ -68,7 +68,8 @@ public class SecondMainActivity extends AppCompatActivity
         }
         if (backgroundMusic == null) {
             backgroundMusic = MediaPlayer.create(this, R.raw.lounge_david_renda);
-            //Lo pongo así porque si no a veces se bugea y se crea dos veces y hace cosas raras
+            //Lo pongo así porque si no a veces se bugea y se crea dos veces y
+            //se solapan los sonidos
         }
         if(alertSound == null){
             alertSound = MediaPlayer.create(this,R.raw.alert);
@@ -326,7 +327,6 @@ public class SecondMainActivity extends AppCompatActivity
             };
             viewModel.getUserWantToExit().observe(this, exitObserver);
 
-
         } else if (currentFragment instanceof InfoDialogFragment) {
             infoDialogFragment.dismiss();
         } else {
@@ -345,6 +345,15 @@ public class SecondMainActivity extends AppCompatActivity
     }
 
 
+    /* Escucha los cambios en los archivos
+     * Shared Preferences
+     * Si la key del valor cambiado es "Music", pausará o empezará
+     * a reproducir la música dependiendo de si el nuevo valor es true
+     * o false.
+     * Si la key del valor cambiado es "Sounds", el valor correspondiente
+     * será asignado a la variable areSoundsAllowed
+     *
+     * */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("Music")) {

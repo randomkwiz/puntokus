@@ -96,11 +96,14 @@ public class RankingFragment extends Fragment {
                 new GamesAdapter(listaPartidasAMostrar.getValue(), getActivity());
 
         animationView.setVisibility(View.VISIBLE);
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference connectedRef = FirebaseDatabase
+                .getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 isConnected = snapshot.getValue(Boolean.class);
+                listaPartidas.getValue().clear();
+                listaPartidasAMostrar.getValue().clear();
                 if(isConnected){
                     imgErrorLoadingData.setVisibility(View.GONE);
                     databaseReference.child("Games")

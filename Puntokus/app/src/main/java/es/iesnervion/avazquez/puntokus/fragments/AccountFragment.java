@@ -71,7 +71,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
     String idUsuarioActual;
-    ProgressDialog progressDialog;
+
     MainViewModel viewModel;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -79,7 +79,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     boolean areSoundsAllowed;
     MediaPlayer sonidoTap;
     MediaPlayer alertSound;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,9 +89,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         idUsuarioActual = firebaseAuth.getCurrentUser().getUid();
-        //progressDialog = new ProgressDialog(getContext());
-        //progressDialog.setMessage("Cargando datos");
-        //progressDialog.show();
         sharedPreferences = getActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -109,6 +105,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         sounds.setChecked(areSoundsAllowed);
 
 
+        /*
+        * Si la versión de Android es superior a Marshmallow
+        * se aplicarán colores diferentes para los checkboxes.
+        * De lo contrario, no.
+        * */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (isMusicAllowed) {
                 music.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
@@ -127,16 +128,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
             }
         }
 
-
         nickname.setText(sharedPreferences.getString("UserNICK", ""));
         email.setText(sharedPreferences.getString("UserEMAIL", ""));
-
 
         btnLogout.setOnClickListener(this);
         btn_delete.setOnClickListener(this);
         sounds.setOnCheckedChangeListener(this);
         music.setOnCheckedChangeListener(this);
-
 
         return view;
     }
@@ -146,15 +144,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         AlertDialog.Builder builder;
         AlertDialog dialog;
         builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
-
         if (sharedPreferences.getBoolean("Sounds", true)) {
             sonidoTap.start();
         }
-
         switch (v.getId()) {
             case R.id.btn_logout:
                 //Pide confirmación, Cierra la sesión y te devuelve a la main activity
-
                 //pongo el titulo y los botones
                 builder.setTitle(R.string.logout);
                 builder.setMessage(R.string.msgConfirmLogout)
@@ -171,7 +166,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                 firebaseAuth.signOut();
                                 startActivity(new Intent(getContext(), AutenticacionActivity.class));
                                 getActivity().finish(); //TODO cambiar y poner con viewmodel
-
                             }
                         })
                         .setNegativeButton(R.string.cancel, null);
@@ -182,7 +176,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                 if(areSoundsAllowed){
                     alertSound.start();
                 }
-
 
                 break;
             case R.id.btn_delete:
@@ -194,49 +187,83 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                if (sharedPreferences.getBoolean("IsLogged", false)) {
-                                    eliminarTodosLosDatos();    //esto debe ir antes de borrar los datos de shared preferences
-                                    editor.putString("UserID", "");
-                                    editor.putString("UserEMAIL", "");
-                                    editor.putString("UserNICK", "");
-                                    //No hagas clear que borras lo de la música también!
-                                    editor.putBoolean("IsLogged", false);
-                                    editor.commit();
-                                    firebaseAuth.getCurrentUser()
-                                            .delete()
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Intent intent = new Intent(getContext(), AutenticacionActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        if (getContext() != null) {   //por el internet
-                                                            Toast toast1 =
-                                                                    Toast.makeText(getContext(),
-                                                                            R.string.accountDeleted, Toast.LENGTH_SHORT);
-                                                            toast1.show();
-                                                        }
-                                                        startActivity(intent);
-                                                        getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                //Hace click en que sí quiere borrar sus datos
+                                //Compruebo si hay conexión con firebase
+                                DatabaseReference connectedRef = FirebaseDatabase
+                                        .getInstance().getReference(".info/connected");
+                                connectedRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        boolean isConnected = dataSnapshot.getValue(Boolean.class);
+                                        if(isConnected){
+                                            if (sharedPreferences.getBoolean("IsLogged", false)) {
+                                                eliminarTodosLosDatos();    //esto debe ir antes de borrar los datos de shared preferences
+                                                editor.putString("UserID", "");
+                                                editor.putString("UserEMAIL", "");
+                                                editor.putString("UserNICK", "");
+                                                //No hago clear porque borraría la información
+                                                // referente a música y sonidos también
+                                                editor.putBoolean("IsLogged", false);
+                                                editor.commit();
+                                                firebaseAuth.getCurrentUser()
+                                                        .delete()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Intent intent = new Intent(getContext(), AutenticacionActivity.class);
+                                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                    if (getContext() != null) {   //por el internet
+                                                                        Toast toast1 =
+                                                                                Toast.makeText(getContext(),
+                                                                                        R.string.accountDeleted, Toast.LENGTH_SHORT);
+                                                                        toast1.show();
+                                                                    }
+                                                                    startActivity(intent);
+                                                                    getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                                                } else {
+                                                                    Intent intent = new Intent(getContext(), AutenticacionActivity.class);
+                                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                    if (getContext() != null) {
+                                                                        Toast toast1 =
+                                                                                Toast.makeText(getContext(),
+                                                                                        R.string.error, Toast.LENGTH_SHORT);
+                                                                        toast1.show();
+                                                                    }
+                                                                    startActivity(intent);
+                                                                    getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        }else{
+                                            AlertDialog.Builder builder;
+                                            AlertDialog dialog;
+                                            builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                                            //pongo el titulo y los botones
+                                            builder.setTitle(R.string.error);
+                                            builder.setMessage(R.string.errorLoading)
+                                                    .setCancelable(true);
 
-                                                    } else {
+                                            //lo muestro
+                                            dialog = builder.create();
+                                            dialog.show();
+                                            if(areSoundsAllowed){
+                                                alertSound.start();
+                                            }
+                                        }
+                                    }
 
-                                                        Intent intent = new Intent(getContext(), AutenticacionActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        if (getContext() != null) {
-                                                            Toast toast1 =
-                                                                    Toast.makeText(getContext(),
-                                                                            R.string.error, Toast.LENGTH_SHORT);
-                                                            toast1.show();
-                                                        }
-                                                        startActivity(intent);
-                                                        getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
 
 
-                                                    }
-                                                }
-                                            });
-                                }
+
+
+
                             }
                         })
                         .setNegativeButton(R.string.cancel, null);
@@ -248,10 +275,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                     alertSound.start();
                 }
                 break;
-
         }
-
-
     }
 
     @Override
@@ -281,8 +305,17 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         }
     }
 
+    /*
+    * Signatura: public void eliminarTodosLosDatos()
+    * Comentario: elimina todos los elementos hijos de las colecciones Users y Games
+    * de firebase referidas a un usuario concreto.
+    * Precondiciones: Debe haber internet y conexión con firebase
+    * Entradas:
+    * Salidas:
+    * Postcondiciones: los datos del usuario quedarán eliminados en firebase.
+    * */
     public void eliminarTodosLosDatos() {
-        //esto molaría hacerlo en una transacción pero no sé como se haría
+
         databaseReference.child("Users").
                 child(sharedPreferences.getString("UserID", "")).removeValue();
         databaseReference.child("Games").
