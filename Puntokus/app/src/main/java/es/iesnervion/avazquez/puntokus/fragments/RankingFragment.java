@@ -56,7 +56,6 @@ public class RankingFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @BindView(R.id.RGfiltrar)
     RadioGroup radioGroup;
     @BindView(R.id.listView_ranking)
@@ -267,6 +266,11 @@ public class RankingFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * Filtra el listado por la dificultad dada
+     * @param dificultadPorLaQueFiltro
+     */
     public void filtrarListado(String dificultadPorLaQueFiltro) {
         ArrayList<Game> nuevaListaFiltrada = new ArrayList<>();
         if (dificultadPorLaQueFiltro.equals("EASY") ||
@@ -285,13 +289,4 @@ public class RankingFragment extends Fragment {
         }
 
     }
-
-    public List<Game> copiarListaEnOtraLista(List<Game> listaACopiar, ArrayList<Game> nuevaLista) {
-        nuevaLista = new ArrayList<>();
-        for (int i = 0; i < listaACopiar.size(); i++) {
-            nuevaLista.add(listaACopiar.get(i));
-        }
-        return nuevaLista;
-    }
-
 }

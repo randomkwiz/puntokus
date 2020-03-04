@@ -70,9 +70,6 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         if(sonidoTap == null){
             sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
         }
-
-
-
         easyBtn.setOnClickListener(this);
         normalBtn.setOnClickListener(this);
         hardBtn.setOnClickListener(this);
@@ -86,7 +83,6 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 //                "");
 //        viewModel.setUsuarioActual(user);
 
-
             //https://androidexample365.com/material-intro-view-is-a-showcase-android-library/
             new MaterialIntroView.Builder(getActivity())
                     .enableDotAnimation(false) //Shows dot animation center of focus area
@@ -99,10 +95,8 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
                     .setInfoText(getResources().getString(R.string.scv_info))
                     //.setShapeType(ShapeType.CIRCLE)
                     .setTarget(infoBtn)
-                    .setUsageId("scv_infoBtn") //THIS SHOULD BE UNIQUE ID -> con esto sabe si ya se ha mostrado o no
+                    .setUsageId("scv_infoBtn") // -> con esto sabe si ya se ha mostrado o no
                     .show();
-
-
 
         return view;
     }

@@ -14,16 +14,6 @@ import es.iesnervion.avazquez.puntokus.entities.User;
 import es.iesnervion.avazquez.puntokus.util.Utilidad;
 
 
-//Nota para mi misma:
-/*
- * A ver, que necesitas tocar el factory porque tienes que pasarle
- * por parametro el lado
- * y como tienes que pasarle parametro, no puedes extender
- * de AndroidViewModel
- * por eso le pasas tb el contexto
- * No lo cambies mas
- * */
-
 public class MainViewModel extends ViewModel {
     private Tablero tablero;
     private SparseIntArray mapeo = new SparseIntArray();

@@ -114,6 +114,12 @@ public class AutenticacionActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Sobreescribo el método onBackPressed
+     * para controlar a mano la navegación y poner alerts de ayuda al usuario
+     */
+
     @Override
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager()

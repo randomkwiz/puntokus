@@ -6,15 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,7 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         progressDialog = new ProgressDialog(getContext(), R.style.ProgressDialogStyle);
 
         //https://stackoverflow.com/questions/13303469/edittext-settext-not-working-with-fragment -> parece ser que hay un problema
-        //con set text de edit text en onCreateView -> al parecer no me da problemas
+        //con set text de edit text en onCreateView -> al parecer a mi no me da problemas
         email.setText(viewModel.getUser().getValue().getEmail());
         password.setText(viewModel.getUser().getValue().getPassword());
 
@@ -189,8 +183,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if (task.isSuccessful()) {
-                            //TODO aquí haces que se vaya a la siguiente pantalla.
-                            //TODO por aquí y sólo por aquí puede avanzar a la siguiente pantalla!!
+
                             //viewModel.getUser().getValue().setEmail(email);
                             viewModel.getUser().getValue().setId(firebaseAuth.getCurrentUser().getUid());
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -199,7 +192,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             User user = dataSnapshot.getValue(User.class);
-                                            if(user != null){
+                                            if (user != null) {
                                                 viewModel.setUser(user);
                                                 editor.putString("UserID", firebaseAuth.getCurrentUser().getUid());
                                                 editor.putString("UserEMAIL", firebaseAuth.getCurrentUser().getEmail());
@@ -209,42 +202,34 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                                 //Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_SHORT).show();
                                                 viewModel.setIsCorrectLogin(true);
                                                 progressDialog.dismiss();
-                                            }else{
-                                                if(getContext() != null){
+                                            } else {
+                                                if (getContext() != null) {
                                                     Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_SHORT).show();
-                                                    if(progressDialog.isShowing()){
+                                                    if (progressDialog.isShowing()) {
                                                         progressDialog.dismiss();
                                                     }
                                                 }
-
                                             }
-
                                         }
-
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
                                     });
-
-
                         } else {
                             if (getContext() != null) {
                                 Toast.makeText(getContext(), getResources().getText(R.string.errorLogin), Toast.LENGTH_LONG).show();
                             }
                             progressDialog.dismiss();
                         }
-
                     }
                 });
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
         boolean isLogged = sharedPreferences.getBoolean("IsLogged", false);
-
 
         if (isLogged) {
             Intent intent = new Intent(getContext(), SecondMainActivity.class);

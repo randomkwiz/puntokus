@@ -113,6 +113,9 @@ public class GameFragment extends Fragment
         return view;
     }
 
+    /*
+     * Coloca todos los listeners en el tablero
+     */
     public void colocarListeners(ConstraintLayout layout, Tablero tablero, SparseIntArray mapeo) {
         for (int iRow = 0; iRow < tablero.getLado(); iRow++) {
             for (int iCol = 0; iCol < tablero.getLado(); iCol++) {
@@ -138,6 +141,7 @@ public class GameFragment extends Fragment
             //Obtengo el objeto casilla correspondiente a la vista pulsada
             Casilla objetoCasilla = utilidad.obtenerCasillaPorID(viewModel.getTablero(), v.getId());
 
+            //Si está seleccionado se deselecciona y viceversa
             if (objetoCasilla.getImgSrc() == R.drawable.selecteditem) {
                 casilla.setImageResource(R.drawable.nonselecteditem);
                 casilla.setTag(R.drawable.nonselecteditem);
@@ -435,6 +439,10 @@ public class GameFragment extends Fragment
     }
 
 
+    /**
+     * Se llama cada vez que varía el intervalo indicado del cronómetro
+     * @param chronometer cronómetro que vigilará
+     */
     @Override
     public void onChronometerTick(Chronometer chronometer) {
         viewModel.setTimeInMilis(SystemClock.elapsedRealtime() - chronometer.getBase());

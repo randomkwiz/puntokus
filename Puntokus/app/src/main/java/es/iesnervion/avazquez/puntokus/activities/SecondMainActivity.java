@@ -63,7 +63,7 @@ public class SecondMainActivity extends AppCompatActivity
         sharedPreferences = this.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         areSoundsAllowed = sharedPreferences.getBoolean("Sounds", true);
         isMusicAllowed = sharedPreferences.getBoolean("Music", true);
-        if(sonidoTap == null){
+        if(sonidoTap == null){  //Para que no cree el sonido dos veces
             sonidoTap = MediaPlayer.create(this, R.raw.mec_switch);
         }
         if (backgroundMusic == null) {
@@ -239,7 +239,10 @@ public class SecondMainActivity extends AppCompatActivity
         return ret;
     }
 
-
+    /**
+     * Sobreescribo el método onBackPressed
+     * para controlar a mano la navegación y poner alerts de ayuda al usuario
+     */
     @Override
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager()

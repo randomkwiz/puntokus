@@ -109,6 +109,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
          * Si la versión de Android es superior a Marshmallow
          * se aplicarán colores diferentes para los checkboxes.
          * De lo contrario, no.
+         * Esto es así porque en veriones anteriores no se puede
+         * usar el tracktintlist
          * */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (isMusicAllowed) {
@@ -273,6 +275,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         }
     }
 
+    /**
+     * Se llama cuando cambia un switch
+     * @param buttonView switch que cambia
+     * @param isChecked nuevo valor que adquiere
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (sharedPreferences.getBoolean("Sounds", true)) {
