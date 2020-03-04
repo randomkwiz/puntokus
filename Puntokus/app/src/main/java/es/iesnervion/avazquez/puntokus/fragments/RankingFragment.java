@@ -189,15 +189,21 @@ public class RankingFragment extends Fragment {
                                 public void onChanged(ArrayList<Game> list) {
                                     //Actualizar la UI
                                     listViewRanking.invalidate(); //Se tiene que poner esto
-                                    GamesAdapter gamesAdapter2 = new GamesAdapter(list, getActivity().getBaseContext());
-                                    listViewRanking.setAdapter(gamesAdapter2);
+                                    if(getActivity() != null){
+                                        GamesAdapter gamesAdapter2 = new GamesAdapter(list, getActivity().getBaseContext());
+                                        listViewRanking.setAdapter(gamesAdapter2);
+                                    }
+
 
                                 }
                             };
 
                     //lista.setAdapter(productosAdapter);
                     //Observo el LiveData con ese observer que acabo de crear
-                    listaPartidasAMostrar.observe(getActivity(), listObserver);
+                    if(getActivity() != null){
+                        listaPartidasAMostrar.observe(getActivity(), listObserver);
+                    }
+
 
                     radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                         @Override

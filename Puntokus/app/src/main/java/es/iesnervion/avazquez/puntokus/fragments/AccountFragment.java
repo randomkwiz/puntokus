@@ -213,16 +213,22 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()) {
-                                                                    Intent intent = new Intent(getContext(), AutenticacionActivity.class);
-                                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                                                                     if (getContext() != null) {   //por el internet
+                                                                        Intent intent = new Intent(getContext(), AutenticacionActivity.class);
+                                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                                         Toast toast1 =
                                                                                 Toast.makeText(getContext(),
                                                                                         R.string.accountDeleted, Toast.LENGTH_SHORT);
                                                                         toast1.show();
+                                                                        if(getActivity() != null){
+                                                                            startActivity(intent);
+                                                                            getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                                                        }
                                                                     }
-                                                                    startActivity(intent);
-                                                                    getActivity().finish(); //TODO cambiar y poner con viewmodel
+
+
+
                                                                 } else {
                                                                     Intent intent = new Intent(getContext(), AutenticacionActivity.class);
                                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -232,8 +238,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                                                                         R.string.error, Toast.LENGTH_SHORT);
                                                                         toast1.show();
                                                                     }
-                                                                    startActivity(intent);
-                                                                    getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                                                    //Lo pongo así porque a veces
+                                                                    //la respuesta de firebase viaja tarde y entra aqui cuando ya he cerrado esto
+                                                                    //y da un nullreference
+                                                                    if(getActivity() != null){
+                                                                        startActivity(intent);
+                                                                        getActivity().finish(); //TODO cambiar y poner con viewmodel
+                                                                    }
+
                                                                 }
                                                             }
                                                         });
