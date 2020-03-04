@@ -97,8 +97,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
         if (sonidoTap == null) {
             sonidoTap = MediaPlayer.create(getContext(), R.raw.mec_switch);
         }
-        if(alertSound == null){
-            alertSound = MediaPlayer.create(getContext(),R.raw.alert);
+        if (alertSound == null) {
+            alertSound = MediaPlayer.create(getContext(), R.raw.alert);
         }
 
         music.setChecked(isMusicAllowed);
@@ -106,10 +106,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
 
         /*
-        * Si la versión de Android es superior a Marshmallow
-        * se aplicarán colores diferentes para los checkboxes.
-        * De lo contrario, no.
-        * */
+         * Si la versión de Android es superior a Marshmallow
+         * se aplicarán colores diferentes para los checkboxes.
+         * De lo contrario, no.
+         * */
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (isMusicAllowed) {
                 music.setTrackTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorOscuro1)));
@@ -173,7 +173,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                 //lo muestro
                 dialog = builder.create();
                 dialog.show();
-                if(areSoundsAllowed){
+                if (areSoundsAllowed) {
                     alertSound.start();
                 }
 
@@ -195,7 +195,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         boolean isConnected = dataSnapshot.getValue(Boolean.class);
-                                        if(isConnected){
+                                        if (isConnected) {
                                             if (sharedPreferences.getBoolean("IsLogged", false)) {
                                                 eliminarTodosLosDatos();    //esto debe ir antes de borrar los datos de shared preferences
                                                 editor.putString("UserID", "");
@@ -236,7 +236,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                                             }
                                                         });
                                             }
-                                        }else{
+                                        } else {
                                             AlertDialog.Builder builder;
                                             AlertDialog dialog;
                                             builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
@@ -248,7 +248,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                             //lo muestro
                                             dialog = builder.create();
                                             dialog.show();
-                                            if(areSoundsAllowed){
+                                            if (areSoundsAllowed) {
                                                 alertSound.start();
                                             }
                                         }
@@ -259,11 +259,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
 
                                     }
                                 });
-
-
-
-
-
                             }
                         })
                         .setNegativeButton(R.string.cancel, null);
@@ -271,7 +266,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                 //lo muestro
                 dialog = builder.create();
                 dialog.show();
-                if(areSoundsAllowed){
+                if (areSoundsAllowed) {
                     alertSound.start();
                 }
                 break;
@@ -306,14 +301,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
     }
 
     /*
-    * Signatura: public void eliminarTodosLosDatos()
-    * Comentario: elimina todos los elementos hijos de las colecciones Users y Games
-    * de firebase referidas a un usuario concreto.
-    * Precondiciones: Debe haber internet y conexión con firebase
-    * Entradas:
-    * Salidas:
-    * Postcondiciones: los datos del usuario quedarán eliminados en firebase.
-    * */
+     * Signatura: public void eliminarTodosLosDatos()
+     * Comentario: elimina todos los elementos hijos de las colecciones Users y Games
+     * de firebase referidas a un usuario concreto.
+     * Precondiciones: Debe haber internet y conexión con firebase
+     * Entradas:
+     * Salidas:
+     * Postcondiciones: los datos del usuario quedarán eliminados en firebase.
+     * */
     public void eliminarTodosLosDatos() {
 
         databaseReference.child("Users").
