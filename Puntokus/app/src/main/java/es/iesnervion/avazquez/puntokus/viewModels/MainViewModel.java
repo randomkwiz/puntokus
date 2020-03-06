@@ -25,6 +25,7 @@ public class MainViewModel extends ViewModel {
     //MutableLiveData<String> currentFragment;
     MutableLiveData<Boolean> showDialog;
     MutableLiveData<Long> timeInMilis;
+    MutableLiveData<Boolean> isCronoStopped;
 
     public MainViewModel() {
 
@@ -35,6 +36,7 @@ public class MainViewModel extends ViewModel {
         this.lado = new MutableLiveData<>();
         this.usuarioActual = new MutableLiveData<>();
         this.timeInMilis = new MutableLiveData<>();
+        this.isCronoStopped = new MutableLiveData<>();
 
         this.timeInMilis.setValue((long)0);
        // this.currentFragment = new MutableLiveData<>();
@@ -43,6 +45,7 @@ public class MainViewModel extends ViewModel {
         this.userWantToGoBack.setValue(false);
        // this.currentFragment.setValue("");
         this.showDialog.setValue(false);
+        this.isCronoStopped.setValue(false);
     }
 
 
@@ -60,6 +63,13 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public LiveData<Boolean> getIsCronoStopped() {
+        return isCronoStopped;
+    }
+
+    public void setIsCronoStopped(Boolean isCronoStopped) {
+        this.isCronoStopped.setValue(isCronoStopped);
+    }
 
     public LiveData<Long> getTimeInMilis() {
         return timeInMilis;

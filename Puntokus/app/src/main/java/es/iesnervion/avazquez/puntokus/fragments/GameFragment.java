@@ -82,6 +82,7 @@ public class GameFragment extends Fragment
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     boolean isMusicAllowed;
+    boolean isChronoStopped;
     boolean areSoundsAllowed;
     SharedPreferences sharedPreferences;
 //    @BindView(R.id.infobtn)
@@ -99,7 +100,10 @@ public class GameFragment extends Fragment
         establecerTablero(layout, view.getContext(), viewModel.getMapeo(), viewModel.getTablero());
         colocarListeners(layout, viewModel.getTablero(), viewModel.getMapeo());
         crono.setOnChronometerTickListener(this);
-        crono.start();
+        if(!viewModel.getIsCronoStopped().getValue()) {
+            crono.start();
+            viewModel.setIsCronoStopped(false);
+        }
         evaluateBtn.setOnClickListener(this);
         refreshBtn.setOnClickListener(this);
         newGameBtn.setOnClickListener(this);
@@ -184,6 +188,7 @@ public class GameFragment extends Fragment
                         }
                         //Para el cronometro
                         crono.stop();
+                        viewModel.setIsCronoStopped(true);
                         //Guarda la partida en la BBDD
                         Map<String, Object> map = new HashMap<>();
                         map.put("idUser", viewModel.getUsuarioActual().getValue().getId());
@@ -268,8 +273,10 @@ public class GameFragment extends Fragment
                                     util.partidaNueva(viewModel.getTablero(), layout);
                                     util.mostrarToast(getString(R.string.newGame), getContext());
                                     crono.stop();
+                                    viewModel.setIsCronoStopped(true);
                                     crono.setBase(SystemClock.elapsedRealtime());   //lo pone a 0
                                     crono.start();
+                                    viewModel.setIsCronoStopped(false);
                                     evaluateBtn.setEnabled(true);
 
                                 }

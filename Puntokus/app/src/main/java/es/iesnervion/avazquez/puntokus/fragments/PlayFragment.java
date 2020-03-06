@@ -132,6 +132,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
             viewModel.setIsGoingToPlay(true);
             viewModel.inicializarPartida(); //esto debe ir aquí
             viewModel.resetTime();
+            viewModel.setIsCronoStopped(false);
         }
     }
 
