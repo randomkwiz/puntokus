@@ -1,0 +1,9 @@
+Título: 
+Puntokus
+
+Descripción breve:
+Coloca tantos puntos en cada fila y columna como indiquen los marcadores.
+
+Descripción completa:
+Juego donde deberás colocar tantos puntos en cada fila y columna como indiquen los marcadores, con hasta cuatro niveles de dificultad.
+Resuelve los tableros en el mínimo tiempo posible y mira tu posición en la clasificación global.
