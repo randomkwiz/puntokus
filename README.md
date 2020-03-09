@@ -7,6 +7,6 @@ El objetivo es poner tantos puntos en cada fila o columna como número indique e
 
 Iconos de la aplicación sacados de <a href="https://www.flaticon.es/" title="Flaticon">www.flaticon.es</a>
 
-
+<a href="https://play.google.com/store/apps/details?id=es.iesnervion.avazquez.puntokus"> Link a Play Store</a>
 --------------
 
