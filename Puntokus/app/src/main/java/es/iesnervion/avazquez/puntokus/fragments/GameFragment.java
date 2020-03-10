@@ -195,37 +195,40 @@ public class GameFragment extends Fragment
                         map.put("nickname", viewModel.getUsuarioActual().getValue().getNickname());
                         map.put("email", viewModel.getUsuarioActual().getValue().getEmail());
                         map.put("timeInMilis", viewModel.getTimeInMilis().getValue());
-                        map.put("level", utilidad.getLevelName(viewModel.getLado().getValue()));
+                        if(viewModel.getLado().getValue() != null) {
+                            map.put("level", utilidad.getLevelName(viewModel.getLado().getValue()));
+                        }
                         evaluateBtn.setEnabled(false);
                         databaseReference.child("Games").
                                 child(viewModel.getUsuarioActual().getValue().getId()).   //lo anidara en las partidas del usuario
                                 push(). //le pondra una id a la partida
                                 setValue(map)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task2) {
-                                        if (task2.isSuccessful()) {
-                                            if(getActivity() != null){
-                                                //Esto es porque si no tenías internet cuando jugaste
-                                                //pero al cabo de un rato sí, firebase hará la petición igualmente
-                                                //y si al devolver los datos no estás en esa misma pantalla
-                                                //petará al intentar mostrarte un toast
-                                                Toast.makeText(getActivity(),
-                                                        getResources().getText(R.string.gameDataSaved),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-
-
-                                        }else{
-                                            if(getActivity() != null){
-                                                Toast.makeText(getActivity(),
-                                                        getResources().getText(R.string.loadingData),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        }
-                                    }
-                                });
+                                ;
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task2) {
+//                                        if (task2.isSuccessful()) {
+//                                            if(getActivity() != null){
+//                                                //Esto es porque si no tenías internet cuando jugaste
+//                                                //pero al cabo de un rato sí, firebase hará la petición igualmente
+//                                                //y si al devolver los datos no estás en esa misma pantalla
+//                                                //petará al intentar mostrarte un toast
+//                                                Toast.makeText(getActivity(),
+//                                                        getResources().getText(R.string.gameDataSaved),
+//                                                        Toast.LENGTH_SHORT).show();
+//                                            }
+//
+//
+//                                        }else{
+//                                            if(getActivity() != null){
+//                                                Toast.makeText(getActivity(),
+//                                                        getResources().getText(R.string.loadingData),
+//                                                        Toast.LENGTH_SHORT).show();
+//                                            }
+//
+//                                        }
+//                                    }
+//                                });
 
                     } else {
                         utilidad.mostrarToast(getString((R.string.isWrong)), getContext());

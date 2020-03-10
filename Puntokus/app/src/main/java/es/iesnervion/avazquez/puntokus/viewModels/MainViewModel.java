@@ -17,15 +17,15 @@ import es.iesnervion.avazquez.puntokus.util.Utilidad;
 public class MainViewModel extends ViewModel {
     private Tablero tablero;
     private SparseIntArray mapeo = new SparseIntArray();
-    MutableLiveData<Boolean> isGoingToPlay;
-    MutableLiveData<Integer> lado;
-    MutableLiveData<User> usuarioActual;
-    MutableLiveData<Boolean> userWantToExit;
-    MutableLiveData<Boolean> userWantToGoBack;
+    private MutableLiveData<Boolean> isGoingToPlay;
+    private MutableLiveData<Integer> lado;
+    private MutableLiveData<User> usuarioActual;
+    private MutableLiveData<Boolean> userWantToExit;
+    private MutableLiveData<Boolean> userWantToGoBack;
     //MutableLiveData<String> currentFragment;
-    MutableLiveData<Boolean> showDialog;
-    MutableLiveData<Long> timeInMilis;
-    MutableLiveData<Boolean> isCronoStopped;
+    private MutableLiveData<Boolean> showDialog;
+    private MutableLiveData<Long> timeInMilis;
+    private MutableLiveData<Boolean> isCronoStopped;
 
     public MainViewModel() {
 

@@ -253,15 +253,22 @@ public class AccountFragment extends Fragment implements View.OnClickListener, C
                                         } else {
                                             AlertDialog.Builder builder;
                                             AlertDialog dialog;
-                                            builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
-                                            //pongo el titulo y los botones
-                                            builder.setTitle(R.string.error);
-                                            builder.setMessage(R.string.errorLoading)
-                                                    .setCancelable(true);
+                                            if(getContext() != null){
+                                                builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                                                //pongo el titulo y los botones
+                                                builder.setTitle(R.string.error);
+                                                builder.setMessage(R.string.errorLoading)
+                                                        .setCancelable(true);
 
-                                            //lo muestro
-                                            dialog = builder.create();
-                                            dialog.show();
+                                                //lo muestro
+                                                dialog = builder.create();
+
+                                                if(!dialog.isShowing()){
+                                                    dialog.show();
+                                                }
+                                            }
+
+
                                             if (areSoundsAllowed) {
                                                 alertSound.start();
                                             }

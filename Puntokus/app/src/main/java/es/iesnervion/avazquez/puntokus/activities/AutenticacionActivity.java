@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -47,6 +48,7 @@ public class AutenticacionActivity extends AppCompatActivity {
         //Esto para el app center
         AppCenter.start(getApplication(), "eab25880-dfe1-46f4-9ea7-b7b00d5d9ce9",
                 Analytics.class, Crashes.class);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         login = new LoginFragment();
         registro = new RegistrarseFragment();
         intent = new Intent(this, SecondMainActivity.class);
