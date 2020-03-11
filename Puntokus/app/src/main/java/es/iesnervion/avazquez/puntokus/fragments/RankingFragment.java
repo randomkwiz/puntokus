@@ -303,10 +303,11 @@ public class RankingFragment extends Fragment {
                             if(listaPartidas.getValue() != null){
                                 Collections.sort(listaPartidas.getValue());
                             }
-                            if (listaPartidas.getValue().size() >= 150) {
-                                listaPartidas.getValue().subList(149, listaPartidas.getValue().size()).clear();   //elimina los elementos a partir de la posicion 149
-                                //Es para que el ranking tenga max 150 partidas
-                            }
+                            //Si filtro aqui y hay 150 partidas en faciles, no se ven las demas dificultades
+//                            if (listaPartidas.getValue().size() >= 150) {
+//                                listaPartidas.getValue().subList(150, listaPartidas.getValue().size()).clear();   //elimina los elementos a partir de la posicion 149
+//                                //Es para que el ranking tenga max 150 partidas
+//                            }
                             //listViewRanking.setAdapter(adapter);
 
                             //Esta comprobación debe ir aquí, si la pongo antes
@@ -316,7 +317,11 @@ public class RankingFragment extends Fragment {
                             }
                             switch (radioGroup.getCheckedRadioButtonId()) {
                                 case R.id.RBAll:
-                                    listaPartidasAMostrar.setValue(listaPartidas.getValue());
+                                    listaPartidasAMostrar.setValue(new ArrayList<>(listaPartidas.getValue()));  //debe copiarse una copia, no mantener la ref
+                                    if (listaPartidasAMostrar.getValue().size() >= 150) {
+                                        listaPartidasAMostrar.getValue().subList(150, listaPartidasAMostrar.getValue().size()).clear();   //elimina los elementos a partir de la posicion 150
+                                        //Es para que el ranking tenga max 150 partidas
+                                    }
                                     break;
                                 case R.id.RBeasy:
                                     filtrarListado("EASY"); //no puedo ponerlo con el R.string.easy porque en firebase siempre es EASY y nunca FACIL (en español)
@@ -404,7 +409,14 @@ public class RankingFragment extends Fragment {
                 }
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.RBAll:
-                        listaPartidasAMostrar.setValue(listaPartidas.getValue());
+                        //listaPartidasAMostrar.setValue(listaPartidas.getValue());
+                        if(listaPartidas.getValue() != null) {
+                            listaPartidasAMostrar.setValue(new ArrayList<>(listaPartidas.getValue()));  //debe copiarse una copia, no mantener la ref
+                        }
+                        if (listaPartidasAMostrar.getValue().size() >= 150) {
+                            listaPartidasAMostrar.getValue().subList(150, listaPartidasAMostrar.getValue().size()).clear();   //elimina los elementos a partir de la posicion 150
+                            //Es para que el ranking tenga max 150 partidas
+                        }
                         break;
                     case R.id.RBeasy:
                         filtrarListado("EASY"); //no puedo ponerlo con el R.string.easy porque en firebase siempre es EASY y nunca FACIL (en español)
@@ -443,11 +455,16 @@ public class RankingFragment extends Fragment {
         ) {
             for (int i = 0; i < listaPartidas.getValue().size(); i++) {
 
+                //Se cuenta con la lista de partidas original
                 if (listaPartidas.getValue().get(i).getLevel().trim().contains(dificultadPorLaQueFiltro)) {
                     nuevaListaFiltrada.add(listaPartidas.getValue().get(i));
                 }
             }
             this.listaPartidasAMostrar.setValue(nuevaListaFiltrada);
+            if (listaPartidasAMostrar.getValue().size() >= 150) {
+                listaPartidasAMostrar.getValue().subList(150, listaPartidasAMostrar.getValue().size()).clear();   //elimina los elementos a partir de la posicion 150
+                //Es para que el ranking tenga max 150 partidas
+            }
             //copiarListaEnOtraLista(nuevaListaFiltrada, this.listaPartidas.getValue());
         }
 

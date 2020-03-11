@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import es.iesnervion.avazquez.puntokus.R;
 import es.iesnervion.avazquez.puntokus.entities.User;
+import es.iesnervion.avazquez.puntokus.firebase.FirebaseHandler;
 import es.iesnervion.avazquez.puntokus.fragments.LoginFragment;
 import es.iesnervion.avazquez.puntokus.fragments.RegistrarseFragment;
 import es.iesnervion.avazquez.puntokus.viewModels.AutenticacionViewModel;
@@ -39,7 +40,7 @@ public class AutenticacionActivity extends AppCompatActivity {
     Intent intent;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
-
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class AutenticacionActivity extends AppCompatActivity {
         //Esto para el app center
         AppCenter.start(getApplication(), "eab25880-dfe1-46f4-9ea7-b7b00d5d9ce9",
                 Analytics.class, Crashes.class);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseHandler firebaseHandler = new FirebaseHandler();
+
         login = new LoginFragment();
         registro = new RegistrarseFragment();
         intent = new Intent(this, SecondMainActivity.class);
@@ -107,6 +110,7 @@ public class AutenticacionActivity extends AppCompatActivity {
                     //finish();
                     //intent.putExtra("nickname", viewModel.getUser().getValue().getNickname());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                     startActivity(intent);
                 }
             }
